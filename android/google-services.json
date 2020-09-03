@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "509640220115",
+    "firebase_url": "https://sbt-shopping.firebaseio.com",
+    "project_id": "sbt-shopping",
+    "storage_bucket": "sbt-shopping.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509640220115:android:9198360bfd62232ae0a326",
+        "android_client_info": {
+          "package_name": "com.expert.SBT"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509640220115-n4ivh0oja18fmo5vh42l5urr449p9u37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.expert.SBT",
+            "certificate_hash": "3bc972e710d7d13ab1e9df288c9ab03bca06426c"
+          }
+        },
+        {
+          "client_id": "509640220115-ngj1884vcdkkils3rducr3dhk3a1sul1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJeJ7LmJPoMii8xlniN57U_bk0uArvFyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509640220115-ngj1884vcdkkils3rducr3dhk3a1sul1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
