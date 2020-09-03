@@ -1,36 +1,19 @@
 import 'package:SBT/screens/authentication/auth.dart';
-import 'package:SBT/screens/authentication/login.dart';
-import 'package:SBT/screens/home/home_page.dart';
+import 'package:SBT/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Decide extends StatefulWidget {
-  @override
-  _DecideState createState() => _DecideState();
-}
+import 'model/user.dart';
 
-AuthService _authService = AuthService();
-bool flag;
-currentUser()async{
-  dynamic user = await _authService.currentUser();
-  if(user!=null){
-    flag = true;
-    print(user);
-  }else{
-    print(user);
-    flag = false;
-  }
-  return user;
-}
-
-class _DecideState extends State<Decide> {
-
+class Decide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return flag == true ? HomeScreen():Login();
-  }
-
-  @override
-  void initState() {
-    currentUser();
+    return StreamProvider<User>.value(
+      value: AuthService().user,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Wrapper(),
+      ),
+    );
   }
 }

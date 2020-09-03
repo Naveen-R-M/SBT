@@ -1,9 +1,22 @@
 import 'package:SBT/screens/home/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:SBT/model/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User _userFromFirebaseUser(FirebaseUser user) {
+    return user != null ? User(uid: user.uid) : null;
+  }
+
+  // auth change user stream
+  Stream<User> get user {
+    return _auth.onAuthStateChanged
+    //.map((FirebaseUser user) => _userFromFirebaseUser(user));
+        .map(_userFromFirebaseUser);
+  }
+
   Future<bool> loginUser(
       String phone, BuildContext context, otp1, otp2, otp3, otp4, otp5, otp6) async {
     _auth.verifyPhoneNumber(
