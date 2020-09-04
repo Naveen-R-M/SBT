@@ -22,7 +22,7 @@ class ImageCarousel extends StatelessWidget {
                 return Carousel(
                   boxFit: BoxFit.cover,
                   images: [
-                    NetworkImage(data['Sarees']),
+                    NetworkImage(data["Sarees"]),
                     NetworkImage(data['Shirts']),
                     NetworkImage(data['T-Shirts']),
                   ],

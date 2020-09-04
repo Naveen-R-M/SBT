@@ -39,10 +39,8 @@ class _LoadImagesState extends State<LoadImages> {
                     var path = snapshot.data[index];
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Details(
-                                title: path.documentID.toString(),
-                                url: path.data["imageURL"].toString())));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                            Details(title : path.documentID.toString(),url : path.data["imageURL"].toString())));
                         print(path.documentID.toString());
                       },
                       child: Stack(
@@ -64,8 +62,6 @@ class _LoadImagesState extends State<LoadImages> {
                                   ),
                                   fit: BoxFit.cover,
                                 ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
                                 color: MyColors.TEXT_FIELD_BCK,
                                 border: Border(
                                   bottom: BorderSide(
