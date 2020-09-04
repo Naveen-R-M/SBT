@@ -19,7 +19,6 @@ class HomeScreen extends StatelessWidget {
         accentColor: MyColors.TEXT_FIELD_BCK,
       ),
       home: Scaffold(
-        appBar: null,
         body: Container(
           width: double.infinity,
           height: double.infinity,
