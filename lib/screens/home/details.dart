@@ -25,100 +25,92 @@ class Details extends StatelessWidget {
       statusBarColor: MyColors.APP_BCK.withOpacity(0.35),
     ));
     return Scaffold(
-
-        appBar: AppBar(
-          backgroundColor: MyColors.APP_BCK,
-          automaticallyImplyLeading: false,
-          title: Center(
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-            ),
+      appBar: AppBar(
+        backgroundColor: MyColors.APP_BCK,
+        automaticallyImplyLeading: false,
+        title: Center(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
           ),
         ),
-        body: FutureBuilder(
-          future: _getImages(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Loading();
-            } else {
-              return Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: GridView.builder(
-                  padding: EdgeInsets.all(5),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemCount: snapshot.data.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    var path = snapshot.data[index];
-                    return GestureDetector(
+      ),
+      body: FutureBuilder(
+        future: _getImages(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Loading();
+          } else {
+            return Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height,
+              child: GridView.builder(
+                padding: EdgeInsets.all(5),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemCount: snapshot.data.length,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  var path = snapshot.data[index];
+                  return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ViewItems(
-                              title: path.documentID,
-                              url: path.data["imageURL"],
-                              category: title,
-                            )));
+                                  title: path.documentID,
+                                  url: path.data["imageURL"],
+                                  category: title,
+                                )));
                       },
                       child: Card(
                         shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
                         margin: EdgeInsets.all(5.0),
                         elevation: 15,
-                        child: Stack(
+                        child: Column(
                           children: [
                             Container(
-                              height: 150,
-                              child: Center(
-                                  child: Image.network(path.data["imageURL"])),
+                              margin: EdgeInsets.only(
+                                  left: 8, right: 8, top: 5.0, bottom: 5.0),
+                              child: Text(
+                                path.documentID,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: MyColors.TEXT_COLOR,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 190,
-                                  margin:
-                                  EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                                  child: Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text(
-                                      path.documentID,
-                                      style: TextStyle(
-                                        color: MyColors.TEXT_COLOR,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
+                            Container(
+                              height: 130,
+                              child: Center(
+                                  child: Image.network(
+                                path.data["imageURL"],
+                              )),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 8.0, right: 8.0, top: 3.0),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text(
+                                  path.data["cost"],
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
                                   ),
                                 ),
-                                Container(
-                                  height: 190,
-                                  margin: EdgeInsets.all(8),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text(
-                                      path.data["cost"],
-                                      style: TextStyle(
-                                        color: MyColors.TEXT_COLOR,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }
-          },
-        ),
+                      ));
+                },
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
