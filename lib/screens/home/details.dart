@@ -32,6 +32,9 @@ class Details extends StatelessWidget {
           child: Text(
             title,
             textAlign: TextAlign.center,
+            style: TextStyle(
+                color: MyColors.TEXT_COLOR
+            ),
           ),
         ),
       ),
@@ -47,7 +50,10 @@ class Details extends StatelessWidget {
               child: GridView.builder(
                 padding: EdgeInsets.all(5),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
+                    crossAxisCount: 2,
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height /1.6),
+                ),
                 itemCount: snapshot.data.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
@@ -58,6 +64,8 @@ class Details extends StatelessWidget {
                             builder: (context) => ViewItems(
                                   title: path.documentID,
                                   url: path.data["imageURL"],
+                                  cost: path.data["cost"],
+                                  description: path.data["description"]??null,
                                   category: title,
                                 )));
                       },
@@ -81,7 +89,7 @@ class Details extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: 130,
+                              height: MediaQuery.of(context).size.height / 5.5,
                               child: Center(
                                   child: Image.network(
                                 path.data["imageURL"],
@@ -89,16 +97,14 @@ class Details extends StatelessWidget {
                             ),
                             Container(
                               margin: EdgeInsets.only(
-                                  left: 8.0, right: 8.0, top: 3.0),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  path.data["cost"],
-                                  style: TextStyle(
-                                    color: MyColors.TEXT_COLOR,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
+                                  left: 8.0, right: 8.0, top: 8.0),
+                              child: Text(
+                                path.data["cost"],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: MyColors.TEXT_COLOR,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
                                 ),
                               ),
                             ),
