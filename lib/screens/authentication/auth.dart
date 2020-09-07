@@ -26,7 +26,7 @@ class AuthService {
         AuthResult authResult = await _auth.signInWithCredential(credential);
         FirebaseUser user = authResult.user;
         if (user != null) {
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => HomeScreen(user: user),
           ));
         }

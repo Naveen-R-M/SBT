@@ -69,40 +69,45 @@ class Details extends StatelessWidget {
                         child: Stack(
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width,
-                              margin:
-                                  EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  path.documentID,
-                                  style: TextStyle(
-                                    color: MyColors.TEXT_COLOR,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: MediaQuery.of(context).size.height,
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.all(8),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  path.data["cost"],
-                                  style: TextStyle(
-                                    color: MyColors.TEXT_COLOR,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
                               height: 150,
                               child: Center(
                                   child: Image.network(path.data["imageURL"])),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 190,
+                                  margin:
+                                  EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                                  child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      path.documentID,
+                                      style: TextStyle(
+                                        color: MyColors.TEXT_COLOR,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 190,
+                                  margin: EdgeInsets.all(8),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      path.data["cost"],
+                                      style: TextStyle(
+                                        color: MyColors.TEXT_COLOR,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),

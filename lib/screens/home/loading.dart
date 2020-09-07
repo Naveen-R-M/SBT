@@ -1,3 +1,4 @@
+import 'package:SBT/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -9,7 +10,7 @@ class Loading extends StatelessWidget {
       height: MediaQuery.of(context).size.height/2,
       child: Center(
         child: SpinKitFadingCircle(
-          color: Color(0xff242E38),
+          color: MyColors.TEXT_COLOR,
           size: 50.0,
         ),
       ),

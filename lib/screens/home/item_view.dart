@@ -34,32 +34,34 @@ class _ViewItemsState extends State<ViewItems> {
         appBar: AppBar(
           title: Center(child: Text(widget.category)),
         ),
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              GestureDetector(
-                child: Container(
-                  height: MediaQuery.of(context).size.height/1.75,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(widget.url),
-                      fit: BoxFit.cover
-                    ),
-                  ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                GestureDetector(
                   child: Container(
+                    height: MediaQuery.of(context).size.height/1.75,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomRight,
-                          colors: [
-                            MyColors.STATUS_BAR.withOpacity(0.3),
-                            MyColors.APP_BCK.withOpacity(.0),
-                          ]
+                      image: DecorationImage(
+                        image: NetworkImage(widget.url),
+                        fit: BoxFit.cover
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomRight,
+                            colors: [
+                              MyColors.STATUS_BAR.withOpacity(0.3),
+                              MyColors.APP_BCK.withOpacity(.0),
+                            ]
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
