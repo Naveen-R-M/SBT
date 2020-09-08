@@ -52,7 +52,6 @@ class CategorySuggestions extends StatelessWidget {
                                   ),
                                   fit: BoxFit.cover,
                                 ),
-                                borderRadius: BorderRadius.all(Radius.circular(5)),
                                 color: MyColors.APP_BCK,
                                 border: Border(
                                   bottom: BorderSide(

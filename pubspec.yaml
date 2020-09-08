@@ -19,7 +19,6 @@ dependencies:
   flutter_spinkit: ^4.1.2
   url_launcher: ^5.5.2
   geolocator: ^5.1.5
-  location: ^3.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
