@@ -1,8 +1,7 @@
 import 'package:SBT/my_colors.dart';
 import 'package:SBT/screens/authentication/auth.dart';
-import 'package:SBT/screens/home/home_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class OtpScreen extends StatefulWidget {
   String phone;
@@ -15,8 +14,18 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   String otp1, otp2, otp3, otp4, otp5, otp6;
   String buttonText = 'Send OTP';
-
   AuthService _authService = AuthService();
+
+  var location;
+  _getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemarks = await Geolocator()
+        .placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark placemark = placemarks[0];
+    String city = '${placemark.locality}';
+    return city;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +286,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   child: FlatButton(
                     onPressed: () async {
+                      _getLocation();
                       setState(() {
                         buttonText = 'Proceed';
                       });

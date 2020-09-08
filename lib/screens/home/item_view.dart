@@ -2,6 +2,7 @@
 import 'package:SBT/screens/home/suggestion.dart';
 import 'package:SBT/screens/home/suggestion_category.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../my_colors.dart';
 
@@ -101,7 +102,9 @@ class _ViewItemsState extends State<ViewItems> {
                     borderRadius: BorderRadius.all(Radius.circular(40)),
                   ),
                   child: FlatButton(
-                    onPressed: null,
+                    onPressed:()async{
+                      await launch('tel:422 2394911');
+                    },
                     child: Text(
                       'BOOK NOW',
                       style: TextStyle(
@@ -131,6 +134,7 @@ class _ViewItemsState extends State<ViewItems> {
                                     fontFamily: 'Lato',
                                     fontSize: 22,
                                     color: Colors.black,
+                                    fontWeight: FontWeight.w300,
                                     wordSpacing: 2,
                                     letterSpacing: 1.20
                                 ),
@@ -174,6 +178,7 @@ class _ViewItemsState extends State<ViewItems> {
                   ),
                 ),
                 Suggestion(widget.category),
+                SizedBox(height: 5,),
                 Container(
                   margin: EdgeInsets.only(left: 15,right: 15,),
                   alignment: Alignment.centerLeft,
@@ -188,7 +193,7 @@ class _ViewItemsState extends State<ViewItems> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 10,),
                 CategorySuggestions('Images'),
                 SizedBox(height: 15,),
               ],
