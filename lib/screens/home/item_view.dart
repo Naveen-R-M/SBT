@@ -1,3 +1,6 @@
+
+import 'package:SBT/screens/home/suggestion.dart';
+import 'package:SBT/screens/home/suggestion_category.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_colors.dart';
@@ -22,6 +25,7 @@ class ViewItems extends StatefulWidget {
 }
 
 class _ViewItemsState extends State<ViewItems> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -64,75 +68,129 @@ class _ViewItemsState extends State<ViewItems> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 10,right: 10,top: 10),
+                  margin: EdgeInsets.only(left: 15,right: 15,top: 10),
                   alignment: Alignment.centerLeft,
                   child: Text(
                     widget.title,
                     style: TextStyle(
-                      fontSize: 35,
-                      fontFamily: 'Pacifico'
+                        fontSize: 35,
+                        color: MyColors.TEXT_COLOR,
+                        fontFamily: 'Pacifico'
                     ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 10),
+                  margin: EdgeInsets.only(left: 15),
                   alignment: Alignment.centerLeft,
                   child: Text(
                     widget.cost,
                     style: TextStyle(
                         fontSize: 22,
+                        color: MyColors.TEXT_COLOR,
                         fontFamily: 'Pacifico',
                       letterSpacing: 2
                     ),
                   ),
                 ),
+                SizedBox(height: 5,),
                 Container(
-                  margin: EdgeInsets.all(10.0),
+                  margin: EdgeInsets.all(15.0),
+                  width: 200,
                   decoration: BoxDecoration(
-                    color: MyColors.TEXT_COLOR,
+                    color: MyColors.STATUS_BAR,
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
                   ),
                   child: FlatButton(
                     onPressed: null,
                     child: Text(
-                      'PLACE ORDER',
+                      'BOOK NOW',
                       style: TextStyle(
-                          color: Colors.white
+                          color: Colors.white,
+                        fontFamily: 'Lato',
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                widget.description !=null? Container(
-                    margin: EdgeInsets.all(10),
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Description :',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black87,
-                              wordSpacing: 2,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.20
-                          ),
-                        ),
-                        SizedBox(height: 8,),
-                        Text(
-                          '\t\t\t\t\t\t'+widget.description,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black87,
-                              wordSpacing: 2,
-                              letterSpacing: 1.20
-                          ),
-                        ),
-                      ],
-                    )
-                ):Text(''),
-                SizedBox(
-                  height: 10,
+                SizedBox(height: 5,),
+                Card(
+                  shadowColor: MyColors.TEXT_FIELD_BCK,
+                  margin: EdgeInsets.all(15),
+                  elevation: 10,
+                  child: Column(
+                    children: [
+                      widget.description !=null? Container(
+                          margin: EdgeInsets.all(15),
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Description',
+                                style: TextStyle(
+                                    fontFamily: 'Lato',
+                                    fontSize: 22,
+                                    color: Colors.black,
+                                    wordSpacing: 2,
+                                    letterSpacing: 1.20
+                                ),
+                              ),
+                              SizedBox(height: 8,),
+                              Text(
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t'+widget.description,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    wordSpacing: 2,
+                                    height: 1.75,
+                                    letterSpacing: 1.20,
+                                    fontWeight: FontWeight.w300
+                                ),
+                              ),
+                            ],
+                          )
+                      ):Text(''),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15,right: 15,),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Similar Items',
+                    style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 22,
+                        color: Colors.black,
+                        wordSpacing: 2,
+                        letterSpacing: 1.20
+                    ),
+                  ),
+                ),
+                Suggestion(widget.category),
+                Container(
+                  margin: EdgeInsets.only(left: 15,right: 15,),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Categories',
+                    style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 22,
+                        color: Colors.black,
+                        wordSpacing: 2,
+                        letterSpacing: 1.20
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,),
+                CategorySuggestions('Images'),
+                SizedBox(height: 15,),
               ],
             ),
           ),

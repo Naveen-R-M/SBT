@@ -9,9 +9,8 @@ import 'package:flutter/services.dart';
 
 class Details extends StatelessWidget {
   String title;
-  String url;
 
-  Details({this.title, this.url});
+  Details({this.title,});
 
   Future _getImages() async {
     var ref = Firestore.instance;

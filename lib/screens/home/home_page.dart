@@ -59,7 +59,6 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       LoadImages(val: 'Images'),
                     ],
                   ),

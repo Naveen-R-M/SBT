@@ -1,57 +1,47 @@
 import 'package:SBT/my_colors.dart';
-import 'package:SBT/screens/home/details.dart';
-import 'package:SBT/screens/home/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoadImages extends StatefulWidget {
+import 'details.dart';
+import 'loading.dart';
+
+class CategorySuggestions extends StatelessWidget {
   var val;
-  LoadImages({this.val});
 
-  @override
-  _LoadImagesState createState() => _LoadImagesState();
-}
+  CategorySuggestions(this.val);
 
-class _LoadImagesState extends State<LoadImages> {
   Future _getImages(var val) async {
     var ref = Firestore.instance;
     QuerySnapshot qnRef = await ref.collection(val).getDocuments();
     return qnRef.documents;
   }
-
-  listView(var val) {
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _getImages(val),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        future : _getImages(val),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting){
             return Loading();
-          } else {
+          }else{
             return Container(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              height: MediaQuery.of(context).size.height - 51,
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+              margin: EdgeInsets.only(left: 10),
+              height: 130,
+              child: ListView.builder(
                   itemCount: snapshot.data.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context,index){
                     var path = snapshot.data[index];
                     return GestureDetector(
-                      onTap: () {
+                      onTap: (){
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-                            Details(title : path.documentID.toString(),)));
+                            Details(title : path.documentID.toString())));
                         print(path.documentID.toString());
                       },
                       child: Stack(
                         children: [
                           Container(
                             width: 160,
-                            margin: EdgeInsets.only(
-                              bottom: 20,
-                              left: 10,
-                              right: 10,
-                            ),
+                            margin: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                   colorFilter: ColorFilter.mode(
@@ -62,37 +52,32 @@ class _LoadImagesState extends State<LoadImages> {
                                   ),
                                   fit: BoxFit.cover,
                                 ),
-                                color: MyColors.TEXT_FIELD_BCK,
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                color: MyColors.APP_BCK,
                                 border: Border(
                                   bottom: BorderSide(
-                                    width: 1,
-                                    color: MyColors.TEXT_FIELD_BCK,
+                                    width: 1,color: MyColors.APP_BCK,
                                   ),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: MyColors.TEXT_COLOR.withOpacity(0.5),
-                                    blurRadius: 5,
-                                    offset: Offset(5, 5),
+                                    color: MyColors.APP_BCK,
+                                    blurRadius: 10,
+                                    offset: Offset(5 , 2),
                                   )
-                                ]),
+                                ]
+                            ),
                           ),
                           Container(
                             width: 180,
-                            margin: EdgeInsets.only(
-                              bottom: 20,
-                              left: 10,
-                              right: 10,
-                            ),
                             child: Center(
                               child: Text(
                                 snapshot.data[index].documentID,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyColors.TEXT_COLOR,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 22,
+                                  fontSize: 18,
+                                  fontFamily: 'Pacifico'
                                 ),
                               ),
                             ),
@@ -104,10 +89,5 @@ class _LoadImagesState extends State<LoadImages> {
             );
           }
         });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return listView(widget.val);
   }
 }
