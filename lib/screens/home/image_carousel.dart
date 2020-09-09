@@ -8,6 +8,12 @@ class ImageCarousel extends StatelessWidget {
 
   ImageCarousel({this.collection,this.document});
 
+  Future _getImages(var val) async {
+    var ref = Firestore.instance;
+    QuerySnapshot qnRef = await ref.collection(val).getDocuments();
+    return qnRef.documents;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -15,16 +21,14 @@ class ImageCarousel extends StatelessWidget {
         Container(
           height: MediaQuery.of(context).size.height/2.7,
           width: MediaQuery.of(context).size.width,
-          child: StreamBuilder(
-              stream: Firestore.instance.collection(collection).document(document).snapshots(),
+          child: FutureBuilder(
+              future: _getImages('Carousel'),
               builder: (context, snapshot) {
-                var data = snapshot.data;
                 return Carousel(
                   boxFit: BoxFit.cover,
                   images: [
-                    NetworkImage(data["Sarees"]),
-                    NetworkImage(data['Shirts']),
-                    NetworkImage(data['T-Shirts']),
+                    for(var i= 0 ; i<snapshot.data.length ;i++)
+                      NetworkImage(snapshot.data[i].data["imageURL"]),
                   ],
                   dotVerticalPadding: 50,
                   autoplay: true,
