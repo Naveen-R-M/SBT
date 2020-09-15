@@ -1,6 +1,7 @@
 import 'package:SBT/my_colors.dart';
 import 'package:SBT/screens/home/thumnail_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'image_carousel.dart';
@@ -48,15 +49,34 @@ class HomeScreen extends StatelessWidget {
                           top: 25,
                           left: 25,
                         ),
-                        child: Text(
-                          'Categories',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: MyColors.TEXT_COLOR,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 2
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Image(
+                                image: AssetImage('images/sbt.png'),
+                                fit: BoxFit.cover,
+                                height: 35,
+                                width: 35,
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Categories',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: MyColors.TEXT_COLOR,
+                                  fontSize: 22,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.bold,
+                                  letterSpacing: 2
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       LoadImages(val: 'Images'),

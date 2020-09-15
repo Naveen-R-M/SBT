@@ -1,4 +1,5 @@
 import 'package:SBT/screens/home/home_page.dart';
+import 'package:SBT/screens/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:SBT/model/user.dart';
@@ -19,7 +20,7 @@ class AuthService {
   }
 
   Future<bool> loginUser(
-      String phone, BuildContext context, otp1, otp2, otp3, otp4, otp5, otp6) async {
+      String location, String phone, BuildContext context, otp1, otp2, otp3, otp4, otp5, otp6) async {
     _auth.verifyPhoneNumber(
       phoneNumber: phone,
       timeout: Duration(seconds: 60),
@@ -42,6 +43,7 @@ class AuthService {
             verificationId: verificationId, smsCode: code);
         AuthResult authResult = await _auth.signInWithCredential(credential);
         FirebaseUser user = authResult.user;
+        await Database(uid: user.uid).UserData(phone, location);
         if (user != null) {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => HomeScreen(user: user),

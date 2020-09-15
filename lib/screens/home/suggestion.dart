@@ -66,6 +66,7 @@ class Suggestion extends StatelessWidget {
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height / 5.5,
+                            color: Colors.white,
                             child: Center(
                                 child: Image.network(
                                   path.data["imageURL"],

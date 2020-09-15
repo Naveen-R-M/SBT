@@ -133,8 +133,8 @@ class _ViewItemsState extends State<ViewItems> {
                                 style: TextStyle(
                                     fontFamily: 'Lato',
                                     fontSize: 22,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w300,
+                                    color: Colors.black.withOpacity(0.75),
+                                    fontWeight: FontWeight.bold,
                                     wordSpacing: 2,
                                     letterSpacing: 1.20
                                 ),
@@ -144,7 +144,7 @@ class _ViewItemsState extends State<ViewItems> {
                                 '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t'+widget.description,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     wordSpacing: 2,
                                     height: 1.75,
                                     letterSpacing: 1.20,
@@ -171,7 +171,8 @@ class _ViewItemsState extends State<ViewItems> {
                     style: TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 22,
-                        color: Colors.black,
+                        color: Colors.black.withOpacity(0.75),
+                        fontWeight: FontWeight.bold,
                         wordSpacing: 2,
                         letterSpacing: 1.20
                     ),
@@ -186,8 +187,9 @@ class _ViewItemsState extends State<ViewItems> {
                     'Categories',
                     style: TextStyle(
                         fontFamily: 'Lato',
+                        fontWeight: FontWeight.bold,
                         fontSize: 22,
-                        color: Colors.black,
+                        color: Colors.black.withOpacity(0.75),
                         wordSpacing: 2,
                         letterSpacing: 1.20
                     ),

@@ -13,10 +13,11 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   String otp1, otp2, otp3, otp4, otp5, otp6;
+  var location;
   String buttonText = 'Send OTP';
   AuthService _authService = AuthService();
 
-  var location;
+
   _getLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -286,19 +287,21 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   child: FlatButton(
                     onPressed: () async {
-                      _getLocation();
+                      location = await _getLocation();
                       setState(() {
                         buttonText = 'Proceed';
                       });
                       dynamic result = await _authService.loginUser(
-                          widget.phone,
-                          context,
-                          otp1,
-                          otp2,
-                          otp3,
-                          otp4,
-                          otp5,
-                          otp6);
+                        location,
+                        widget.phone,
+                        context,
+                        otp1,
+                        otp2,
+                        otp3,
+                        otp4,
+                        otp5,
+                        otp6
+                      );
                       if (result != null) {
                         print('Success..!');
                       }

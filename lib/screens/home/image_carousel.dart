@@ -1,4 +1,5 @@
 import 'package:SBT/my_colors.dart';
+import 'package:SBT/screens/home/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -24,19 +25,23 @@ class ImageCarousel extends StatelessWidget {
           child: FutureBuilder(
               future: _getImages('Carousel'),
               builder: (context, snapshot) {
-                return Carousel(
-                  boxFit: BoxFit.cover,
-                  images: [
-                    for(var i= 0 ; i<snapshot.data.length ;i++)
-                      NetworkImage(snapshot.data[i].data["imageURL"]),
-                  ],
-                  dotVerticalPadding: 50,
-                  autoplay: true,
-                  dotBgColor: Colors.purple.withOpacity(0),
-                  indicatorBgPadding: 5.0,
-                  dotColor: MyColors.TEXT_COLOR,
-                  dotSize: 4.0,
-                );
+                if (snapshot.connectionState == ConnectionState.waiting){
+                  return Loading();
+                }else{
+                  return Carousel(
+                    boxFit: BoxFit.cover,
+                    images: [
+                      for(var i= 0 ; i<snapshot.data.length ;i++)
+                        NetworkImage(snapshot.data[i].data["imageURL"]),
+                    ],
+                    dotVerticalPadding: 50,
+                    autoplay: true,
+                    dotBgColor: Colors.purple.withOpacity(0),
+                    indicatorBgPadding: 5.0,
+                    dotColor: MyColors.TEXT_COLOR,
+                    dotSize: 4.0,
+                  );
+                }
               }
           ),
           decoration: BoxDecoration(
