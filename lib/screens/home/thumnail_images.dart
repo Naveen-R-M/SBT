@@ -29,7 +29,7 @@ class _LoadImagesState extends State<LoadImages> {
           } else {
             return Container(
               margin: EdgeInsets.only(left: 15, right: 15,top: 5),
-              height: MediaQuery.of(context).size.height-101,
+              height: MediaQuery.of(context).size.height-150,
               child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
