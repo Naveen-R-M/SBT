@@ -196,7 +196,7 @@ class _ViewItemsState extends State<ViewItems> {
                   ),
                 ),
                 SizedBox(height: 10,),
-                CategorySuggestions('Images'),
+                CategorySuggestions('Categories'),
                 SizedBox(height: 15,),
               ],
             ),

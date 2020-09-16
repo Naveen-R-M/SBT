@@ -1,5 +1,6 @@
 import 'package:SBT/my_colors.dart';
-import 'package:SBT/screens/home/loading.dart';
+import 'package:SBT/screens/admin/add_category.dart';
+import 'package:SBT/screens/admin/delete_category.dart';
 import 'package:SBT/screens/home/thumnail_images.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,42 +38,38 @@ class _HomeScreenState extends State<HomeScreen> {
         accentColor: MyColors.TEXT_FIELD_BCK,
       ),
       home: Scaffold(
-          body: StreamBuilder(
-        stream: checkAdmin(),
-        builder: (context, snapshot) {
-          var adminNo = snapshot.data["phone"];
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Loading();
-          } else {
-            if(adminNo=="+919944862232"){
-              admin = true;
-            }
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: MyColors.APP_BCK,
-              child: Stack(
-                children: [
-                  ImageCarousel(
-                    collection: 'Carousel',
-                    document: 'HomePage',
-                  ),
-                  SingleChildScrollView(
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 3),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
-                          )),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
+          body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: MyColors.APP_BCK,
+        child: Stack(
+          children: [
+            ImageCarousel(
+              collection: 'Carousel',
+              document: 'HomePage',
+            ),
+            SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height / 3),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    )),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StreamBuilder(
+                        stream: checkAdmin(),
+                        builder: (context, snapshot) {
+                          if (snapshot.data["phone"] == "+919944862232") {
+                            admin = true;
+                          }
+                          return Stack(
                             children: [
                               Container(
                                 margin: EdgeInsets.only(
@@ -110,31 +107,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
-                              admin == true ? Container(
+                              admin == true
+                                  ? Container(
+                                      margin: EdgeInsets.all(18),
+                                      alignment: Alignment.centerRight,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: IconButton(
+                                        iconSize: 38,
+                                        icon: Icon(
+                                          Icons.add_circle,
+                                          color: MyColors.TEXT_COLOR,
+                                        ),
+                                        onPressed: () => Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddCategories(imageURL: '',))),
+                                      ),
+                                    )
+                                  : Container(),
+                              admin == true
+                                  ? Container(
                                 margin: EdgeInsets.all(18),
-                                alignment: Alignment.centerRight,
+                                alignment: Alignment.centerLeft,
                                 width: MediaQuery.of(context).size.width,
                                 child: IconButton(
                                   iconSize: 38,
                                   icon: Icon(
-                                    Icons.add_circle,
+                                    Icons.remove_circle,
                                     color: MyColors.TEXT_COLOR,
                                   ),
-                                  onPressed: null,
+                                  onPressed: () => Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          DeleteCategories(val: 'Categories',))),
                                 ),
-                              ):Container(),
+                              )
+                                  : Container(),
                             ],
-                          ),
-                          LoadImages(val: 'Categories'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                          );
+                        }),
+                    LoadImages(val: 'Categories'),
+                  ],
+                ),
               ),
-            );
-          }
-        },
+            ),
+          ],
+        ),
       )),
     );
   }
