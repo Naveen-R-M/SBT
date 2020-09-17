@@ -1,20 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_colors.dart';
 
-class DeleteCategories extends StatelessWidget {
+class DeleteCategories extends StatefulWidget {
   String val;
-  String documentID;
   DeleteCategories({this.val});
 
-  _delete(context) async {
+  @override
+  _DeleteCategoriesState createState() => _DeleteCategoriesState();
+}
+
+class _DeleteCategoriesState extends State<DeleteCategories> {
+  String documentID;
+  var imageURL;
+
+  _delete(context, imageURL) async {
+    var ref = await FirebaseStorage.instance
+        .getReferenceFromUrl(imageURL)
+        .whenComplete(() => print(imageURL));
+    await ref.delete();
     return await Firestore.instance
-        .collection(val)
+        .collection(widget.val)
         .document(documentID)
         .delete()
         .whenComplete(() {
-          Navigator.pop(context);
+      Navigator.pop(context);
     });
   }
 
@@ -22,7 +34,7 @@ class DeleteCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Delete + $val'),
+        title: Text('Delete ${widget.val}'),
         backgroundColor: MyColors.STATUS_BAR,
       ),
       body: Container(
@@ -70,8 +82,11 @@ class DeleteCategories extends StatelessWidget {
                   ),
                 ),
                 color: MyColors.TEXT_COLOR,
-                onPressed: () {
-                  _delete(context);
+                onPressed: () async {
+                  var ref = await Firestore.instance.collection(widget.val).document(documentID).get();
+                  imageURL = ref['imageURL'];
+                  print(imageURL);
+                  _delete(context, imageURL);
                 },
               ),
             )

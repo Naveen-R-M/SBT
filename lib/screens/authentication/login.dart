@@ -1,6 +1,5 @@
 import 'package:SBT/my_colors.dart';
 import 'package:SBT/screens/authentication/otp_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -116,7 +115,7 @@ class _LoginState extends State<Login> {
                       if (_formkey.currentState.validate()) {
                         String phone_no = '+91' + phone;
                         print(phone_no);
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                               builder: (context) => OtpScreen(
                                     phone: phone_no,

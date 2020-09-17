@@ -17,7 +17,6 @@ class _OtpScreenState extends State<OtpScreen> {
   String buttonText = 'Send OTP';
   AuthService _authService = AuthService();
 
-
   _getLocation() async {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);

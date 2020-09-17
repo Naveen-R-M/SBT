@@ -86,9 +86,10 @@ class _ImageCaptureState extends State<ImageCapture> {
       var downloadURL =
           await (await uploadTask.onComplete).ref.getDownloadURL();
       var imageURL = downloadURL.toString();
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => AddCategories(
                 imageURL: imageURL,
+            val: val,
               )));
       print(imageURL);
       return "";

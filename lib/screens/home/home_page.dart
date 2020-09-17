@@ -1,11 +1,13 @@
-import 'package:SBT/my_colors.dart';
 import 'package:SBT/screens/admin/add_category.dart';
+import 'package:SBT/screens/admin/admin.dart';
 import 'package:SBT/screens/admin/delete_category.dart';
 import 'package:SBT/screens/home/thumnail_images.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import '../../my_colors.dart';
 import 'image_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool admin = false;
+
+  var title = "Categories";
 
   Stream checkAdmin() {
     var ref = Firestore.instance
@@ -38,122 +41,123 @@ class _HomeScreenState extends State<HomeScreen> {
         accentColor: MyColors.TEXT_FIELD_BCK,
       ),
       home: Scaffold(
-          body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: MyColors.APP_BCK,
-        child: Stack(
-          children: [
-            ImageCarousel(
-              collection: 'Carousel',
-              document: 'HomePage',
-            ),
-            SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height / 3),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    )),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    StreamBuilder(
-                        stream: checkAdmin(),
-                        builder: (context, snapshot) {
-                          if (snapshot.data["phone"] == "+919944862232") {
-                            admin = true;
-                          }
-                          return Stack(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                  top: 25,
-                                  left: 25,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: Image(
-                                        image: AssetImage('images/sbt.png'),
-                                        fit: BoxFit.cover,
-                                        height: 35,
-                                        width: 35,
-                                        alignment: Alignment.center,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Categories',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            color: MyColors.TEXT_COLOR,
-                                            fontSize: 22,
-                                            fontFamily: 'Lato',
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 2),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              admin == true
-                                  ? Container(
-                                      margin: EdgeInsets.all(18),
-                                      alignment: Alignment.centerRight,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: IconButton(
-                                        iconSize: 38,
-                                        icon: Icon(
-                                          Icons.add_circle,
-                                          color: MyColors.TEXT_COLOR,
-                                        ),
-                                        onPressed: () => Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddCategories(imageURL: '',))),
-                                      ),
-                                    )
-                                  : Container(),
-                              admin == true
-                                  ? Container(
-                                margin: EdgeInsets.all(18),
-                                alignment: Alignment.centerLeft,
-                                width: MediaQuery.of(context).size.width,
-                                child: IconButton(
-                                  iconSize: 38,
-                                  icon: Icon(
-                                    Icons.remove_circle,
-                                    color: MyColors.TEXT_COLOR,
-                                  ),
-                                  onPressed: () => Navigator.of(context)
-                                      .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          DeleteCategories(val: 'Categories',))),
-                                ),
-                              )
-                                  : Container(),
-                            ],
-                          );
-                        }),
-                    LoadImages(val: 'Categories'),
-                  ],
+          floatingActionButton: Admin.admin == true
+              ? SpeedDial(
+            animatedIcon: AnimatedIcons.menu_arrow,
+            children: [
+              SpeedDialChild(
+                  child: IconButton(
+                    icon: Icon(Icons.remove_circle),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => DeleteCategories(
+                              val: title,
+                            )),
+                      );
+                    },
+                  )),
+              SpeedDialChild(
+                child: IconButton(
+                  icon: Icon(Icons.add_circle),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => AddCategories(
+                            val: title,
+                            imageURL: '',
+                          )),
+                    );
+                  },
                 ),
               ),
-            ),
-          ],
-        ),
-      )),
+            ],
+          )
+              : null,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          body: RefreshIndicator(
+            onRefresh: (){
+              Navigator.pushReplacement(context,
+              PageRouteBuilder(pageBuilder: (a,b,c)=>HomeScreen(user: widget.user,),
+              transitionDuration: Duration(seconds: 0)
+              ),
+              );
+              return Future.value(false);
+            },
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: MyColors.APP_BCK,
+              child: Stack(
+                children: [
+                  ImageCarousel(
+                    collection: 'Carousel',
+                    document: 'HomePage',
+                  ),
+                  SingleChildScrollView(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height / 3),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          )),
+                      child: StreamBuilder(
+                          stream: checkAdmin(),
+                          builder: (context, snapshot) {
+                            if(snapshot.data!=null){
+                              if (snapshot.data["phone"] == "+919944274499") {
+                                Admin.admin = true;
+                              }
+                            }
+                            return Container(
+                              margin: EdgeInsets.only(
+                                top: 25,
+                                left: 25,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Image(
+                                      image: AssetImage('images/sbt.png'),
+                                      fit: BoxFit.cover,
+                                      height: 35,
+                                      width: 35,
+                                      alignment: Alignment.center,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Categories',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: MyColors.TEXT_COLOR,
+                                          fontSize: 22,
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2),
+                                    ),
+                                  ),
+                                  LoadImages(val: 'Categories'),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
+                ],
+              ),
+      ),
+          )),
     );
   }
 }
