@@ -103,7 +103,7 @@ class _ViewItemsState extends State<ViewItems> {
                   ),
                   child: FlatButton(
                     onPressed:()async{
-                      await launch('tel:422 2394911');
+                      await launch('tel:0422 2394911');
                     },
                     child: Text(
                       'BOOK NOW',

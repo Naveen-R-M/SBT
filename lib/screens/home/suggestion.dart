@@ -25,10 +25,10 @@ class Suggestion extends StatelessWidget {
           return Loading();
         } else {
           return Container(
-            margin: EdgeInsets.all(15),
-            width: double.infinity,
-            height: 230,
+            width: MediaQuery.of(context).size.width,
+            height: (MediaQuery.of(context).size.height / 5)+75,
             child: ListView.builder(
+              padding: EdgeInsets.all(5),
               itemCount: snapshot.data.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
@@ -37,23 +37,33 @@ class Suggestion extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ViewItems(
-                            title: path.documentID,
-                            url: path.data["imageURL"],
-                            cost: path.data["cost"],
-                            description: path.data["description"]??null,
-                            category: category,
-                          )));
+                                title: path.documentID,
+                                url: path.data["imageURL"],
+                                cost: path.data["cost"],
+                                description: path.data["description"] ?? null,
+                                category: category,
+                              )));
                     },
-                    child: Card(
-                      shadowColor: MyColors.APP_BCK.withOpacity(0.5),
-                      color: MyColors.APP_BCK,
-                      margin: EdgeInsets.all(5.0),
-                      elevation: 20,
-                      child: Column(
-                        children: [
-                          Container(
+                    child: Column(
+                      children: [
+                        Card(
+                          shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
+                          elevation: 15,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2.25,
+                            height: MediaQuery.of(context).size.height / 5,
+                            child: Image.network(
+                              path.data["imageURL"],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 20,
+                            width: MediaQuery.of(context).size.width / 2.25,
                             margin: EdgeInsets.only(
-                                left: 8, right: 8, top: 5.0, bottom: 5.0),
+                                left: 8.0, right: 8.0, top: 8.0),
                             child: Text(
                               path.documentID,
                               textAlign: TextAlign.center,
@@ -64,29 +74,22 @@ class Suggestion extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 5.5,
-                            color: Colors.white,
-                            child: Center(
-                                child: Image.network(
-                                  path.data["imageURL"],
-                                )),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              path.data["cost"],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: MyColors.TEXT_COLOR,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                        ),
+                        Container(
+                          height: 20,
+                          margin:
+                              EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                          child: Text(
+                            path.data["cost"],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: MyColors.TEXT_COLOR,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ));
               },
             ),
@@ -96,3 +99,77 @@ class Suggestion extends StatelessWidget {
     );
   }
 }
+
+//
+// return Container(
+// margin: EdgeInsets.all(15),
+// width: double.infinity,
+// height: 230,
+// child: ListView.builder(
+// itemCount: snapshot.data.length,
+// scrollDirection: Axis.horizontal,
+// itemBuilder: (context, index) {
+// var path = snapshot.data[index];
+// return Container(
+// width: MediaQuery.of(context).size.width/3,
+// child: GestureDetector(
+// onTap: () {
+// Navigator.of(context).push(MaterialPageRoute(
+// builder: (context) => ViewItems(
+// title: path.documentID,
+// url: path.data["imageURL"],
+// cost: path.data["cost"],
+// description: path.data["description"]??null,
+// category: category,
+// )));
+// },
+// child: Column(
+// children: [
+// Card(
+// shadowColor: MyColors.APP_BCK.withOpacity(0.5),
+// color: MyColors.APP_BCK,
+// margin: EdgeInsets.all(5.0),
+// elevation: 20,
+// child: Container(
+// height: MediaQuery.of(context).size.height / 5.5,
+// color: Colors.white,
+// child: Center(
+// child: Image.network(
+// path.data["imageURL"],
+// )),
+// ),
+// ),
+// Expanded(
+// child: Container(
+// margin: EdgeInsets.only(
+// left: 8, right: 8, top: 5.0, bottom: 5.0),
+// child: Text(
+// path.documentID,
+// textAlign: TextAlign.center,
+// style: TextStyle(
+// color: MyColors.TEXT_COLOR,
+// fontWeight: FontWeight.bold,
+// fontSize: 18,
+// ),
+// ),
+// ),
+// ),
+// Container(
+// margin: EdgeInsets.only(
+// left: 8.0, right: 8.0, top: 8.0),
+// child: Text(
+// path.data["cost"],
+// textAlign: TextAlign.center,
+// style: TextStyle(
+// color: MyColors.TEXT_COLOR,
+// fontWeight: FontWeight.bold,
+// fontSize: 18,
+// ),
+// ),
+// ),
+// ],
+// )),
+// );
+// },
+// ),
+// );

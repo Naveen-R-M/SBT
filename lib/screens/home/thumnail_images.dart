@@ -28,7 +28,7 @@ class _LoadImagesState extends State<LoadImages> {
             return Loading();
           } else {
             return Container(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 10,right: 10),
               margin: EdgeInsets.only(top: 5),
               height: MediaQuery.of(context).size.height-150,
               child: GridView.builder(
@@ -50,7 +50,7 @@ class _LoadImagesState extends State<LoadImages> {
                             width: 160,
                             margin: EdgeInsets.only(
                               bottom: 20,
-                              right: 10,
+                              right: 20,
                             ),
                             decoration: BoxDecoration(
                                 image: DecorationImage(

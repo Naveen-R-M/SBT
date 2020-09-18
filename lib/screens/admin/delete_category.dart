@@ -1,5 +1,7 @@
+import 'package:SBT/screens/home/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_colors.dart';
@@ -35,39 +37,69 @@ class _DeleteCategoriesState extends State<DeleteCategories> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Delete ${widget.val}'),
-        backgroundColor: MyColors.STATUS_BAR,
+        backgroundColor: MyColors.APP_BCK,
       ),
       body: Container(
         margin: EdgeInsets.all(10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 10,
             ),
-            TextFormField(
-              onChanged: (val) => documentID = val,
+            Text(
+              'Select the ${(widget.val).toLowerCase()} to delete',
               style: TextStyle(
-                  color: MyColors.TEXT_COLOR,
-                  letterSpacing: 3.0,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-              maxLines: 1,
-              cursorColor: MyColors.TEXT_COLOR,
-              decoration: InputDecoration(
-                hintText: 'Enter documentID',
-                hintStyle: TextStyle(fontStyle: FontStyle.normal),
-                filled: true,
-                fillColor: MyColors.TEXT_FIELD_BCK,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                ),
+                fontSize: 18,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 10,
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: Firestore.instance.collection(widget.val).snapshots(),
+              builder: (context,snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Loading();
+                }
+                else{
+                  List<DropdownMenuItem> items = [];
+                  for (int i=0 ; i< snapshot.data.documents.length ; i++){
+                    DocumentSnapshot snap = snapshot.data.documents[i];
+                    items.add(
+                      DropdownMenuItem(
+                        child: Center(
+                          child: Text(snap.documentID,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Lato',
+                          ),),
+                        ),
+                        value: '${snap.documentID}',
+                      ),
+                    );
+                  }
+                  return DropdownButton(
+                    focusColor: MyColors.TEXT_FIELD_BCK,
+                    iconEnabledColor: MyColors.TEXT_COLOR,
+                    items: items,
+                    onChanged: (val){
+                      print(val);
+                      final snackbar = SnackBar(
+                        content: Text('$val is selected'),
+                      );
+                      Scaffold.of(context).showSnackBar(snackbar);
+                      setState(() {
+                        documentID = val;
+                      });
+                    },
+                    value: documentID,
+                  );
+                }
+              },
             ),
             Container(
               margin: EdgeInsets.only(top: 20),

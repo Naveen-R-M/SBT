@@ -98,7 +98,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: MyColors.STATUS_BAR,
+        backgroundColor: MyColors.APP_BCK,
         title: Text('Image Process'),
       ),
       bottomNavigationBar: BottomAppBar(
