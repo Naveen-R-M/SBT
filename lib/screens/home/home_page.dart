@@ -71,6 +71,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+              SpeedDialChild(
+                child: IconButton(
+                  icon: Icon(Icons.view_carousel),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => AddCategories(
+                            val: 'Carousel',
+                            imageURL: '',
+                          )),
+                    );
+                  },
+                ),
+              ),
+              SpeedDialChild(
+                  child: IconButton(
+                    icon: Icon(Icons.layers_clear),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => DeleteCategories(
+                              val: 'Carousel',
+                            )),
+                      );
+                    },
+                  )),
             ],
           )
               : null,

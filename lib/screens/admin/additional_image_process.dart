@@ -1,28 +1,30 @@
 import 'dart:io';
-import 'dart:async';
-import 'package:SBT/my_colors.dart';
-import 'package:SBT/screens/admin/add_category.dart';
+import 'package:path/path.dart' as p;
+import 'package:SBT/screens/admin/add_gallery.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
 
-class ImageProcess extends StatelessWidget {
+import '../../my_colors.dart';
+
+class AdditionalImageProcess extends StatelessWidget {
   var val;
-  ImageProcess({this.val});
-
+  var document;
+  AdditionalImageProcess({this.val, this.document});
   @override
   Widget build(BuildContext context) {
     return ImageCapture(
-      val: val,
+      collection: val,
+      document: document,
     );
   }
 }
 
 class ImageCapture extends StatefulWidget {
-  var val;
-  ImageCapture({this.val});
+  var collection;
+  var document;
+  ImageCapture({this.collection, this.document});
   @override
   _ImageCaptureState createState() => _ImageCaptureState();
 }
@@ -74,8 +76,11 @@ class _ImageCaptureState extends State<ImageCapture> {
 
     Future uploadFile(val, file) async {
       String filename = p.basename(_imageFile.path);
-      var storageRef =
-          FirebaseStorage.instance.ref().child(val).child(p.basename(filename));
+      var storageRef = FirebaseStorage.instance
+          .ref()
+          .child(widget.collection)
+          .child('Additional Images').child(widget.document)
+          .child(p.basename(filename));
       StorageUploadTask uploadTask = storageRef.putFile(_imageFile);
       bool taskCompleted = uploadTask.isCanceled;
       print("task Completed :: $taskCompleted");
@@ -87,9 +92,10 @@ class _ImageCaptureState extends State<ImageCapture> {
           await (await uploadTask.onComplete).ref.getDownloadURL();
       var imageURL = downloadURL.toString();
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => AddCategories(
+          builder: (context) => AddGallery(
                 imageURL: imageURL,
-                val: val,
+                collection: widget.collection,
+            document: widget.document,
               )));
       print(imageURL);
       return "";
@@ -121,7 +127,7 @@ class _ImageCaptureState extends State<ImageCapture> {
               iconSize: 40,
               onPressed: _imageFile != null
                   ? () {
-                      uploadFile(widget.val, _imageFile);
+                      uploadFile(widget.collection, _imageFile);
                     }
                   : null,
             )

@@ -114,47 +114,51 @@ class Details extends StatelessWidget {
                                     category: title,
                                   )));
                         },
-                        child: Column(
-                          children: [
-                            Card(
-                              shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
-                              elevation: 15,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width/2.25,
-                                height: MediaQuery.of(context).size.height / 5,
-                                child: Image.network(
-                                  path.data["imageURL"],
-                                  fit: BoxFit.cover,
+                        child: Card(
+                          elevation: 10,
+                          shadowColor: MyColors.TEXT_COLOR.withOpacity(0.70),
+                          child: Column(
+                            children: [
+                              Card(
+                                shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
+                                elevation: 15,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width/2.30,
+                                  height: MediaQuery.of(context).size.height / 5,
+                                  child: Image.network(
+                                    path.data["imageURL"],
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 8.0, right: 8.0, top: 8.0),
-                              child: Text(
-                                path.documentID,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyColors.TEXT_COLOR,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 8.0, right: 8.0, top: 8.0),
+                                child: Text(
+                                  path.documentID,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 8.0, right: 8.0, top: 8.0),
-                              child: Text(
-                                path.data["cost"],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyColors.TEXT_COLOR,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 8.0, right: 8.0, top: 8.0,bottom: 5),
+                                child: Text(
+                                  path.data["cost"],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ));
                   },
                 ),

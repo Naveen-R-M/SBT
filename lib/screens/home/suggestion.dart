@@ -25,8 +25,9 @@ class Suggestion extends StatelessWidget {
           return Loading();
         } else {
           return Container(
+            margin: EdgeInsets.only(left: 8,bottom: 8),
             width: MediaQuery.of(context).size.width,
-            height: (MediaQuery.of(context).size.height / 5)+75,
+            height: (MediaQuery.of(context).size.height / 5)+80,
             child: ListView.builder(
               padding: EdgeInsets.all(5),
               itemCount: snapshot.data.length,
@@ -44,52 +45,57 @@ class Suggestion extends StatelessWidget {
                                 category: category,
                               )));
                     },
-                    child: Column(
-                      children: [
-                        Card(
-                          shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
-                          elevation: 15,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 2.25,
-                            height: MediaQuery.of(context).size.height / 5,
-                            child: Image.network(
-                              path.data["imageURL"],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 20,
-                            width: MediaQuery.of(context).size.width / 2.25,
-                            margin: EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              path.documentID,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: MyColors.TEXT_COLOR,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      child: Card(
+                        elevation: 3.5,
+                        shadowColor: MyColors.TEXT_COLOR.withOpacity(0.4),
+                        child: Column(
+                          children: [
+                            Card(
+                              shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
+                              elevation: 7,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width / 2.25,
+                                height: MediaQuery.of(context).size.height / 5,
+                                child: Image.network(
+                                  path.data["imageURL"],
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Container(
-                          height: 20,
-                          margin:
-                              EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                          child: Text(
-                            path.data["cost"],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: MyColors.TEXT_COLOR,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                            Expanded(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width / 2.25,
+                                margin: EdgeInsets.only(
+                                    left: 8.0, right: 8.0, top: 8.0),
+                                child: Text(
+                                  path.documentID,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            Container(
+                              margin:
+                                  EdgeInsets.only(left: 8.0, right: 8.0,bottom: 5.0),
+                              child: Text(
+                                path.data["cost"],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: MyColors.TEXT_COLOR,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ));
               },
             ),

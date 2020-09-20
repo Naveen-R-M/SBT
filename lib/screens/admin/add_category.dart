@@ -19,6 +19,7 @@ class _AddCategoriesState extends State<AddCategories> {
   String description;
   String cost;
 
+  final _formkey = GlobalKey<FormState>();
   TextEditingController _documentController = TextEditingController();
 
   @override
@@ -48,8 +49,6 @@ class _AddCategoriesState extends State<AddCategories> {
       }
     }
 
-    final _formkey = GlobalKey<FormState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('New ${widget.val}'),
@@ -61,7 +60,7 @@ class _AddCategoriesState extends State<AddCategories> {
           key: _formkey,
           child: Column(
             children: [
-              if(widget.val == "Categories") ...[
+              if((widget.val == "Categories") | (widget.val == "Carousel")) ...[
                 SizedBox(
                   height: 10,
                 ),
@@ -131,7 +130,7 @@ class _AddCategoriesState extends State<AddCategories> {
                   ),
                 )
               ],
-              if(widget.val != "Categories") ...[
+              if((widget.val != "Categories")&&(widget.val != "Carousel")) ...[
                 SizedBox(
                   height: 10,
                 ),

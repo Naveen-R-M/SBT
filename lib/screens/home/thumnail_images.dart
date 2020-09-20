@@ -29,7 +29,6 @@ class _LoadImagesState extends State<LoadImages> {
           } else {
             return Container(
               padding: EdgeInsets.only(bottom: 10,right: 10),
-              margin: EdgeInsets.only(top: 5),
               height: MediaQuery.of(context).size.height-150,
               child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -89,10 +88,9 @@ class _LoadImagesState extends State<LoadImages> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyColors.TEXT_COLOR,
-                                  fontStyle: FontStyle.italic,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 22,
+                                  fontSize: 20,
                                 ),
                               ),
                             ),
