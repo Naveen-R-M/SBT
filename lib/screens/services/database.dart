@@ -1,3 +1,4 @@
+import 'package:SBT/screens/services/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Database{
@@ -11,6 +12,10 @@ class Database{
         'uid':uid,
         'phone':phone,
         'location':location,
+        'state':UserLocation.area,
+        'postal code':UserLocation.postalCode,
+        'latitude':UserLocation.latitude,
+        'longitude':UserLocation.longitude,
       }
     );
   }

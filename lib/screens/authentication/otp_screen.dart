@@ -1,5 +1,6 @@
 import 'package:SBT/my_colors.dart';
 import 'package:SBT/screens/authentication/auth.dart';
+import 'package:SBT/screens/services/location.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -24,6 +25,11 @@ class _OtpScreenState extends State<OtpScreen> {
         .placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark placemark = placemarks[0];
     String city = '${placemark.locality}';
+    UserLocation.locality = placemark.locality;
+    UserLocation.latitude = position.latitude.toString();
+    UserLocation.longitude = position.longitude.toString();
+    UserLocation.area = '${placemark.administrativeArea} , ${placemark.subAdministrativeArea}';
+    UserLocation.postalCode = placemark.postalCode;
     return city;
   }
 

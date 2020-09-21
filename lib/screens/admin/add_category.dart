@@ -54,205 +54,210 @@ class _AddCategoriesState extends State<AddCategories> {
         title: Text('New ${widget.val}'),
         backgroundColor: MyColors.APP_BCK,
       ),
-      body: Container(
-        margin: EdgeInsets.all(10),
-        child: Form(
-          key: _formkey,
-          child: Column(
-            children: [
-              if((widget.val == "Categories") | (widget.val == "Carousel")) ...[
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  validator: (value)=>value.length<1?"DocumentID cannot be empty":null,
-                  controller: _documentController,
-                  onChanged: (val) => documentID = val,
-                  style: TextStyle(
-                      color: MyColors.TEXT_COLOR,
-                      letterSpacing: 3.0,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  cursorColor: MyColors.TEXT_COLOR,
-                  decoration: InputDecoration(
-                    hintText: 'Enter documentID',
-                    hintStyle: TextStyle(fontStyle: FontStyle.normal),
-                    filled: true,
-                    fillColor: MyColors.TEXT_FIELD_BCK,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          margin: EdgeInsets.all(10),
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                if((widget.val == "Categories") | (widget.val == "Carousel")) ...[
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  color: MyColors.TEXT_FIELD_BCK,
-                  child: ListTile(
-                    leading: IconButton(
-                      icon: Icon(Icons.file_upload),
-                      color: MyColors.TEXT_COLOR,
-                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ImageProcess(
-                            val: widget.val,
-                          ))),
-                    ),
-                    title: Text(widget.imageURL),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top:20),
-                  width: MediaQuery.of(context).size.width,
-                  height: 45,
-                  child: FlatButton(
-                    child: Text(
-                      'Upload',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
+                  TextFormField(
+                    validator: (value)=>value.length<1?"DocumentID cannot be empty":null,
+                    controller: _documentController,
+                    onChanged: (val) => documentID = val,
+                    style: TextStyle(
+                        color: MyColors.TEXT_COLOR,
+                        letterSpacing: 3.0,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    cursorColor: MyColors.TEXT_COLOR,
+                    decoration: InputDecoration(
+                      hintText: 'Enter documentID',
+                      hintStyle: TextStyle(fontStyle: FontStyle.normal),
+                      filled: true,
+                      fillColor: MyColors.TEXT_FIELD_BCK,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
                       ),
                     ),
-                    color: MyColors.TEXT_COLOR,
-                    onPressed: () {
-                      if(_formkey.currentState.validate()){
-                        _upload();
-                        Navigator.of(context).pop();
-                      }
-                    },
                   ),
-                )
-              ],
-              if((widget.val != "Categories")&&(widget.val != "Carousel")) ...[
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  validator: (value)=>value.length<1?"DocumentID cannot be empty":null,
-                  controller: _documentController,
-                  onChanged: (val) => documentID = val,
-                  style: TextStyle(
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    color: MyColors.TEXT_FIELD_BCK,
+                    child: ListTile(
+                      leading: IconButton(
+                        icon: Icon(Icons.file_upload),
+                        color: MyColors.TEXT_COLOR,
+                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ImageProcess(
+                              val: widget.val,
+                            ))),
+                      ),
+                      title: Text(widget.imageURL),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top:20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 45,
+                    child: FlatButton(
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                       color: MyColors.TEXT_COLOR,
-                      letterSpacing: 3.0,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  cursorColor: MyColors.TEXT_COLOR,
-                  decoration: InputDecoration(
-                    hintText: 'Enter documentID',
-                    hintStyle: TextStyle(fontStyle: FontStyle.normal),
-                    filled: true,
-                    fillColor: MyColors.TEXT_FIELD_BCK,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      onPressed: () {
+                        if(_formkey.currentState.validate()){
+                          _upload();
+                          Navigator.of(context).pop();
+                        }
+                      },
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
+                  )
+                ],
+                if((widget.val != "Categories")&&(widget.val != "Carousel")) ...[
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  validator: (value)=>value.length<1?"Cost cannot be empty":null,
-                  onChanged: (val) => cost = '₹$val',
-                  style: TextStyle(
-                      color: MyColors.TEXT_COLOR,
-                      letterSpacing: 3.0,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  cursorColor: MyColors.TEXT_COLOR,
-                  decoration: InputDecoration(
-                    hintText: 'Enter the cost',
-                    hintStyle: TextStyle(fontStyle: FontStyle.normal),
-                    filled: true,
-                    fillColor: MyColors.TEXT_FIELD_BCK,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  validator: (value)=>value.length<1?"Description cannot be empty":null,
-                  onChanged: (val) => description = val,
-                  style: TextStyle(
-                      color: MyColors.TEXT_COLOR,
-                      letterSpacing: 3.0,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  cursorColor: MyColors.TEXT_COLOR,
-                  decoration: InputDecoration(
-                    hintText: 'Enter the description',
-                    hintStyle: TextStyle(fontStyle: FontStyle.normal),
-                    filled: true,
-                    fillColor: MyColors.TEXT_FIELD_BCK,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  color: MyColors.TEXT_FIELD_BCK,
-                  child: ListTile(
-                    leading: IconButton(
-                      icon: Icon(Icons.file_upload),
-                      color: MyColors.TEXT_COLOR,
-                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ImageProcess(
-                            val: widget.val,
-                          ))),
-                    ),
-                    title: Text(widget.imageURL),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top:20),
-                  width: MediaQuery.of(context).size.width,
-                  height: 45,
-                  child: FlatButton(
-                    child: Text(
-                      'Upload',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
+                  TextFormField(
+                    validator: (value)=>value.length<1?"DocumentID cannot be empty":null,
+                    controller: _documentController,
+                    onChanged: (val) => documentID = val,
+                    style: TextStyle(
+                        color: MyColors.TEXT_COLOR,
+                        letterSpacing: 3.0,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    cursorColor: MyColors.TEXT_COLOR,
+                    decoration: InputDecoration(
+                      hintText: 'Enter documentID',
+                      hintStyle: TextStyle(fontStyle: FontStyle.normal),
+                      filled: true,
+                      fillColor: MyColors.TEXT_FIELD_BCK,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
                       ),
                     ),
-                    color: MyColors.TEXT_COLOR,
-                    onPressed: () {
-                      if(_formkey.currentState.validate()){
-                        _upload();
-                        Navigator.of(context).pop();
-                      }
-                    },
                   ),
-                )
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    validator: (value)=>value.length<1?"Cost cannot be empty":null,
+                    onChanged: (val) => cost = '₹$val',
+                    style: TextStyle(
+                        color: MyColors.TEXT_COLOR,
+                        letterSpacing: 3.0,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    cursorColor: MyColors.TEXT_COLOR,
+                    decoration: InputDecoration(
+                      hintText: 'Enter the cost',
+                      hintStyle: TextStyle(fontStyle: FontStyle.normal),
+                      filled: true,
+                      fillColor: MyColors.TEXT_FIELD_BCK,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    validator: (value)=>value.length<1?"Description cannot be empty":null,
+                    onChanged: (val) => description = val,
+                    style: TextStyle(
+                        color: MyColors.TEXT_COLOR,
+                        letterSpacing: 3.0,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    cursorColor: MyColors.TEXT_COLOR,
+                    decoration: InputDecoration(
+                      hintText: 'Enter the description',
+                      hintStyle: TextStyle(fontStyle: FontStyle.normal),
+                      filled: true,
+                      fillColor: MyColors.TEXT_FIELD_BCK,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    color: MyColors.TEXT_FIELD_BCK,
+                    child: ListTile(
+                      leading: IconButton(
+                        icon: Icon(Icons.file_upload),
+                        color: MyColors.TEXT_COLOR,
+                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ImageProcess(
+                              val: widget.val,
+                            ))),
+                      ),
+                      title: Text(widget.imageURL),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top:20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 45,
+                    child: FlatButton(
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: MyColors.TEXT_COLOR,
+                      onPressed: () {
+                        if(_formkey.currentState.validate()){
+                          _upload();
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    ),
+                  )
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

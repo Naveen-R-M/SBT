@@ -18,10 +18,9 @@ class Details extends StatelessWidget {
     this.title,
   });
 
-  Future _getImages() async {
+  Stream _getImages() {
     var ref = Firestore.instance;
-    QuerySnapshot qnRef = await ref.collection(title).getDocuments();
-    return qnRef.documents;
+    return ref.collection(title).snapshots();
   }
 
   @override
@@ -83,12 +82,13 @@ class Details extends StatelessWidget {
           );
           return Future.value(false);
         },
-        child: FutureBuilder(
-          future: _getImages(),
+        child: StreamBuilder(
+          stream: _getImages(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             } else {
+              var data = snapshot.data.documents;
               return Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height,
@@ -99,10 +99,10 @@ class Details extends StatelessWidget {
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height / 1.6),
                   ),
-                  itemCount: snapshot.data.length,
+                  itemCount: data.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    var path = snapshot.data[index];
+                    var path = data[index];
                     return GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(

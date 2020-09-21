@@ -70,57 +70,70 @@ class AdditionalImages extends StatelessWidget {
               ],
             )
           : null,
-      body: Container(
-        margin: EdgeInsets.all(5.0),
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: StreamBuilder(
-          stream: _getImages(title, documentID, 'Additional Images'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Loading();
-            } else {
-              var data = snapshot.data.documents;
-              return GestureDetector(
-                child: Container(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      var path = data[index];
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  path.data['imageURL'],
+      body: RefreshIndicator(
+        onRefresh: (){
+          Navigator.pushReplacement(context,
+            PageRouteBuilder(pageBuilder: (a,b,c)=>AdditionalImages(
+              title: title,
+              documentID: documentID,
+            ),
+                transitionDuration: Duration(seconds: 0)
+            ),
+          );
+          return Future.value(false);
+        },
+        child: Container(
+          margin: EdgeInsets.all(5.0),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: StreamBuilder(
+            stream: _getImages(title, documentID, 'Additional Images'),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Loading();
+              } else {
+                var data = snapshot.data.documents;
+                return GestureDetector(
+                  child: Container(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        var path = data[index];
+                        return Stack(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    path.data['imageURL'],
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
-                                fit: BoxFit.cover,
                               ),
                             ),
-                          ),
-                          Admin.admin==true?Container(
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
-                            child: Center(
-                              child: Text(data[index].documentID,
-                              style: TextStyle(
-                                fontFamily: 'Pacifico',
-                                fontSize: 28,
-                              ),),
-                            ),
-                          ):Container(),
-                        ],
-                      );
-                    },
+                            Admin.admin==true?Container(
+                              height: MediaQuery.of(context).size.height,
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(
+                                child: Text(data[index].documentID,
+                                style: TextStyle(
+                                  fontFamily: 'Pacifico',
+                                  fontSize: 28,
+                                ),),
+                              ),
+                            ):Container(),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              );
-            }
-          },
+                );
+              }
+            },
+          ),
         ),
       ),
     );

@@ -42,63 +42,66 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       home: Scaffold(
           floatingActionButton: Admin.admin == true
-              ? SpeedDial(
+              ? Container(
+            margin: EdgeInsets.only(right: 15,),
+                child: SpeedDial(
             animatedIcon: AnimatedIcons.menu_arrow,
             children: [
-              SpeedDialChild(
+                SpeedDialChild(
+                    child: IconButton(
+                      icon: Icon(Icons.remove_circle),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => DeleteCategories(
+                                val: title,
+                              )),
+                        );
+                      },
+                    )),
+                SpeedDialChild(
                   child: IconButton(
-                    icon: Icon(Icons.remove_circle),
+                    icon: Icon(Icons.add_circle),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => DeleteCategories(
+                            builder: (context) => AddCategories(
                               val: title,
+                              imageURL: '',
                             )),
                       );
                     },
-                  )),
-              SpeedDialChild(
-                child: IconButton(
-                  icon: Icon(Icons.add_circle),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => AddCategories(
-                            val: title,
-                            imageURL: '',
-                          )),
-                    );
-                  },
+                  ),
                 ),
-              ),
-              SpeedDialChild(
-                child: IconButton(
-                  icon: Icon(Icons.view_carousel),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => AddCategories(
-                            val: 'Carousel',
-                            imageURL: '',
-                          )),
-                    );
-                  },
-                ),
-              ),
-              SpeedDialChild(
+                SpeedDialChild(
                   child: IconButton(
-                    icon: Icon(Icons.layers_clear),
+                    icon: Icon(Icons.view_carousel),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => DeleteCategories(
+                            builder: (context) => AddCategories(
                               val: 'Carousel',
+                              imageURL: '',
                             )),
                       );
                     },
-                  )),
+                  ),
+                ),
+                SpeedDialChild(
+                    child: IconButton(
+                      icon: Icon(Icons.layers_clear),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => DeleteCategories(
+                                val: 'Carousel',
+                              )),
+                        );
+                      },
+                    )),
             ],
-          )
+          ),
+              )
               : null,
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           body: RefreshIndicator(

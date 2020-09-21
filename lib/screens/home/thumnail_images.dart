@@ -14,29 +14,29 @@ class LoadImages extends StatefulWidget {
 }
 
 class _LoadImagesState extends State<LoadImages> {
-  Future _getImages(var val) async {
+  Stream _getImages(var val) {
     var ref = Firestore.instance;
-    QuerySnapshot qnRef = await ref.collection(val).getDocuments();
-    return qnRef.documents;
+    return ref.collection(val).snapshots();
   }
 
   listView(var val) {
-    return FutureBuilder(
-        future: _getImages(val),
+    return StreamBuilder(
+        stream: _getImages(val),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading();
           } else {
+            var data = snapshot.data.documents;
             return Container(
               padding: EdgeInsets.only(bottom: 10,right: 10),
               height: MediaQuery.of(context).size.height-150,
               child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
-                  itemCount: snapshot.data.length,
+                  itemCount: data.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    var path = snapshot.data[index];
+                    var path = data[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
@@ -84,7 +84,7 @@ class _LoadImagesState extends State<LoadImages> {
                             ),
                             child: Center(
                               child: Text(
-                                snapshot.data[index].documentID,
+                                path.documentID,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyColors.TEXT_COLOR,
