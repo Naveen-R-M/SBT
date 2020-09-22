@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:SBT/model/user.dart';
 import 'package:SBT/screens/home/additional_images.dart';
 import 'package:SBT/screens/home/suggestion.dart';
 import 'package:SBT/screens/home/suggestion_category.dart';
@@ -7,7 +8,10 @@ import 'package:SBT/screens/services/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 
@@ -27,6 +31,56 @@ class ViewItems extends StatefulWidget {
 }
 
 class _ViewItemsState extends State<ViewItems> {
+  Razorpay _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout() async {
+    var options = {
+      'key': 'rzp_test_iXSAz7jqJc5n0D',
+      'amount': 100 * 100,
+      'name': 'SBT Shopping',
+      'description': 'Happy shopping with us',
+      'prefill': {'Contact': '', 'Mail id': ''},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e);
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    Fluttertoast.showToast(
+        msg: 'Your paymentID ${response.paymentId} is successful');
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: 'Your payment is failed with ${{
+      response.code
+    }.toString()}\nERROR Message:${response.message}');
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: 'External Wallet selected : ${response.walletName}');
+  }
 
   _getLocation() async {
     Position position = await Geolocator()
@@ -38,7 +92,8 @@ class _ViewItemsState extends State<ViewItems> {
     UserLocation.locality = placemark.locality;
     UserLocation.latitude = position.latitude.toString();
     UserLocation.longitude = position.longitude.toString();
-    UserLocation.area = '${placemark.administrativeArea} , ${placemark.subAdministrativeArea}';
+    UserLocation.area =
+        '${placemark.administrativeArea} , ${placemark.subAdministrativeArea}';
     UserLocation.postalCode = placemark.postalCode;
   }
 
@@ -83,8 +138,7 @@ class _ViewItemsState extends State<ViewItems> {
                     height: MediaQuery.of(context).size.height / 1.75,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(widget.url),
-                          fit: BoxFit.cover),
+                          image: NetworkImage(widget.url), fit: BoxFit.cover),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
@@ -142,7 +196,8 @@ class _ViewItemsState extends State<ViewItems> {
                                       .collection('Admin')
                                       .document('Mobile No')
                                       .get();
-                                  await launch('tel:'+'${admin_mobile_no['phoneNo']}');
+                                  await launch(
+                                      'tel:' + '${admin_mobile_no['phoneNo']}');
                                 },
                               ),
                             ),
@@ -156,8 +211,7 @@ class _ViewItemsState extends State<ViewItems> {
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'Lato',
-                                      color: Colors.black
-                                  ),
+                                      color: Colors.black),
                                 ),
                               ),
                             ),
@@ -188,14 +242,14 @@ class _ViewItemsState extends State<ViewItems> {
                                   FlutterOpenWhatsapp.sendSingleMessage(
                                       "${admin_no["phoneNo"]}",
                                       'Product ID : ${widget.title}'
-                                      '\nCost : ${widget.cost}'
-                                      '\nDescription : ${widget.description}'
-                                      '\n\nAddress:'
-                                      '\nArea : ${UserLocation.area}'
-                                      '\nLocality : ${UserLocation.locality}'
-                                      '\nPostal Code : ${UserLocation.postalCode}'
-                                      '\nLatitude : ${UserLocation.latitude}'
-                                      '\nLongitude : ${UserLocation.longitude}');
+                                          '\nCost : ${widget.cost}'
+                                          '\nDescription : ${widget.description}'
+                                          '\n\nAddress:'
+                                          '\nArea : ${UserLocation.area}'
+                                          '\nLocality : ${UserLocation.locality}'
+                                          '\nPostal Code : ${UserLocation.postalCode}'
+                                          '\nLatitude : ${UserLocation.latitude}'
+                                          '\nLongitude : ${UserLocation.longitude}');
                                 },
                               ),
                             ),
@@ -209,8 +263,44 @@ class _ViewItemsState extends State<ViewItems> {
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'Lato',
-                                      color: Colors.black
-                                  ),
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          child: Container(
+                            height: 105,
+                            width: 2,
+                            color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: MyColors.TEXT_FIELD_BCK,
+                              radius: 35,
+                              child: IconButton(
+                                icon: Icon(Icons.monetization_on),
+                                color: MyColors.TEXT_COLOR,
+                                iconSize: 40,
+                                onPressed: () {
+                                  openCheckout();
+                                },
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              width: 100,
+                              child: Center(
+                                child: Text(
+                                  'Book through online',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Lato',
+                                      color: Colors.black),
                                 ),
                               ),
                             ),
@@ -235,9 +325,9 @@ class _ViewItemsState extends State<ViewItems> {
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => AdditionalImages(
-                                        title: widget.category,
-                                        documentID: widget.title,
-                                      )));
+                                            title: widget.category,
+                                            documentID: widget.title,
+                                          )));
                                 },
                               ),
                             ),
@@ -246,13 +336,12 @@ class _ViewItemsState extends State<ViewItems> {
                               width: 100,
                               child: Center(
                                 child: Text(
-                                    'Additional Images',
+                                  'Additional Images',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'Lato',
-                                    color: Colors.black
-                                  ),
+                                      fontSize: 14,
+                                      fontFamily: 'Lato',
+                                      color: Colors.black),
                                 ),
                               ),
                             ),
