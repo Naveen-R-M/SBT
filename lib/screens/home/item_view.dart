@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:SBT/model/user.dart';
 import 'package:SBT/screens/home/additional_images.dart';
 import 'package:SBT/screens/home/suggestion.dart';
 import 'package:SBT/screens/home/suggestion_category.dart';
@@ -10,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
@@ -88,7 +84,6 @@ class _ViewItemsState extends State<ViewItems> {
     List<Placemark> placemarks = await Geolocator()
         .placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark placemark = placemarks[0];
-    String city = '${placemark.locality}';
     UserLocation.locality = placemark.locality;
     UserLocation.latitude = position.latitude.toString();
     UserLocation.longitude = position.longitude.toString();

@@ -18,13 +18,15 @@ class _AddCategoriesState extends State<AddCategories> {
   String documentID;
   String description;
   String cost;
+  String priorityValue;
 
   final _formkey = GlobalKey<FormState>();
   TextEditingController _documentController = TextEditingController();
 
+  var priority = ['High','Low'];
+
   @override
   Widget build(BuildContext context) {
-
     _upload() async{
       CollectionReference ref = Firestore.instance.collection(widget.val);
       if(widget.val == "Categories"){
@@ -39,6 +41,7 @@ class _AddCategoriesState extends State<AddCategories> {
           'cost':cost,
           'description':description,
           'imageURL':widget.imageURL,
+          'priority':priorityValue,
         }).whenComplete(() {
           print("Completed");
           setState(() {
@@ -48,6 +51,8 @@ class _AddCategoriesState extends State<AddCategories> {
         });
       }
     }
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -62,6 +67,7 @@ class _AddCategoriesState extends State<AddCategories> {
           child: Form(
             key: _formkey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if((widget.val == "Categories") | (widget.val == "Carousel")) ...[
                   SizedBox(
@@ -234,6 +240,40 @@ class _AddCategoriesState extends State<AddCategories> {
                   SizedBox(
                     height: 15,
                   ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                        margin: EdgeInsets.all(10),
+                        child: Text(
+                          'Priority',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    alignment: Alignment.centerLeft,
+                    child: DropdownButton<String>(
+                      items: priority.map((value){
+                        return DropdownMenuItem(
+                          child: Text(value),
+                          value: value,
+                        );
+                      }).toList(),
+                      onChanged: (value){
+                        print("Priority:::");
+                        setState(() {
+                          priorityValue = value;
+                        });
+                      },
+                      value: priorityValue,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
                     margin: EdgeInsets.only(top:20),
                     width: MediaQuery.of(context).size.width,
@@ -262,5 +302,10 @@ class _AddCategoriesState extends State<AddCategories> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
