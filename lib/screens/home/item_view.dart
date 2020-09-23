@@ -181,11 +181,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
+                              radius: 20,
                               child: IconButton(
                                 icon: Icon(Icons.phone),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
+                                iconSize: 25,
                                 onPressed: () async {
                                   var admin_mobile_no = await Firestore.instance
                                       .collection('Admin')
@@ -198,13 +198,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 100,
+                              width: 80,
                               child: Center(
                                 child: Text(
                                   'Book through phone',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
@@ -214,7 +214,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         SizedBox(
                           child: Container(
-                            height: 105,
+                            height: 85,
                             width: 2,
                             color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
@@ -223,11 +223,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
+                              radius: 20,
                               child: IconButton(
                                 icon: Image.asset('images/whatsapp_logo.png'),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
+                                iconSize: 25,
                                 onPressed: () async {
                                   _getLocation();
                                   var admin_no = await Firestore.instance
@@ -250,13 +250,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 100,
+                              width: 80,
                               child: Center(
                                 child: Text(
                                   'Book through whatsapp',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
@@ -266,7 +266,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         SizedBox(
                           child: Container(
-                            height: 105,
+                            height: 85,
                             width: 2,
                             color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
@@ -275,11 +275,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
+                              radius: 20,
                               child: IconButton(
                                 icon: Icon(Icons.monetization_on),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
+                                iconSize: 25,
                                 onPressed: () {
                                   openCheckout();
                                 },
@@ -287,13 +287,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 100,
+                              width: 80,
                               child: Center(
                                 child: Text(
                                   'Book through online',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
@@ -303,7 +303,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         SizedBox(
                           child: Container(
-                            height: 105,
+                            height: 85,
                             width: 2,
                             color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
@@ -312,11 +312,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
+                              radius: 20,
                               child: IconButton(
                                 icon: Icon(Icons.photo_library),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
+                                iconSize: 25,
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => AdditionalImages(
@@ -328,13 +328,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 100,
+                              width: 80,
                               child: Center(
                                 child: Text(
                                   'Additional Images',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
