@@ -19,39 +19,36 @@ class _AddCategoriesState extends State<AddCategories> {
   String description;
   String cost;
   String priorityValue;
+  int stockCount;
 
   final _formkey = GlobalKey<FormState>();
   TextEditingController _documentController = TextEditingController();
 
-  var priority = ['High','Low'];
+  var priority = ['High', 'Low'];
 
   @override
   Widget build(BuildContext context) {
-    _upload() async{
+    _upload() async {
       CollectionReference ref = Firestore.instance.collection(widget.val);
-      if(widget.val == "Categories"){
+      if (widget.val == "Categories") {
         return await ref.document(documentID).setData({
-          'imageURL':widget.imageURL,
+          'imageURL': widget.imageURL,
         }).whenComplete(() {
           print("Completed");
         });
       }
-      else{
+      else {
         return await ref.document(documentID).setData({
-          'cost':cost,
-          'description':description,
-          'imageURL':widget.imageURL,
-          'priority':priorityValue,
+          'stockAvailable': stockCount,
+          'cost': cost,
+          'description': description,
+          'imageURL': widget.imageURL,
+          'priority': priorityValue,
         }).whenComplete(() {
           print("Completed");
-          setState(() {
-            _documentController.text = '';
-            widget.imageURL = '';
-          });
         });
       }
     }
-
 
 
     return Scaffold(
@@ -69,12 +66,16 @@ class _AddCategoriesState extends State<AddCategories> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if((widget.val == "Categories") | (widget.val == "Carousel")) ...[
+                if((widget.val == "Categories") | (widget.val ==
+                    "Carousel")) ...[
                   SizedBox(
                     height: 10,
                   ),
                   TextFormField(
-                    validator: (value)=>value.length<1?"DocumentID cannot be empty":null,
+                    validator: (value) =>
+                    value.length < 1
+                        ? "DocumentID cannot be empty"
+                        : null,
                     controller: _documentController,
                     onChanged: (val) => documentID = val,
                     style: TextStyle(
@@ -106,10 +107,12 @@ class _AddCategoriesState extends State<AddCategories> {
                       leading: IconButton(
                         icon: Icon(Icons.file_upload),
                         color: MyColors.TEXT_COLOR,
-                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ImageProcess(
-                              val: widget.val,
-                            ))),
+                        onPressed: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    ImageProcess(
+                                      val: widget.val,
+                                    ))),
                       ),
                       title: Text(widget.imageURL),
                     ),
@@ -118,8 +121,11 @@ class _AddCategoriesState extends State<AddCategories> {
                     height: 15,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top:20),
-                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(top: 20),
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     height: 45,
                     child: FlatButton(
                       child: Text(
@@ -131,7 +137,7 @@ class _AddCategoriesState extends State<AddCategories> {
                       ),
                       color: MyColors.TEXT_COLOR,
                       onPressed: () {
-                        if(_formkey.currentState.validate()){
+                        if (_formkey.currentState.validate()) {
                           _upload();
                           Navigator.of(context).pop();
                         }
@@ -139,12 +145,16 @@ class _AddCategoriesState extends State<AddCategories> {
                     ),
                   )
                 ],
-                if((widget.val != "Categories")&&(widget.val != "Carousel")) ...[
+                if((widget.val != "Categories") &&
+                    (widget.val != "Carousel")) ...[
                   SizedBox(
                     height: 10,
                   ),
                   TextFormField(
-                    validator: (value)=>value.length<1?"DocumentID cannot be empty":null,
+                    validator: (value) =>
+                    value.length < 1
+                        ? "DocumentID cannot be empty"
+                        : null,
                     controller: _documentController,
                     onChanged: (val) => documentID = val,
                     style: TextStyle(
@@ -171,8 +181,11 @@ class _AddCategoriesState extends State<AddCategories> {
                     height: 10,
                   ),
                   TextFormField(
-                    validator: (value)=>value.length<1?"Cost cannot be empty":null,
-                    onChanged: (val) => cost = '₹$val',
+                    validator: (value) =>
+                    value.length < 1
+                        ? "Cost cannot be empty"
+                        : null,
+                    onChanged: (val) => cost = val,
                     style: TextStyle(
                         color: MyColors.TEXT_COLOR,
                         letterSpacing: 3.0,
@@ -197,7 +210,10 @@ class _AddCategoriesState extends State<AddCategories> {
                     height: 15,
                   ),
                   TextFormField(
-                    validator: (value)=>value.length<1?"Description cannot be empty":null,
+                    validator: (value) =>
+                    value.length < 1
+                        ? "Description cannot be empty"
+                        : null,
                     onChanged: (val) => description = val,
                     style: TextStyle(
                         color: MyColors.TEXT_COLOR,
@@ -223,16 +239,47 @@ class _AddCategoriesState extends State<AddCategories> {
                   SizedBox(
                     height: 15,
                   ),
+                  TextFormField(
+                    validator: (value) =>
+                    value.length < 1
+                        ? "Stock count is required"
+                        : null,
+                    onChanged: (val) => stockCount = num.parse(val),
+                    style: TextStyle(
+                        color: MyColors.TEXT_COLOR,
+                        letterSpacing: 3.0,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    cursorColor: MyColors.TEXT_COLOR,
+                    decoration: InputDecoration(
+                      hintText: 'Stock Available',
+                      hintStyle: TextStyle(fontStyle: FontStyle.normal),
+                      filled: true,
+                      fillColor: MyColors.TEXT_FIELD_BCK,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
                     color: MyColors.TEXT_FIELD_BCK,
                     child: ListTile(
                       leading: IconButton(
                         icon: Icon(Icons.file_upload),
                         color: MyColors.TEXT_COLOR,
-                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ImageProcess(
-                              val: widget.val,
-                            ))),
+                        onPressed: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    ImageProcess(
+                                      val: widget.val,
+                                    ))),
                       ),
                       title: Text(widget.imageURL),
                     ),
@@ -243,26 +290,26 @@ class _AddCategoriesState extends State<AddCategories> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                        margin: EdgeInsets.all(10),
-                        child: Text(
-                          'Priority',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
+                      margin: EdgeInsets.all(10),
+                      child: Text(
+                        'Priority',
+                        style: TextStyle(
+                          fontSize: 18,
                         ),
+                      ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: DropdownButton<String>(
-                      items: priority.map((value){
+                      items: priority.map((value) {
                         return DropdownMenuItem(
                           child: Text(value),
                           value: value,
                         );
                       }).toList(),
-                      onChanged: (value){
+                      onChanged: (value) {
                         print("Priority:::");
                         setState(() {
                           priorityValue = value;
@@ -275,8 +322,11 @@ class _AddCategoriesState extends State<AddCategories> {
                     height: 15,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top:20),
-                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(top: 20),
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     height: 45,
                     child: FlatButton(
                       child: Text(
@@ -288,7 +338,7 @@ class _AddCategoriesState extends State<AddCategories> {
                       ),
                       color: MyColors.TEXT_COLOR,
                       onPressed: () {
-                        if(_formkey.currentState.validate()){
+                        if (_formkey.currentState.validate()) {
                           _upload();
                           Navigator.of(context).pop();
                         }
@@ -302,10 +352,5 @@ class _AddCategoriesState extends State<AddCategories> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

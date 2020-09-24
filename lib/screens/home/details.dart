@@ -2,6 +2,7 @@ import 'package:SBT/my_colors.dart';
 import 'package:SBT/screens/admin/add_category.dart';
 import 'package:SBT/screens/admin/admin.dart';
 import 'package:SBT/screens/admin/delete_category.dart';
+import 'package:SBT/screens/admin/edit_category.dart';
 import 'package:SBT/screens/home/item_view.dart';
 import 'package:SBT/screens/home/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,7 +29,6 @@ class _DetailsState extends State<Details> {
     var ref = Firestore.instance;
     return ref.collection(widget.title).snapshots();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,28 +64,44 @@ class _DetailsState extends State<Details> {
                   },
                 )),
                 SpeedDialChild(
-                    child: IconButton(
-                      icon: Icon(Icons.add_circle),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                          builder: (context) => AddCategories(
-                                val: widget.title,
-                                imageURL: '',
-                              )),
-                        );
-                        },
-                    ),
+                  child: IconButton(
+                    icon: Icon(Icons.add_circle),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => AddCategories(
+                                  val: widget.title,
+                                  imageURL: '',
+                                )),
+                      );
+                    },
+                  ),
+                ),
+                SpeedDialChild(
+                  child: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => EditCategory(
+                              collection: widget.title,
+                            )),
+                      );
+                    },
+                  ),
                 ),
               ],
             )
           : null,
-      body:  RefreshIndicator(
-        onRefresh: (){
-          Navigator.pushReplacement(context,
-            PageRouteBuilder(pageBuilder: (a,b,c)=>Details(title: widget.title,),
-                transitionDuration: Duration(seconds: 0)
-            ),
+      body: RefreshIndicator(
+        onRefresh: () {
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (a, b, c) => Details(
+                      title: widget.title,
+                    ),
+                transitionDuration: Duration(seconds: 0)),
           );
           return Future.value(false);
         },
@@ -104,122 +120,208 @@ class _DetailsState extends State<Details> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 1.6),
+                        (MediaQuery.of(context).size.height / 1.5),
                   ),
                   itemCount: data.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     var path = data[index];
                     return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ViewItems(
-                                    title: path.documentID,
-                                    url: path.data["imageURL"],
-                                    cost: path.data["cost"],
-                                    description: path.data["description"] ?? null,
-                                    category: widget.title,
-                                  )));
-                        },
-                        child: path.data['priority']=="High"?Banner(
-                          location: BannerLocation.topEnd,
-                          message: message,
-                          textStyle: TextStyle(
-                            fontSize: 10,
-                            letterSpacing: 1.25
-                          ),
-                          child: Card(
-                            elevation: 10,
-                            shadowColor: MyColors.TEXT_COLOR.withOpacity(0.70),
-                            child: Column(
-                              children: [
-                                Card(
-                                  shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
-                                  elevation: 15,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width/2.30,
-                                    height: MediaQuery.of(context).size.height / 5,
-                                    child: Image.network(
-                                      path.data["imageURL"],
-                                      fit: BoxFit.cover,
+                      onTap:path.data['stockAvailable'] > 0?(){
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ViewItems(
+                                  title: path.documentID,
+                                  url: path.data["imageURL"],
+                                  cost: path.data["cost"],
+                                  description: path.data["description"] ?? null,
+                                  category: widget.title,
+                                )));
+                      }:null,
+                      child: path.data['stockAvailable'] > 0
+                          ? path.data['priority'] == "High"
+                              ? Banner(
+                                  location: BannerLocation.topEnd,
+                                  message: message,
+                                  textStyle: TextStyle(
+                                      fontSize: 10, letterSpacing: 1.25),
+                                  child: Card(
+                                    elevation: 10,
+                                    shadowColor:
+                                        MyColors.TEXT_COLOR.withOpacity(0.70),
+                                    child: Column(
+                                      children: [
+                                        Card(
+                                          shadowColor: MyColors.STATUS_BAR
+                                              .withOpacity(0.5),
+                                          elevation: 15,
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.30,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                5,
+                                            child: Image.network(
+                                              path.data["imageURL"],
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 8.0, right: 8.0, top: 8.0),
+                                          child: Text(
+                                            path.documentID,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: MyColors.TEXT_COLOR,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 8.0,
+                                              right: 8.0,
+                                              top: 8.0,
+                                              bottom: 5),
+                                          child: Text(
+                                            '₹${path.data["cost"]}',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: MyColors.TEXT_COLOR,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: 8.0, right: 8.0, top: 8.0),
-                                  child: Text(
-                                    path.documentID,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: MyColors.TEXT_COLOR,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
+                                )
+                              : Card(
+                                  elevation: 10,
+                                  shadowColor:
+                                      MyColors.TEXT_COLOR.withOpacity(0.70),
+                                  child: Column(
+                                    children: [
+                                      Card(
+                                        shadowColor: MyColors.STATUS_BAR
+                                            .withOpacity(0.5),
+                                        elevation: 15,
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.30,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              5,
+                                          child: Image.network(
+                                            path.data["imageURL"],
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 8.0, right: 8.0, top: 8.0),
+                                        child: Text(
+                                          path.documentID,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: MyColors.TEXT_COLOR,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            left: 8.0,
+                                            right: 8.0,
+                                            top: 8.0,
+                                            bottom: 5),
+                                        child: Text(
+                                          '₹${path.data["cost"]}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: MyColors.TEXT_COLOR,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                          : Banner(
+                        location: BannerLocation.topEnd,
+                        message: 'Sold',
+                        textStyle: TextStyle(
+                            fontSize: 10, letterSpacing: 1.25),
+                        child: Card(
+                          elevation: 10,
+                          shadowColor:
+                          MyColors.TEXT_COLOR.withOpacity(0.70),
+                          child: Column(
+                            children: [
+                              Card(
+                                shadowColor: MyColors.STATUS_BAR
+                                    .withOpacity(0.5),
+                                elevation: 15,
+                                child: Container(
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width /
+                                      2.30,
+                                  height: MediaQuery.of(context)
+                                      .size
+                                      .height /
+                                      5,
+                                  child: Image.network(
+                                    path.data["imageURL"],
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: 8.0, right: 8.0, top: 8.0,bottom: 5),
-                                  child: Text(
-                                    path.data["cost"],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: MyColors.TEXT_COLOR,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 8.0, right: 8.0, top: 8.0),
+                                child: Text(
+                                  path.documentID,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ):Card(
-                      elevation: 10,
-                      shadowColor: MyColors.TEXT_COLOR.withOpacity(0.70),
-                      child: Column(
-                        children: [
-                          Card(
-                            shadowColor: MyColors.STATUS_BAR.withOpacity(0.5),
-                            elevation: 15,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width/2.30,
-                              height: MediaQuery.of(context).size.height / 5,
-                              child: Image.network(
-                                path.data["imageURL"],
-                                fit: BoxFit.cover,
                               ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              path.documentID,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: MyColors.TEXT_COLOR,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 8.0,
+                                    right: 8.0,
+                                    top: 8.0,
+                                    bottom: 5),
+                                child: Text(
+                                  '₹${path.data["cost"]}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0,bottom: 5),
-                            child: Text(
-                              path.data["cost"],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: MyColors.TEXT_COLOR,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
                     );
                   },
                 ),
@@ -231,8 +333,9 @@ class _DetailsState extends State<Details> {
     );
   }
 
-  _message()async{
-    var ref = await Firestore.instance.collection('Message').document('Banner').get();
+  _message() async {
+    var ref =
+        await Firestore.instance.collection('Message').document('Banner').get();
     setState(() {
       message = ref["tag"].toString();
     });
@@ -244,20 +347,3 @@ class _DetailsState extends State<Details> {
     _message();
   }
 }
-
-//
-//Container(
-//height: 220,
-//width: 160,
-//margin: EdgeInsets.all(8),
-//child: Align(
-//alignment: Alignment.bottomRight,
-//child: Text(
-//'\$50',
-//style: TextStyle(
-//color: MyColors.TEXT_COLOR,
-//fontSize: 22,
-//),
-//),
-//),
-//),

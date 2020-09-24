@@ -1,3 +1,4 @@
+import 'package:SBT/model/user.dart';
 import 'package:SBT/screens/home/additional_images.dart';
 import 'package:SBT/screens/home/suggestion.dart';
 import 'package:SBT/screens/home/suggestion_category.dart';
@@ -6,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
@@ -27,6 +28,7 @@ class ViewItems extends StatefulWidget {
 }
 
 class _ViewItemsState extends State<ViewItems> {
+  var user;
   Razorpay _razorpay;
 
   @override
@@ -43,12 +45,21 @@ class _ViewItemsState extends State<ViewItems> {
     _razorpay.clear();
   }
 
+  _update()async{
+    var ref = await Firestore.instance.collection(widget.category)
+    .document(widget.title).get();
+    return await Firestore.instance.collection(widget.category)
+        .document(widget.title).updateData({
+      'stockAvailable' : ref["stockAvailable"] - 1,
+    });
+  }
+  
   void openCheckout() async {
     var options = {
       'key': 'rzp_test_iXSAz7jqJc5n0D',
-      'amount': 100 * 100,
+      'amount': num.parse(widget.cost) * 100,
       'name': 'SBT Shopping',
-      'description': 'Happy shopping with us',
+      'description': 'ProductID : ${widget.title}',
       'prefill': {'Contact': '', 'Mail id': ''},
       'external': {
         'wallets': ['paytm']
@@ -61,16 +72,45 @@ class _ViewItemsState extends State<ViewItems> {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(
         msg: 'Your paymentID ${response.paymentId} is successful');
+    _update();
+    DateTime now = DateTime.now();
+    await Firestore.instance
+        .collection('Users')
+        .document(user.uid)
+        .collection('Successful Transactions')
+        .document()
+        .setData({
+      'dateTime' : now,
+      'result' : 'Success',
+      'category' : widget.category,
+      'productID' : widget.title,
+      'amount' : widget.cost,
+      'imageURL' : widget.url,
+    });
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
+  void _handlePaymentError(PaymentFailureResponse response) async{
     Fluttertoast.showToast(
         msg: 'Your payment is failed with ${{
       response.code
     }.toString()}\nERROR Message:${response.message}');
+    DateTime now = DateTime.now();
+    await Firestore.instance
+        .collection('Users')
+        .document(user.uid)
+        .collection('Failed Transactions')
+        .document()
+        .setData({
+      'dateTime' : now,
+      'result' : 'Failed',
+      'category' : widget.category,
+      'productID' : widget.title,
+      'amount' : widget.cost,
+      'imageURL' : widget.url,
+    });
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -78,22 +118,9 @@ class _ViewItemsState extends State<ViewItems> {
         msg: 'External Wallet selected : ${response.walletName}');
   }
 
-  _getLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemarks = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark placemark = placemarks[0];
-    UserLocation.locality = placemark.locality;
-    UserLocation.latitude = position.latitude.toString();
-    UserLocation.longitude = position.longitude.toString();
-    UserLocation.area =
-        '${placemark.administrativeArea} , ${placemark.subAdministrativeArea}';
-    UserLocation.postalCode = placemark.postalCode;
-  }
-
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<User>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -119,7 +146,7 @@ class _ViewItemsState extends State<ViewItems> {
                         title: widget.title,
                         description: widget.description,
                         url: widget.url,
-                        cost: widget.cost,
+                        cost: '₹${widget.cost}',
                       ),
                   transitionDuration: Duration(seconds: 1)),
             );
@@ -161,7 +188,7 @@ class _ViewItemsState extends State<ViewItems> {
                     margin: EdgeInsets.only(left: 15),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      widget.cost,
+                      '₹${widget.cost}',
                       style: TextStyle(
                           fontSize: 20,
                           color: MyColors.TEXT_COLOR,
@@ -181,11 +208,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 20,
+                              radius: 35,
                               child: IconButton(
                                 icon: Icon(Icons.phone),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 25,
+                                iconSize: 40,
                                 onPressed: () async {
                                   var admin_mobile_no = await Firestore.instance
                                       .collection('Admin')
@@ -198,13 +225,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 80,
+                              width: 100,
                               child: Center(
                                 child: Text(
                                   'Book through phone',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
@@ -214,7 +241,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         SizedBox(
                           child: Container(
-                            height: 85,
+                            height: 105,
                             width: 2,
                             color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
@@ -223,13 +250,12 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 20,
+                              radius: 35,
                               child: IconButton(
                                 icon: Image.asset('images/whatsapp_logo.png'),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 25,
+                                iconSize: 40,
                                 onPressed: () async {
-                                  _getLocation();
                                   var admin_no = await Firestore.instance
                                       .collection('Admin')
                                       .document('Phone No')
@@ -237,7 +263,7 @@ class _ViewItemsState extends State<ViewItems> {
                                   FlutterOpenWhatsapp.sendSingleMessage(
                                       "${admin_no["phoneNo"]}",
                                       'Product ID : ${widget.title}'
-                                          '\nCost : ${widget.cost}'
+                                          '\nCost : ₹${widget.cost}'
                                           '\nDescription : ${widget.description}'
                                           '\n\nAddress:'
                                           '\nArea : ${UserLocation.area}'
@@ -250,13 +276,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 80,
+                              width: 100,
                               child: Center(
                                 child: Text(
                                   'Book through whatsapp',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
@@ -266,7 +292,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         SizedBox(
                           child: Container(
-                            height: 85,
+                            height: 105,
                             width: 2,
                             color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
@@ -275,11 +301,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 20,
+                              radius: 35,
                               child: IconButton(
                                 icon: Icon(Icons.monetization_on),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 25,
+                                iconSize: 40,
                                 onPressed: () {
                                   openCheckout();
                                 },
@@ -287,13 +313,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 80,
+                              width: 100,
                               child: Center(
                                 child: Text(
                                   'Book through online',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),
@@ -303,7 +329,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         SizedBox(
                           child: Container(
-                            height: 85,
+                            height: 105,
                             width: 2,
                             color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
@@ -312,11 +338,11 @@ class _ViewItemsState extends State<ViewItems> {
                           children: [
                             CircleAvatar(
                               backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 20,
+                              radius: 35,
                               child: IconButton(
                                 icon: Icon(Icons.photo_library),
                                 color: MyColors.TEXT_COLOR,
-                                iconSize: 25,
+                                iconSize: 40,
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => AdditionalImages(
@@ -328,13 +354,13 @@ class _ViewItemsState extends State<ViewItems> {
                             ),
                             Container(
                               margin: EdgeInsets.all(10),
-                              width: 80,
+                              width: 100,
                               child: Center(
                                 child: Text(
                                   'Additional Images',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontFamily: 'Lato',
                                       color: Colors.black),
                                 ),

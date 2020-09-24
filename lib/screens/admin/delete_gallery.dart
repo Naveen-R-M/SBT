@@ -10,7 +10,6 @@ class DeleteGallery extends StatefulWidget {
   String document;
   String subCollection;
 
-
   DeleteGallery({this.collection, this.document, this.subCollection});
 
   @override
