@@ -95,7 +95,7 @@ class _SuggestionState extends State<Suggestion> {
                                     margin:
                                     EdgeInsets.only(left: 8.0, right: 8.0,bottom: 5.0),
                                     child: Text(
-                                      path.data["cost"],
+                                      '₹${path.data["cost"]}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: MyColors.TEXT_COLOR,
@@ -122,7 +122,7 @@ class _SuggestionState extends State<Suggestion> {
                                 width: MediaQuery.of(context).size.width / 2.25,
                                 height: MediaQuery.of(context).size.height / 5,
                                 child: Image.network(
-                                  path.data["imageURL"],
+                                  '₹${path.data["imageURL"]}',
                                   fit: BoxFit.cover,
                                 ),
                               ),

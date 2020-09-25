@@ -28,7 +28,7 @@ class _LoadImagesState extends State<LoadImages> {
           } else {
             var data = snapshot.data.documents;
             return Container(
-              padding: EdgeInsets.only(bottom: 10,right: 10),
+              padding: EdgeInsets.only(bottom: 30,right: 10,),
               height: MediaQuery.of(context).size.height-150,
               child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

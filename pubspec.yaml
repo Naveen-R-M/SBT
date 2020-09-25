@@ -39,8 +39,4 @@ flutter:
   - family: Lato
     fonts:
     - asset: fonts/Lato/Lato-Bold.ttf
-    - weight: 600
     - asset: fonts/Lato/Lato-Light.ttf
-    - weight: 100
-    - asset: fonts/Lato/Lato-Black.ttf
-    - weight: 300

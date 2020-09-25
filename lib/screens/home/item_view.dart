@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 
 import '../../my_colors.dart';
@@ -29,7 +28,44 @@ class ViewItems extends StatefulWidget {
 
 class _ViewItemsState extends State<ViewItems> {
   var user;
+  bool liked = false;
+  bool cartAdded;
   Razorpay _razorpay;
+
+  _addToLiked() async {
+    var ref = Firestore.instance
+        .collection('Users')
+        .document(user.uid)
+        .collection('Liked')
+        .document();
+    return await ref.setData({
+      'category': widget.category,
+      'title': widget.title,
+      'cost': widget.cost,
+      'description': widget.description,
+      'imageURL': widget.url,
+    }).whenComplete(() => Fluttertoast.showToast(msg: 'Item added to liked'));
+  }
+
+  _addToCart() async {
+    var ref = Firestore.instance
+        .collection("Users")
+        .document(user.uid)
+        .collection('Cart')
+        .document();
+    return await ref.setData({
+      'category': widget.category,
+      'title': widget.title,
+      'cost': widget.cost,
+      'description': widget.description,
+      'imageURL': widget.url,
+    }).whenComplete(() {
+      Fluttertoast.showToast(msg: 'Item added to cart successfully');
+      setState(() {
+        cartAdded = true;
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -45,15 +81,21 @@ class _ViewItemsState extends State<ViewItems> {
     _razorpay.clear();
   }
 
-  _update()async{
-    var ref = await Firestore.instance.collection(widget.category)
-    .document(widget.title).get();
-    return await Firestore.instance.collection(widget.category)
-        .document(widget.title).updateData({
-      'stockAvailable' : ref["stockAvailable"] - 1,
-    });
+  _update() async {
+    var ref = await Firestore.instance
+        .collection(widget.category)
+        .document(widget.title)
+        .get();
+    if (ref.data['stockAvailable'] > 0) {
+      return await Firestore.instance
+          .collection(widget.category)
+          .document(widget.title)
+          .updateData({
+        'stockAvailable': ref["stockAvailable"] - 1,
+      });
+    }
   }
-  
+
   void openCheckout() async {
     var options = {
       'key': 'rzp_test_iXSAz7jqJc5n0D',
@@ -83,16 +125,16 @@ class _ViewItemsState extends State<ViewItems> {
         .collection('Successful Transactions')
         .document()
         .setData({
-      'dateTime' : now,
-      'result' : 'Success',
-      'category' : widget.category,
-      'productID' : widget.title,
-      'amount' : widget.cost,
-      'imageURL' : widget.url,
+      'dateTime': now,
+      'result': 'Success',
+      'category': widget.category,
+      'productID': widget.title,
+      'amount': widget.cost,
+      'imageURL': widget.url,
     });
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) async{
+  void _handlePaymentError(PaymentFailureResponse response) async {
     Fluttertoast.showToast(
         msg: 'Your payment is failed with ${{
       response.code
@@ -104,12 +146,12 @@ class _ViewItemsState extends State<ViewItems> {
         .collection('Failed Transactions')
         .document()
         .setData({
-      'dateTime' : now,
-      'result' : 'Failed',
-      'category' : widget.category,
-      'productID' : widget.title,
-      'amount' : widget.cost,
-      'imageURL' : widget.url,
+      'dateTime': now,
+      'result': 'Failed',
+      'category': widget.category,
+      'productID': widget.title,
+      'amount': widget.cost,
+      'imageURL': widget.url,
     });
   }
 
@@ -199,180 +241,269 @@ class _ViewItemsState extends State<ViewItems> {
                   SizedBox(
                     height: 20,
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
-                              child: IconButton(
-                                icon: Icon(Icons.phone),
-                                color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
-                                onPressed: () async {
-                                  var admin_mobile_no = await Firestore.instance
-                                      .collection('Admin')
-                                      .document('Mobile No')
-                                      .get();
-                                  await launch(
-                                      'tel:' + '${admin_mobile_no['phoneNo']}');
-                                },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          StreamBuilder(
+                              stream: Firestore.instance
+                                  .collection('Users')
+                                  .document(user.uid)
+                                  .collection('Liked')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                for (var i = 0 ; i<snapshot.data.documents.length;i++){
+                                  if(snapshot.data.documents[i]["title"]==widget.title){
+                                    liked = true;
+                                  }
+                                }
+                                return CircleAvatar(
+                                  backgroundColor: MyColors.TEXT_FIELD_BCK,
+                                  radius: 35,
+                                  child: IconButton(
+                                    icon: Icon(Icons.thumb_up),
+                                    color: liked == true
+                                        ? MyColors.TEXT_COLOR
+                                        : Colors.grey,
+                                    iconSize: 40,
+                                    onPressed: () {
+                                      _addToLiked();
+                                      setState(() {
+                                        liked = true;
+                                      });
+                                    },
+                                  ),
+                                );
+                              }),
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: 100,
+                            child: Center(
+                              child: Text(
+                                liked == true
+                                    ? 'You liked this product'
+                                    : 'Like this product?',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Lato',
+                                    color: Colors.black),
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              width: 100,
-                              child: Center(
-                                child: Text(
-                                  'Book through phone',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Lato',
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          child: Container(
-                            height: 105,
-                            width: 2,
-                            color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
+                        ],
+                      ),
+                      SizedBox(
+                        child: Container(
+                          height: 105,
+                          width: 2,
+                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                         ),
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
-                              child: IconButton(
-                                icon: Image.asset('images/whatsapp_logo.png'),
-                                color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
-                                onPressed: () async {
-                                  var admin_no = await Firestore.instance
-                                      .collection('Admin')
-                                      .document('Phone No')
-                                      .get();
-                                  FlutterOpenWhatsapp.sendSingleMessage(
-                                      "${admin_no["phoneNo"]}",
-                                      'Product ID : ${widget.title}'
-                                          '\nCost : ₹${widget.cost}'
-                                          '\nDescription : ${widget.description}'
-                                          '\n\nAddress:'
-                                          '\nArea : ${UserLocation.area}'
-                                          '\nLocality : ${UserLocation.locality}'
-                                          '\nPostal Code : ${UserLocation.postalCode}'
-                                          '\nLatitude : ${UserLocation.latitude}'
-                                          '\nLongitude : ${UserLocation.longitude}');
-                                },
-                              ),
+                      ),
+                      Column(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: MyColors.TEXT_FIELD_BCK,
+                            radius: 35,
+                            child: IconButton(
+                              icon: Image.asset('images/whatsapp_logo.png'),
+                              color: MyColors.TEXT_COLOR,
+                              iconSize: 40,
+                              onPressed: () async {
+                                var admin_no = await Firestore.instance
+                                    .collection('Admin')
+                                    .document('Phone No')
+                                    .get();
+                                FlutterOpenWhatsapp.sendSingleMessage(
+                                    "${admin_no["phoneNo"]}",
+                                    'Product ID : ${widget.title}'
+                                        '\nCost : ₹${widget.cost}'
+                                        '\nDescription : ${widget.description}'
+                                        '\n\nAddress:'
+                                        '\nArea : ${UserLocation.area}'
+                                        '\nLocality : ${UserLocation.locality}'
+                                        '\nPostal Code : ${UserLocation.postalCode}'
+                                        '\nLatitude : ${UserLocation.latitude}'
+                                        '\nLongitude : ${UserLocation.longitude}');
+                              },
                             ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              width: 100,
-                              child: Center(
-                                child: Text(
-                                  'Book through whatsapp',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Lato',
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          child: Container(
-                            height: 105,
-                            width: 2,
-                            color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
-                              child: IconButton(
-                                icon: Icon(Icons.monetization_on),
-                                color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
-                                onPressed: () {
-                                  openCheckout();
-                                },
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: 100,
+                            child: Center(
+                              child: Text(
+                                'Share via whatsapp',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Lato',
+                                    color: Colors.black),
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              width: 100,
-                              child: Center(
-                                child: Text(
-                                  'Book through online',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Lato',
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          child: Container(
-                            height: 105,
-                            width: 2,
-                            color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                           ),
+                        ],
+                      ),
+                      SizedBox(
+                        child: Container(
+                          height: 105,
+                          width: 2,
+                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.35),
                         ),
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: MyColors.TEXT_FIELD_BCK,
-                              radius: 35,
-                              child: IconButton(
-                                icon: Icon(Icons.photo_library),
-                                color: MyColors.TEXT_COLOR,
-                                iconSize: 40,
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => AdditionalImages(
-                                            title: widget.category,
-                                            documentID: widget.title,
-                                          )));
-                                },
+                      ),
+                      Column(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: MyColors.TEXT_FIELD_BCK,
+                            radius: 35,
+                            child: IconButton(
+                              icon: Icon(Icons.photo_library),
+                              color: MyColors.TEXT_COLOR,
+                              iconSize: 40,
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AdditionalImages(
+                                          title: widget.category,
+                                          documentID: widget.title,
+                                        )));
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: 100,
+                            child: Center(
+                              child: Text(
+                                'Additional Images',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Lato',
+                                    color: Colors.black),
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              width: 100,
-                              child: Center(
-                                child: Text(
-                                  'Additional Images',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Lato',
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            top: 15.0, bottom: 15.0, right: 10.0),
+                        width: 140,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('Users')
+                                .document(user.uid)
+                                .collection('Cart')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              var dataCount = snapshot.data.documents.length;
+                              print(dataCount);
+                              for (var i = 0; i < dataCount; i++) {
+                                if (snapshot.data.documents[i]['title'] ==
+                                    widget.title) {
+                                  cartAdded = true;
+                                }
+                              }
+                              return OutlineButton(
+                                onPressed: cartAdded == true
+                                    ? null
+                                    : () {
+                                        _addToCart();
+                                      },
+                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                splashColor: MyColors.TEXT_COLOR,
+                                borderSide: BorderSide(
+                                  color: MyColors.TEXT_FIELD_BCK,
+                                  style: BorderStyle.solid,
+                                  width: 2,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Icon(
+                                      Icons.add_shopping_cart,
+                                      color: MyColors.TEXT_COLOR,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        cartAdded == true
+                                            ? 'ADDED TO CART'
+                                            : 'ADD TO CART',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: MyColors.TEXT_COLOR,
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            top: 15.0, bottom: 15.0, left: 10.0),
+                        width: 140,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: OutlineButton(
+                          onPressed: () {
+                            openCheckout();
+                          },
+                          highlightedBorderColor: MyColors.TEXT_COLOR,
+                          highlightColor: MyColors.TEXT_FIELD_BCK,
+                          splashColor: MyColors.TEXT_COLOR,
+                          borderSide: BorderSide(
+                            color: MyColors.TEXT_FIELD_BCK,
+                            style: BorderStyle.solid,
+                            width: 2,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(
+                                Icons.monetization_on,
+                                color: MyColors.TEXT_COLOR,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'BOOK NOW',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: MyColors.TEXT_COLOR,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Card(
                     shadowColor: MyColors.TEXT_FIELD_BCK,

@@ -28,6 +28,7 @@ class _EditCategoryState extends State<EditCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text('Edit ${widget.collection}'),
         backgroundColor: MyColors.APP_BCK,

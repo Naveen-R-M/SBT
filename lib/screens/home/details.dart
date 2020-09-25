@@ -25,6 +25,7 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   String message;
+  String _sold;
   Stream _getImages() {
     var ref = Firestore.instance;
     return ref.collection(widget.title).snapshots();
@@ -261,7 +262,7 @@ class _DetailsState extends State<Details> {
                                 )
                           : Banner(
                         location: BannerLocation.topEnd,
-                        message: 'Sold',
+                        message: _sold,
                         textStyle: TextStyle(
                             fontSize: 10, letterSpacing: 1.25),
                         child: Card(
@@ -338,6 +339,7 @@ class _DetailsState extends State<Details> {
         await Firestore.instance.collection('Message').document('Banner').get();
     setState(() {
       message = ref["tag"].toString();
+      _sold = ref["sold"].toString();
     });
   }
 
