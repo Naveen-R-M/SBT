@@ -4,6 +4,7 @@ import 'package:SBT/screens/home/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class LoadImages extends StatefulWidget {
   var val;
@@ -30,11 +31,13 @@ class _LoadImagesState extends State<LoadImages> {
             return Container(
               padding: EdgeInsets.only(bottom: 30,right: 10,),
               height: MediaQuery.of(context).size.height-150,
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+              child: StaggeredGridView.countBuilder(
+                crossAxisCount: 2,
                   itemCount: data.length,
                   scrollDirection: Axis.vertical,
+                  staggeredTileBuilder: (index)=>StaggeredTile.count(
+                      (index%2==0)?1 : 1,(index%2==0)?2:1,
+                  ),
                   itemBuilder: (context, index) {
                     var path = data[index];
                     return GestureDetector(
@@ -62,6 +65,7 @@ class _LoadImagesState extends State<LoadImages> {
                                   fit: BoxFit.cover,
                                 ),
                                 color: MyColors.TEXT_FIELD_BCK,
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
                                 border: Border(
                                   bottom: BorderSide(
                                     width: 1,

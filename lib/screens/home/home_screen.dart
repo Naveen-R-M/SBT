@@ -2,6 +2,7 @@ import 'package:SBT/screens/admin/admin.dart';
 import 'package:SBT/screens/home/bottom_nav/cart.dart';
 import 'package:SBT/screens/home/bottom_nav/home.dart';
 import 'package:SBT/screens/home/bottom_nav/liked.dart';
+import 'package:SBT/screens/home/bottom_nav/purchases.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -132,10 +133,11 @@ class _HomePageState extends State<HomePage> {
                 bottomIcons == BottomIcons.Cart
                     ? Cart(user: widget.user,)
                     : bottomIcons == BottomIcons.Home
-                        ? Home(user: widget.user,)
-                        : bottomIcons == BottomIcons.Liked
-                            ? Liked(user: widget.user,)
-                            : Container(),
+                    ? Home(user: widget.user,)
+                    : bottomIcons == BottomIcons.Liked
+                    ? Liked(user: widget.user,)
+                    : bottomIcons == BottomIcons.Purchases
+                    ?Purchases():Container(),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Container(

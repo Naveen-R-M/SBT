@@ -16,15 +16,6 @@ class _CartState extends State<Cart> {
   String message;
   String sold;
 
-  Stream _getImages() {
-    var ref = Firestore.instance;
-    return ref
-        .collection('Users')
-        .document(widget.user.uid)
-        .collection('Cart')
-        .snapshots();
-  }
-
   cart() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -40,14 +31,18 @@ class _CartState extends State<Cart> {
               child: Text(
                 'Your Cart',
                 style: TextStyle(
-                    fontFamily: 'Pacifico', fontSize: 22, color: Colors.black),
+                    fontFamily: 'Pacifico', fontSize: 20, color: Colors.black),
               ),
             ),
             SizedBox(
               height: 15,
             ),
             StreamBuilder(
-              stream: _getImages(),
+              stream: Firestore.instance
+                  .collection('Users')
+                  .document(widget.user.uid)
+                  .collection('Cart')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Loading();

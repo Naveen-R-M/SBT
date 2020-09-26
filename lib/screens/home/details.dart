@@ -37,14 +37,20 @@ class _DetailsState extends State<Details> {
       statusBarColor: MyColors.APP_BCK.withOpacity(0.35),
     ));
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        shadowColor: MyColors.TEXT_FIELD_BCK,
         backgroundColor: MyColors.APP_BCK,
         automaticallyImplyLeading: false,
         title: Center(
           child: Text(
             widget.title,
             textAlign: TextAlign.center,
-            style: TextStyle(color: MyColors.TEXT_COLOR),
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Pacifico',
+              fontSize: 20
+            ),
           ),
         ),
       ),

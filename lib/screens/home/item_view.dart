@@ -175,7 +175,11 @@ class _ViewItemsState extends State<ViewItems> {
           title: Center(
               child: Text(
             widget.category,
-            style: TextStyle(color: MyColors.TEXT_COLOR),
+            style: TextStyle(
+              color: MyColors.TEXT_COLOR,
+              fontFamily: 'Pacifico',
+              fontSize: 20
+            ),
           )),
         ),
         body: RefreshIndicator(

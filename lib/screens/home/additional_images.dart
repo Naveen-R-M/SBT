@@ -31,7 +31,11 @@ class AdditionalImages extends StatelessWidget {
         title: Center(
             child: Text(
           '$title gallery',
-          style: TextStyle(color: MyColors.TEXT_COLOR),
+          style: TextStyle(
+            color: MyColors.TEXT_COLOR,
+            fontFamily: 'Pacifico',
+            fontSize: 20
+          ),
         )),
       ),
       floatingActionButton: Admin.admin == true

@@ -32,7 +32,7 @@ class _LikedState extends State<Liked> {
               child: Text(
                 'Liked Items',
                 style: TextStyle(
-                    fontFamily: 'Pacifico', fontSize: 22, color: Colors.black),
+                    fontFamily: 'Pacifico', fontSize: 20, color: Colors.black),
               ),
             ),
             SizedBox(
