@@ -28,6 +28,7 @@ enum BottomIcons {
 }
 
 class _HomePageState extends State<HomePage> {
+
   var title = 'Categories';
   BottomIcons bottomIcons = BottomIcons.Home;
 

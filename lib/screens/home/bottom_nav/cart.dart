@@ -97,7 +97,7 @@ class _CartState extends State<Cart> {
                                                 .height /
                                                 4.4,
                                             child: Image.network(
-                                              path.data["imageURL"],
+                                              data2["imageURL"],
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -118,7 +118,7 @@ class _CartState extends State<Cart> {
                                                 alignment:
                                                 Alignment.topLeft,
                                                 child: Text(
-                                                  path.data['title'],
+                                                  data2['name'],
                                                   style: TextStyle(
                                                     color: MyColors
                                                         .TEXT_COLOR,
@@ -137,7 +137,7 @@ class _CartState extends State<Cart> {
                                                   top: 8.0,
                                                   bottom: 5),
                                               child: Text(
-                                                '₹${path.data["cost"]}',
+                                                '₹${data2["cost"]}',
                                                 textAlign:
                                                 TextAlign.center,
                                                 style: TextStyle(
@@ -163,74 +163,67 @@ class _CartState extends State<Cart> {
                                                       .all(Radius
                                                       .circular(
                                                       10))),
-                                              child: StreamBuilder(
-                                                  stream: Firestore
-                                                      .instance
-                                                      .collection(
-                                                      'Users')
+                                              child: OutlineButton(
+                                                onPressed: ()async{
+                                                  var ref = await Firestore.instance
+                                                      .collection('Users')
                                                       .document(widget
                                                       .user.uid)
-                                                      .collection(
-                                                      'Cart')
-                                                      .snapshots(),
-                                                  builder: (context, snapshot) {
-                                                    var dataCount = snapshot.data.documents.length;
-                                                    print(dataCount);
-                                                    return OutlineButton(
-                                                      onPressed:
-                                                          () {},
-                                                      highlightedBorderColor:
-                                                      MyColors
+                                                      .collection('Cart')
+                                                      .document(path.documentID);
+                                                  await ref.delete();
+                                                },
+                                                highlightedBorderColor:
+                                                MyColors
+                                                    .TEXT_COLOR,
+                                                highlightColor:
+                                                MyColors
+                                                    .TEXT_FIELD_BCK,
+                                                splashColor:
+                                                MyColors
+                                                    .TEXT_COLOR,
+                                                borderSide:
+                                                BorderSide(
+                                                  color: MyColors
+                                                      .TEXT_FIELD_BCK,
+                                                  style:
+                                                  BorderStyle
+                                                      .solid,
+                                                  width: 2,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceEvenly,
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .add_shopping_cart,
+                                                      color: MyColors
                                                           .TEXT_COLOR,
-                                                      highlightColor:
-                                                      MyColors
-                                                          .TEXT_FIELD_BCK,
-                                                      splashColor:
-                                                      MyColors
-                                                          .TEXT_COLOR,
-                                                      borderSide:
-                                                      BorderSide(
-                                                        color: MyColors
-                                                            .TEXT_FIELD_BCK,
+                                                    ),
+                                                    Expanded(
+                                                      child:
+                                                      Text(
+                                                        'REMOVE FROM CART',
+                                                        textAlign:
+                                                        TextAlign.center,
                                                         style:
-                                                        BorderStyle
-                                                            .solid,
-                                                        width: 2,
+                                                        TextStyle(
+                                                          fontSize:
+                                                          12,
+                                                          color:
+                                                          MyColors.TEXT_COLOR,
+                                                          fontFamily:
+                                                          'Lato',
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                        ),
                                                       ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .add_shopping_cart,
-                                                            color: MyColors
-                                                                .TEXT_COLOR,
-                                                          ),
-                                                          Expanded(
-                                                            child:
-                                                            Text(
-                                                              'REMOVE FROM CART',
-                                                              textAlign:
-                                                              TextAlign.center,
-                                                              style:
-                                                              TextStyle(
-                                                                fontSize:
-                                                                12,
-                                                                color:
-                                                                MyColors.TEXT_COLOR,
-                                                                fontFamily:
-                                                                'Lato',
-                                                                fontWeight:
-                                                                FontWeight.bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  }),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(
@@ -329,7 +322,7 @@ class _CartState extends State<Cart> {
                                               .height /
                                               4.4,
                                           child: Image.network(
-                                            path.data["imageURL"],
+                                            data2["imageURL"],
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -349,7 +342,7 @@ class _CartState extends State<Cart> {
                                               alignment:
                                               Alignment.topLeft,
                                               child: Text(
-                                                path.data['title'],
+                                                data2['name'],
                                                 style: TextStyle(
                                                   color: MyColors
                                                       .TEXT_COLOR,
@@ -367,7 +360,7 @@ class _CartState extends State<Cart> {
                                                 top: 8.0,
                                                 bottom: 5),
                                             child: Text(
-                                              '₹${path.data["cost"]}',
+                                              '₹${data2["cost"]}',
                                               textAlign:
                                               TextAlign.center,
                                               style: TextStyle(
@@ -393,78 +386,67 @@ class _CartState extends State<Cart> {
                                                     Radius
                                                         .circular(
                                                         10))),
-                                            child: StreamBuilder(
-                                                stream: Firestore
-                                                    .instance
-                                                    .collection(
-                                                    'Users')
+                                            child: OutlineButton(
+                                              onPressed: ()async{
+                                                var ref = await Firestore.instance
+                                                    .collection('Users')
                                                     .document(widget
                                                     .user.uid)
-                                                    .collection(
-                                                    'Cart')
-                                                    .snapshots(),
-                                                builder: (context,
-                                                    snapshot) {
-                                                  var dataCount =
-                                                      snapshot
-                                                          .data
-                                                          .documents
-                                                          .length;
-                                                  print(dataCount);
-                                                  return OutlineButton(
-                                                    onPressed: () {},
-                                                    highlightedBorderColor:
-                                                    MyColors
+                                                    .collection('Cart')
+                                                    .document(path.documentID);
+                                                await ref.delete();
+                                              },
+                                              highlightedBorderColor:
+                                              MyColors
+                                                  .TEXT_COLOR,
+                                              highlightColor:
+                                              MyColors
+                                                  .TEXT_FIELD_BCK,
+                                              splashColor:
+                                              MyColors
+                                                  .TEXT_COLOR,
+                                              borderSide:
+                                              BorderSide(
+                                                color: MyColors
+                                                    .TEXT_FIELD_BCK,
+                                                style:
+                                                BorderStyle
+                                                    .solid,
+                                                width: 2,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceEvenly,
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .add_shopping_cart,
+                                                    color: MyColors
                                                         .TEXT_COLOR,
-                                                    highlightColor:
-                                                    MyColors
-                                                        .TEXT_FIELD_BCK,
-                                                    splashColor:
-                                                    MyColors
-                                                        .TEXT_COLOR,
-                                                    borderSide:
-                                                    BorderSide(
-                                                      color: MyColors
-                                                          .TEXT_FIELD_BCK,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'REMOVE FROM CART',
+                                                      textAlign:
+                                                      TextAlign
+                                                          .center,
                                                       style:
-                                                      BorderStyle
-                                                          .solid,
-                                                      width: 2,
+                                                      TextStyle(
+                                                        fontSize:
+                                                        12,
+                                                        color: MyColors
+                                                            .TEXT_COLOR,
+                                                        fontFamily:
+                                                        'Lato',
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                      ),
                                                     ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                      children: [
-                                                        Icon(
-                                                          Icons
-                                                              .add_shopping_cart,
-                                                          color: MyColors
-                                                              .TEXT_COLOR,
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            'REMOVE FROM CART',
-                                                            textAlign:
-                                                            TextAlign
-                                                                .center,
-                                                            style:
-                                                            TextStyle(
-                                                              fontSize:
-                                                              12,
-                                                              color: MyColors
-                                                                  .TEXT_COLOR,
-                                                              fontFamily:
-                                                              'Lato',
-                                                              fontWeight:
-                                                              FontWeight.bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                           Container(
                                             margin: EdgeInsets.only(
@@ -559,7 +541,7 @@ class _CartState extends State<Cart> {
                                                 .height /
                                                 4.4,
                                             child: Image.network(
-                                              path.data["imageURL"],
+                                              data2["imageURL"],
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -579,7 +561,7 @@ class _CartState extends State<Cart> {
                                                 alignment:
                                                 Alignment.topLeft,
                                                 child: Text(
-                                                  path.data['title'],
+                                                  data2['name'],
                                                   style: TextStyle(
                                                     color: MyColors
                                                         .TEXT_COLOR,
@@ -597,7 +579,7 @@ class _CartState extends State<Cart> {
                                                   top: 8.0,
                                                   bottom: 5),
                                               child: Text(
-                                                '₹${path.data["cost"]}',
+                                                '₹${data2["cost"]}',
                                                 textAlign:
                                                 TextAlign.center,
                                                 style: TextStyle(

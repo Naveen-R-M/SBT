@@ -19,6 +19,7 @@ class _AddCategoriesState extends State<AddCategories> {
   String description;
   String cost;
   String priorityValue;
+  String name;
   int stockCount;
 
   final _formkey = GlobalKey<FormState>();
@@ -39,6 +40,7 @@ class _AddCategoriesState extends State<AddCategories> {
       }
       else {
         return await ref.document(documentID).setData({
+          'name' : name,
           'stockAvailable': stockCount,
           'cost': cost,
           'description': description,
@@ -166,6 +168,35 @@ class _AddCategoriesState extends State<AddCategories> {
                     cursorColor: MyColors.TEXT_COLOR,
                     decoration: InputDecoration(
                       hintText: 'Enter documentID',
+                      hintStyle: TextStyle(fontStyle: FontStyle.normal),
+                      filled: true,
+                      fillColor: MyColors.TEXT_FIELD_BCK,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    validator: (value) =>
+                    value.length < 1
+                        ? "Name cannot be empty"
+                        : null,
+                    onChanged: (val) => name = val,
+                    style: TextStyle(
+                        color: MyColors.TEXT_COLOR,
+                        letterSpacing: 3.0,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    cursorColor: MyColors.TEXT_COLOR,
+                    decoration: InputDecoration(
+                      hintText: 'Enter the product name',
                       hintStyle: TextStyle(fontStyle: FontStyle.normal),
                       filled: true,
                       fillColor: MyColors.TEXT_FIELD_BCK,

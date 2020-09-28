@@ -98,7 +98,7 @@ class _LikedState extends State<Liked> {
                                                 .height /
                                                 6,
                                             child: Image.network(
-                                              path.data["imageURL"],
+                                              data2["imageURL"],
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -119,13 +119,11 @@ class _LikedState extends State<Liked> {
                                                 alignment:
                                                 Alignment.topLeft,
                                                 child: Text(
-                                                  path.data['title'],
+                                                  data2['name'],
                                                   style: TextStyle(
                                                     color: MyColors
                                                         .TEXT_COLOR,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
+                                                    fontFamily: 'Pacifico',
                                                     fontSize: 15,
                                                   ),
                                                 ),
@@ -138,15 +136,41 @@ class _LikedState extends State<Liked> {
                                                   top: 8.0,
                                                   bottom: 5),
                                               child: Text(
-                                                '₹${path.data["cost"]}',
+                                                '₹${data2["cost"]}',
                                                 textAlign:
                                                 TextAlign.center,
                                                 style: TextStyle(
+                                                  fontFamily: 'Pacifico',
                                                   color: MyColors
                                                       .TEXT_COLOR,
-                                                  fontWeight:
-                                                  FontWeight.bold,
                                                   fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 15,
+                                                  right: 8.0,
+                                                  top: 8.0,
+                                                  bottom: 5),
+                                              child: OutlineButton(
+                                                onPressed:()async{
+                                                  var ref = await Firestore.instance
+                                                      .collection('Users')
+                                                      .document(widget
+                                                      .user.uid)
+                                                      .collection('Liked')
+                                                      .document(path.documentID);
+                                                  await ref.delete();
+                                                },
+                                                child: Text('REMOVE FROM LIKED'),
+                                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                                splashColor: MyColors.TEXT_COLOR,
+                                                borderSide: BorderSide(
+                                                  color: MyColors.TEXT_FIELD_BCK,
+                                                  style: BorderStyle.solid,
+                                                  width: 2,
                                                 ),
                                               ),
                                             ),
@@ -179,7 +203,7 @@ class _LikedState extends State<Liked> {
                                               .height /
                                               6,
                                           child: Image.network(
-                                            path.data["imageURL"],
+                                            data2["imageURL"],
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -199,12 +223,11 @@ class _LikedState extends State<Liked> {
                                               alignment:
                                               Alignment.topLeft,
                                               child: Text(
-                                                path.data['title'],
+                                                data2['name'],
                                                 style: TextStyle(
+                                                  fontFamily: 'Pacifico',
                                                   color: MyColors
                                                       .TEXT_COLOR,
-                                                  fontWeight:
-                                                  FontWeight.bold,
                                                   fontSize: 15,
                                                 ),
                                               ),
@@ -217,15 +240,41 @@ class _LikedState extends State<Liked> {
                                                 top: 8.0,
                                                 bottom: 5),
                                             child: Text(
-                                              '₹${path.data["cost"]}',
+                                              '₹${data2["cost"]}',
                                               textAlign:
                                               TextAlign.center,
                                               style: TextStyle(
                                                 color: MyColors
                                                     .TEXT_COLOR,
-                                                fontWeight:
-                                                FontWeight.bold,
+                                                fontFamily: 'Pacifico',
                                                 fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: 15,
+                                                right: 8.0,
+                                                top: 8.0,
+                                                bottom: 5),
+                                            child: OutlineButton(
+                                              onPressed:()async{
+                                                var ref = await Firestore.instance
+                                                    .collection('Users')
+                                                    .document(widget
+                                                    .user.uid)
+                                                    .collection('Liked')
+                                                    .document(path.documentID);
+                                                await ref.delete();
+                                              },
+                                              child: Text('REMOVE FROM LIKED'),
+                                              highlightedBorderColor: MyColors.TEXT_COLOR,
+                                              highlightColor: MyColors.TEXT_FIELD_BCK,
+                                              splashColor: MyColors.TEXT_COLOR,
+                                              borderSide: BorderSide(
+                                                color: MyColors.TEXT_FIELD_BCK,
+                                                style: BorderStyle.solid,
+                                                width: 2,
                                               ),
                                             ),
                                           ),
@@ -259,7 +308,7 @@ class _LikedState extends State<Liked> {
                                                 .height /
                                                 6,
                                             child: Image.network(
-                                              path.data["imageURL"],
+                                              data2["imageURL"],
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -279,12 +328,11 @@ class _LikedState extends State<Liked> {
                                                 alignment:
                                                 Alignment.topLeft,
                                                 child: Text(
-                                                  path.data['title'],
+                                                  data2['name'],
                                                   style: TextStyle(
+                                                    fontFamily: 'Pacifico',
                                                     color: MyColors
                                                         .TEXT_COLOR,
-                                                    fontWeight:
-                                                    FontWeight.bold,
                                                     fontSize: 15,
                                                   ),
                                                 ),
@@ -297,15 +345,41 @@ class _LikedState extends State<Liked> {
                                                   top: 8.0,
                                                   bottom: 5),
                                               child: Text(
-                                                '₹${path.data["cost"]}',
+                                                '₹${data2["cost"]}',
                                                 textAlign:
                                                 TextAlign.center,
                                                 style: TextStyle(
+                                                  fontFamily: 'Pacifico',
                                                   color:
                                                   MyColors.TEXT_COLOR,
-                                                  fontWeight:
-                                                  FontWeight.bold,
                                                   fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 15,
+                                                  right: 8.0,
+                                                  top: 8.0,
+                                                  bottom: 5),
+                                              child: OutlineButton(
+                                                onPressed:()async{
+                                                  var ref = await Firestore.instance
+                                                      .collection('Users')
+                                                      .document(widget
+                                                      .user.uid)
+                                                      .collection('Liked')
+                                                      .document(path.documentID);
+                                                  await ref.delete();
+                                                },
+                                                child: Text('REMOVE FROM LIKED'),
+                                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                                splashColor: MyColors.TEXT_COLOR,
+                                                borderSide: BorderSide(
+                                                  color: MyColors.TEXT_FIELD_BCK,
+                                                  style: BorderStyle.solid,
+                                                  width: 2,
                                                 ),
                                               ),
                                             ),

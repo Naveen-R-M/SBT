@@ -142,6 +142,7 @@ class _DetailsState extends State<Details> {
                                   cost: path.data["cost"],
                                   description: path.data["description"] ?? null,
                                   category: widget.title,
+                                  name: path.data["name"],
                                 )));
                       }:null,
                       child: path.data['stockAvailable'] > 0
@@ -180,7 +181,7 @@ class _DetailsState extends State<Details> {
                                           margin: EdgeInsets.only(
                                               left: 8.0, right: 8.0, top: 8.0),
                                           child: Text(
-                                            path.documentID,
+                                            path.data['name'],
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: MyColors.TEXT_COLOR,
@@ -237,13 +238,15 @@ class _DetailsState extends State<Details> {
                                       Container(
                                         margin: EdgeInsets.only(
                                             left: 8.0, right: 8.0, top: 8.0),
-                                        child: Text(
-                                          path.documentID,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: MyColors.TEXT_COLOR,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
+                                        child: Expanded(
+                                          child: Text(
+                                            path.data['name'],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: MyColors.TEXT_COLOR,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -299,13 +302,15 @@ class _DetailsState extends State<Details> {
                               Container(
                                 margin: EdgeInsets.only(
                                     left: 8.0, right: 8.0, top: 8.0),
-                                child: Text(
-                                  path.documentID,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: MyColors.TEXT_COLOR,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                                child: Expanded(
+                                  child: Text(
+                                    path.data['name'],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: MyColors.TEXT_COLOR,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),

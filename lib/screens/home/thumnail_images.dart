@@ -36,7 +36,7 @@ class _LoadImagesState extends State<LoadImages> {
                   itemCount: data.length,
                   scrollDirection: Axis.vertical,
                   staggeredTileBuilder: (index)=>StaggeredTile.count(
-                      (index%2==0)?1 : 1,(index%2==0)?2:1,
+                      (index%2==0)?1 : 1,(index%2==0)?1.85:1,
                   ),
                   itemBuilder: (context, index) {
                     var path = data[index];

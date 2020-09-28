@@ -15,12 +15,13 @@ import '../../my_colors.dart';
 
 class ViewItems extends StatefulWidget {
   String category;
+  String name;
   String title;
   String url;
   String description;
   String cost;
 
-  ViewItems({this.title, this.url, this.description, this.category, this.cost});
+  ViewItems({this.title, this.url, this.description, this.category, this.cost ,this.name});
 
   @override
   _ViewItemsState createState() => _ViewItemsState();
@@ -40,10 +41,8 @@ class _ViewItemsState extends State<ViewItems> {
         .document();
     return await ref.setData({
       'category': widget.category,
+      'name' : widget.name,
       'title': widget.title,
-      'cost': widget.cost,
-      'description': widget.description,
-      'imageURL': widget.url,
     }).whenComplete(() => Fluttertoast.showToast(msg: 'Item added to liked'));
   }
 
@@ -56,9 +55,7 @@ class _ViewItemsState extends State<ViewItems> {
     return await ref.setData({
       'category': widget.category,
       'title': widget.title,
-      'cost': widget.cost,
-      'description': widget.description,
-      'imageURL': widget.url,
+      'name' : widget.name,
     }).whenComplete(() {
       Fluttertoast.showToast(msg: 'Item added to cart successfully');
       setState(() {
@@ -192,7 +189,8 @@ class _ViewItemsState extends State<ViewItems> {
                         title: widget.title,
                         description: widget.description,
                         url: widget.url,
-                        cost: '₹${widget.cost}',
+                        name: widget.name,
+                        cost: '${widget.cost}',
                       ),
                   transitionDuration: Duration(seconds: 1)),
             );
@@ -208,22 +206,12 @@ class _ViewItemsState extends State<ViewItems> {
                       image: DecorationImage(
                           image: NetworkImage(widget.url), fit: BoxFit.cover),
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomRight,
-                            colors: [
-                              MyColors.STATUS_BAR.withOpacity(0.3),
-                              MyColors.APP_BCK.withOpacity(.0),
-                            ]),
-                      ),
-                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 15, right: 15, top: 10),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      widget.title,
+                      widget.name,
                       style: TextStyle(
                           fontSize: 30,
                           color: MyColors.TEXT_COLOR,
@@ -271,11 +259,13 @@ class _ViewItemsState extends State<ViewItems> {
                                         ? MyColors.TEXT_COLOR
                                         : Colors.grey,
                                     iconSize: 40,
-                                    onPressed: () {
+                                    onPressed: liked!=true?() {
                                       _addToLiked();
                                       setState(() {
                                         liked = true;
                                       });
+                                    }:(){
+                                      Fluttertoast.showToast(msg: 'Item already added to liked..');
                                     },
                                   ),
                                 );
