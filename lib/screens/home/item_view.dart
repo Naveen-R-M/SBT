@@ -1,15 +1,20 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:SBT/model/user.dart';
 import 'package:SBT/screens/home/additional_images.dart';
 import 'package:SBT/screens/home/suggestion.dart';
 import 'package:SBT/screens/home/suggestion_category.dart';
-import 'package:SBT/screens/services/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:intl/intl.dart';
 
 import '../../my_colors.dart';
 
@@ -21,7 +26,13 @@ class ViewItems extends StatefulWidget {
   String description;
   String cost;
 
-  ViewItems({this.title, this.url, this.description, this.category, this.cost ,this.name});
+  ViewItems(
+      {this.title,
+      this.url,
+      this.description,
+      this.category,
+      this.cost,
+      this.name});
 
   @override
   _ViewItemsState createState() => _ViewItemsState();
@@ -41,7 +52,7 @@ class _ViewItemsState extends State<ViewItems> {
         .document();
     return await ref.setData({
       'category': widget.category,
-      'name' : widget.name,
+      'name': widget.name,
       'title': widget.title,
     }).whenComplete(() => Fluttertoast.showToast(msg: 'Item added to liked'));
   }
@@ -55,7 +66,7 @@ class _ViewItemsState extends State<ViewItems> {
     return await ref.setData({
       'category': widget.category,
       'title': widget.title,
-      'name' : widget.name,
+      'name': widget.name,
     }).whenComplete(() {
       Fluttertoast.showToast(msg: 'Item added to cart successfully');
       setState(() {
@@ -116,15 +127,17 @@ class _ViewItemsState extends State<ViewItems> {
         msg: 'Your paymentID ${response.paymentId} is successful');
     _update();
     DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     await Firestore.instance
         .collection('Users')
         .document(user.uid)
         .collection('Successful Transactions')
         .document()
         .setData({
-      'dateTime': now,
+      'dateTime': formattedDate,
       'result': 'Success',
       'category': widget.category,
+      'name': widget.name,
       'productID': widget.title,
       'amount': widget.cost,
       'imageURL': widget.url,
@@ -137,14 +150,16 @@ class _ViewItemsState extends State<ViewItems> {
       response.code
     }.toString()}\nERROR Message:${response.message}');
     DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     await Firestore.instance
         .collection('Users')
         .document(user.uid)
         .collection('Failed Transactions')
         .document()
         .setData({
-      'dateTime': now,
+      'dateTime': formattedDate,
       'result': 'Failed',
+      'name': widget.name,
       'category': widget.category,
       'productID': widget.title,
       'amount': widget.cost,
@@ -173,10 +188,9 @@ class _ViewItemsState extends State<ViewItems> {
               child: Text(
             widget.category,
             style: TextStyle(
-              color: MyColors.TEXT_COLOR,
-              fontFamily: 'Pacifico',
-              fontSize: 20
-            ),
+                color: MyColors.TEXT_COLOR,
+                fontFamily: 'Pacifico',
+                fontSize: 20),
           )),
         ),
         body: RefreshIndicator(
@@ -245,8 +259,11 @@ class _ViewItemsState extends State<ViewItems> {
                                   .collection('Liked')
                                   .snapshots(),
                               builder: (context, snapshot) {
-                                for (var i = 0 ; i<snapshot.data.documents.length;i++){
-                                  if(snapshot.data.documents[i]["title"]==widget.title){
+                                for (var i = 0;
+                                    i < snapshot.data.documents.length;
+                                    i++) {
+                                  if (snapshot.data.documents[i]["title"] ==
+                                      widget.title) {
                                     liked = true;
                                   }
                                 }
@@ -259,14 +276,18 @@ class _ViewItemsState extends State<ViewItems> {
                                         ? MyColors.TEXT_COLOR
                                         : Colors.grey,
                                     iconSize: 40,
-                                    onPressed: liked!=true?() {
-                                      _addToLiked();
-                                      setState(() {
-                                        liked = true;
-                                      });
-                                    }:(){
-                                      Fluttertoast.showToast(msg: 'Item already added to liked..');
-                                    },
+                                    onPressed: liked != true
+                                        ? () {
+                                            _addToLiked();
+                                            setState(() {
+                                              liked = true;
+                                            });
+                                          }
+                                        : () {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Item already added to liked..');
+                                          },
                                   ),
                                 );
                               }),
@@ -301,25 +322,44 @@ class _ViewItemsState extends State<ViewItems> {
                             backgroundColor: MyColors.TEXT_FIELD_BCK,
                             radius: 35,
                             child: IconButton(
-                              icon: Image.asset('images/whatsapp_logo.png'),
+                              icon: Icon(Icons.share),
                               color: MyColors.TEXT_COLOR,
                               iconSize: 40,
                               onPressed: () async {
-                                var admin_no = await Firestore.instance
-                                    .collection('Admin')
-                                    .document('Phone No')
-                                    .get();
-                                FlutterOpenWhatsapp.sendSingleMessage(
-                                    "${admin_no["phoneNo"]}",
-                                    'Product ID : ${widget.title}'
-                                        '\nCost : ₹${widget.cost}'
-                                        '\nDescription : ${widget.description}'
-                                        '\n\nAddress:'
-                                        '\nArea : ${UserLocation.area}'
-                                        '\nLocality : ${UserLocation.locality}'
-                                        '\nPostal Code : ${UserLocation.postalCode}'
-                                        '\nLatitude : ${UserLocation.latitude}'
-                                        '\nLongitude : ${UserLocation.longitude}');
+                                try {
+                                  var appURL = await Firestore.instance
+                                      .collection('APP').document('URL').get();
+                                  var request = await HttpClient()
+                                      .getUrl(Uri.parse(widget.url));
+                                  var response = await request.close();
+                                  Uint8List bytes =
+                                      await consolidateHttpClientResponseBytes(
+                                          response);
+                                  await Share.file(
+                                      'SBT Shopping',
+                                      '${widget.title}.jpg',
+                                      bytes,
+                                      'image/jpg',text: 'Hey have a look at our product ${widget.name}.'
+                                      '\nDownload SBT Shopping app for free from playstore.'
+                                      '\n${appURL['url']}');
+                                } catch (e) {
+                                  print("ERROR Sharing FILE: $e");
+                                }
+                                // var admin_no = await Firestore.instance
+                                //     .collection('Admin')
+                                //     .document('Phone No')
+                                //     .get();
+                                // FlutterOpenWhatsapp.sendSingleMessage(
+                                //     "${admin_no["phoneNo"]}",
+                                //     'Product ID : ${widget.title}'
+                                //         '\nCost : ₹${widget.cost}'
+                                //         '\nDescription : ${widget.description}'
+                                //         '\n\nAddress:'
+                                //         '\nArea : ${UserLocation.area}'
+                                //         '\nLocality : ${UserLocation.locality}'
+                                //         '\nPostal Code : ${UserLocation.postalCode}'
+                                //         '\nLatitude : ${UserLocation.latitude}'
+                                //         '\nLongitude : ${UserLocation.longitude}');
                               },
                             ),
                           ),
@@ -328,7 +368,7 @@ class _ViewItemsState extends State<ViewItems> {
                             width: 100,
                             child: Center(
                               child: Text(
-                                'Share via whatsapp',
+                                'Share this product via..',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 14,
@@ -383,7 +423,7 @@ class _ViewItemsState extends State<ViewItems> {
                     ],
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -391,7 +431,7 @@ class _ViewItemsState extends State<ViewItems> {
                       Container(
                         margin: EdgeInsets.only(
                             top: 15.0, bottom: 15.0, right: 10.0),
-                        width: 140,
+                        width: MediaQuery.of(context).size.width / 2.35,
                         height: 50,
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -456,7 +496,7 @@ class _ViewItemsState extends State<ViewItems> {
                       Container(
                         margin: EdgeInsets.only(
                             top: 15.0, bottom: 15.0, left: 10.0),
-                        width: 140,
+                        width: MediaQuery.of(context).size.width / 2.35,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -498,6 +538,9 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Card(
                     shadowColor: MyColors.TEXT_FIELD_BCK,

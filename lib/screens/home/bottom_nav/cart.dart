@@ -528,15 +528,18 @@ class _CartState extends State<Cart> {
                                     child: Row(
                                       children: [
                                         Card(
-                                          shadowColor: MyColors.STATUS_BAR
+                                          shadowColor: MyColors
+                                              .STATUS_BAR
                                               .withOpacity(0.5),
                                           elevation: 15,
                                           child: Container(
-                                            width: MediaQuery.of(context)
+                                            width:
+                                            MediaQuery.of(context)
                                                 .size
                                                 .width /
                                                 2.5,
-                                            height: MediaQuery.of(context)
+                                            height:
+                                            MediaQuery.of(context)
                                                 .size
                                                 .height /
                                                 4.4,
@@ -583,8 +586,8 @@ class _CartState extends State<Cart> {
                                                 textAlign:
                                                 TextAlign.center,
                                                 style: TextStyle(
-                                                  color:
-                                                  MyColors.TEXT_COLOR,
+                                                  color: MyColors
+                                                      .TEXT_COLOR,
                                                   fontWeight:
                                                   FontWeight.bold,
                                                   fontSize: 15,
@@ -602,77 +605,70 @@ class _CartState extends State<Cart> {
                                                   color: Colors.white,
                                                   borderRadius:
                                                   BorderRadius.all(
-                                                      Radius.circular(
+                                                      Radius
+                                                          .circular(
                                                           10))),
-                                              child: StreamBuilder(
-                                                  stream: Firestore
-                                                      .instance
+                                              child: OutlineButton(
+                                                onPressed: ()async{
+                                                  var ref = await Firestore.instance
                                                       .collection('Users')
-                                                      .document(
-                                                      widget.user.uid)
+                                                      .document(widget
+                                                      .user.uid)
                                                       .collection('Cart')
-                                                      .snapshots(),
-                                                  builder: (context,
-                                                      snapshot) {
-                                                    var dataCount =
-                                                        snapshot
-                                                            .data
-                                                            .documents
-                                                            .length;
-                                                    print(dataCount);
-                                                    return OutlineButton(
-                                                      onPressed: () {},
-                                                      highlightedBorderColor:
-                                                      MyColors
+                                                      .document(path.documentID);
+                                                  await ref.delete();
+                                                },
+                                                highlightedBorderColor:
+                                                MyColors
+                                                    .TEXT_COLOR,
+                                                highlightColor:
+                                                MyColors
+                                                    .TEXT_FIELD_BCK,
+                                                splashColor:
+                                                MyColors
+                                                    .TEXT_COLOR,
+                                                borderSide:
+                                                BorderSide(
+                                                  color: MyColors
+                                                      .TEXT_FIELD_BCK,
+                                                  style:
+                                                  BorderStyle
+                                                      .solid,
+                                                  width: 2,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceEvenly,
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .add_shopping_cart,
+                                                      color: MyColors
                                                           .TEXT_COLOR,
-                                                      highlightColor: MyColors
-                                                          .TEXT_FIELD_BCK,
-                                                      splashColor:
-                                                      MyColors
-                                                          .TEXT_COLOR,
-                                                      borderSide:
-                                                      BorderSide(
-                                                        color: MyColors
-                                                            .TEXT_FIELD_BCK,
-                                                        style: BorderStyle
-                                                            .solid,
-                                                        width: 2,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        'REMOVE FROM CART',
+                                                        textAlign:
+                                                        TextAlign
+                                                            .center,
+                                                        style:
+                                                        TextStyle(
+                                                          fontSize:
+                                                          12,
+                                                          color: MyColors
+                                                              .TEXT_COLOR,
+                                                          fontFamily:
+                                                          'Lato',
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                        ),
                                                       ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .add_shopping_cart,
-                                                            color: MyColors
-                                                                .TEXT_COLOR,
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              'REMOVE FROM CART',
-                                                              textAlign:
-                                                              TextAlign
-                                                                  .center,
-                                                              style:
-                                                              TextStyle(
-                                                                fontSize:
-                                                                12,
-                                                                color: MyColors
-                                                                    .TEXT_COLOR,
-                                                                fontFamily:
-                                                                'Lato',
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  }),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(
@@ -720,7 +716,8 @@ class _CartState extends State<Cart> {
                                                         textAlign:
                                                         TextAlign
                                                             .center,
-                                                        style: TextStyle(
+                                                        style:
+                                                        TextStyle(
                                                           fontSize: 12,
                                                           color: MyColors
                                                               .TEXT_COLOR,

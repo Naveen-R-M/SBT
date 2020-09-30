@@ -290,20 +290,24 @@ class _LikedState extends State<Liked> {
                                       fontSize: 10, letterSpacing: 1.25),
                                   child: Card(
                                     elevation: 10,
-                                    shadowColor: MyColors.TEXT_FIELD_BCK
+                                    shadowColor: MyColors
+                                        .TEXT_FIELD_BCK
                                         .withOpacity(0.50),
                                     child: Row(
                                       children: [
                                         Card(
-                                          shadowColor: MyColors.STATUS_BAR
+                                          shadowColor: MyColors
+                                              .STATUS_BAR
                                               .withOpacity(0.5),
                                           elevation: 15,
                                           child: Container(
-                                            width: MediaQuery.of(context)
+                                            width:
+                                            MediaQuery.of(context)
                                                 .size
                                                 .width /
                                                 2.5,
-                                            height: MediaQuery.of(context)
+                                            height:
+                                            MediaQuery.of(context)
                                                 .size
                                                 .height /
                                                 6,
@@ -317,7 +321,8 @@ class _LikedState extends State<Liked> {
                                           mainAxisAlignment:
                                           MainAxisAlignment.start,
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment
+                                              .start,
                                           children: [
                                             Container(
                                               margin: EdgeInsets.only(
@@ -330,9 +335,9 @@ class _LikedState extends State<Liked> {
                                                 child: Text(
                                                   data2['name'],
                                                   style: TextStyle(
-                                                    fontFamily: 'Pacifico',
                                                     color: MyColors
                                                         .TEXT_COLOR,
+                                                    fontFamily: 'Pacifico',
                                                     fontSize: 15,
                                                   ),
                                                 ),
@@ -350,8 +355,8 @@ class _LikedState extends State<Liked> {
                                                 TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily: 'Pacifico',
-                                                  color:
-                                                  MyColors.TEXT_COLOR,
+                                                  color: MyColors
+                                                      .TEXT_COLOR,
                                                   fontSize: 15,
                                                 ),
                                               ),

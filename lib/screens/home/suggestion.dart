@@ -32,7 +32,7 @@ class _SuggestionState extends State<Suggestion> {
           return Loading();
         } else {
           return Container(
-            margin: EdgeInsets.only(left: 8,bottom: 8),
+            margin: EdgeInsets.only(left: 8,bottom: 8,top: 5.0),
             width: MediaQuery.of(context).size.width,
             height: (MediaQuery.of(context).size.height / 5)+80,
             child: ListView.builder(
@@ -52,8 +52,8 @@ class _SuggestionState extends State<Suggestion> {
                                 category: widget.category,
                               )));
                     }:null,
-                    child:path.data['stockAvailable']>0?path.data['priority']=='High'?
-                        Banner(
+                    child:path.data['stockAvailable']>0?path.data['priority']=='High'
+                        ? Banner(
                           message: message,
                           location: BannerLocation.topEnd,
                           child:  Container(
@@ -108,7 +108,8 @@ class _SuggestionState extends State<Suggestion> {
                               ),
                             ),
                           ),
-                        ): Container(
+                        )
+                        : Container(
                       width: MediaQuery.of(context).size.width / 2.5,
                       child: Card(
                         elevation: 3.5,
@@ -122,7 +123,7 @@ class _SuggestionState extends State<Suggestion> {
                                 width: MediaQuery.of(context).size.width / 2.25,
                                 height: MediaQuery.of(context).size.height / 5,
                                 child: Image.network(
-                                  '₹${path.data["imageURL"]}',
+                                  path.data["imageURL"],
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -147,7 +148,7 @@ class _SuggestionState extends State<Suggestion> {
                               margin:
                               EdgeInsets.only(left: 8.0, right: 8.0,bottom: 5.0),
                               child: Text(
-                                path.data["cost"],
+                                '₹${path.data["cost"]}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyColors.TEXT_COLOR,
@@ -159,7 +160,8 @@ class _SuggestionState extends State<Suggestion> {
                           ],
                         ),
                       ),
-                    ):Banner(
+                    )
+                        :Banner(
                       message: sold,
                       location: BannerLocation.topEnd,
                       child:  Container(
@@ -201,7 +203,7 @@ class _SuggestionState extends State<Suggestion> {
                                 margin:
                                 EdgeInsets.only(left: 8.0, right: 8.0,bottom: 5.0),
                                 child: Text(
-                                  path.data["cost"],
+                                  '₹${path.data["cost"]}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: MyColors.TEXT_COLOR,

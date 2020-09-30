@@ -5,6 +5,7 @@ import 'package:SBT/screens/admin/delete_category.dart';
 import 'package:SBT/screens/admin/edit_category.dart';
 import 'package:SBT/screens/home/item_view.dart';
 import 'package:SBT/screens/home/loading.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +148,7 @@ class _DetailsState extends State<Details> {
                       }:null,
                       child: path.data['stockAvailable'] > 0
                           ? path.data['priority'] == "High"
-                              ? Banner(
+                          ? Banner(
                                   location: BannerLocation.topEnd,
                                   message: message,
                                   textStyle: TextStyle(
@@ -171,10 +172,18 @@ class _DetailsState extends State<Details> {
                                                     .size
                                                     .height /
                                                 5,
-                                            child: Image.network(
-                                              path.data["imageURL"],
-                                              fit: BoxFit.cover,
-                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl: path.data['imageURL'],
+                                              placeholder: (context,url)=>
+                                              Container(
+                                                child: Center(
+                                                  child: CircularProgressIndicator(),
+                                                ),
+                                              ),
+                                              errorWidget: (context,url,error)=>Icon(Icons.error),
+                                              fadeInCurve: Curves.easeIn,
+                                              fadeInDuration: Duration(milliseconds: 1000),
+                                            )
                                           ),
                                         ),
                                         Container(
@@ -210,7 +219,7 @@ class _DetailsState extends State<Details> {
                                     ),
                                   ),
                                 )
-                              : Card(
+                          : Card(
                         elevation: 10,
                         shadowColor:
                         MyColors.TEXT_COLOR.withOpacity(0.70),
@@ -221,18 +230,26 @@ class _DetailsState extends State<Details> {
                                   .withOpacity(0.5),
                               elevation: 15,
                               child: Container(
-                                width: MediaQuery.of(context)
-                                    .size
-                                    .width /
-                                    2.30,
-                                height: MediaQuery.of(context)
-                                    .size
-                                    .height /
-                                    5,
-                                child: Image.network(
-                                  path.data["imageURL"],
-                                  fit: BoxFit.cover,
-                                ),
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width /
+                                      2.30,
+                                  height: MediaQuery.of(context)
+                                      .size
+                                      .height /
+                                      5,
+                                  child: CachedNetworkImage(
+                                    imageUrl: path.data['imageURL'],
+                                    placeholder: (context,url)=>
+                                        Container(
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        ),
+                                    errorWidget: (context,url,error)=>Icon(Icons.error),
+                                    fadeInCurve: Curves.easeIn,
+                                    fadeInDuration: Duration(milliseconds: 1000),
+                                  )
                               ),
                             ),
                             Container(
@@ -283,32 +300,38 @@ class _DetailsState extends State<Details> {
                                     .withOpacity(0.5),
                                 elevation: 15,
                                 child: Container(
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width /
-                                      2.30,
-                                  height: MediaQuery.of(context)
-                                      .size
-                                      .height /
-                                      5,
-                                  child: Image.network(
-                                    path.data["imageURL"],
-                                    fit: BoxFit.cover,
-                                  ),
+                                    width: MediaQuery.of(context)
+                                        .size
+                                        .width /
+                                        2.30,
+                                    height: MediaQuery.of(context)
+                                        .size
+                                        .height /
+                                        5,
+                                    child: CachedNetworkImage(
+                                      imageUrl: path.data['imageURL'],
+                                      placeholder: (context,url)=>
+                                          Container(
+                                            child: Center(
+                                              child: CircularProgressIndicator(),
+                                            ),
+                                          ),
+                                      errorWidget: (context,url,error)=>Icon(Icons.error),
+                                      fadeInCurve: Curves.easeIn,
+                                      fadeInDuration: Duration(milliseconds: 1000),
+                                    )
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.only(
                                     left: 8.0, right: 8.0, top: 8.0),
-                                child: Expanded(
-                                  child: Text(
-                                    path.data['name'],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: MyColors.TEXT_COLOR,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
+                                child: Text(
+                                  path.data['name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyColors.TEXT_COLOR,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                   ),
                                 ),
                               ),
