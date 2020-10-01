@@ -173,6 +173,7 @@ class _DetailsState extends State<Details> {
                                                     .height /
                                                 5,
                                             child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
                                               imageUrl: path.data['imageURL'],
                                               placeholder: (context,url)=>
                                               Container(
@@ -239,6 +240,7 @@ class _DetailsState extends State<Details> {
                                       .height /
                                       5,
                                   child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
                                     imageUrl: path.data['imageURL'],
                                     placeholder: (context,url)=>
                                         Container(
@@ -309,6 +311,7 @@ class _DetailsState extends State<Details> {
                                         .height /
                                         5,
                                     child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
                                       imageUrl: path.data['imageURL'],
                                       placeholder: (context,url)=>
                                           Container(

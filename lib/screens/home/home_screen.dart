@@ -1,4 +1,5 @@
 import 'package:SBT/screens/admin/admin.dart';
+import 'package:SBT/screens/home/bottom_nav/account/profile.dart';
 import 'package:SBT/screens/home/bottom_nav/cart.dart';
 import 'package:SBT/screens/home/bottom_nav/home.dart';
 import 'package:SBT/screens/home/bottom_nav/liked.dart';
@@ -138,7 +139,9 @@ class _HomePageState extends State<HomePage> {
                     : bottomIcons == BottomIcons.Liked
                     ? Liked(user: widget.user,)
                     : bottomIcons == BottomIcons.Purchases
-                    ?Purchases():Container(),
+                    ? Purchases()
+                    : bottomIcons == BottomIcons.Account
+                    ? Profile():Container(),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Container(

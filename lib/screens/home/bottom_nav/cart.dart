@@ -772,5 +772,9 @@ class _CartState extends State<Cart> {
     super.initState();
     _message();
   }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
 
