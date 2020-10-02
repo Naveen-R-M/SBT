@@ -6,7 +6,8 @@ import 'package:geolocator/geolocator.dart';
 
 class OtpScreen extends StatefulWidget {
   String phone;
-  OtpScreen({this.phone});
+  String name;
+  OtpScreen({this.phone, this.name});
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -82,10 +83,11 @@ class _OtpScreenState extends State<OtpScreen> {
                 height: 15,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 15,
+                    width: 5,
                   ),
                   Container(
                     width: 40,
@@ -101,8 +103,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (val) => otp1 = val,
                       style: TextStyle(
                           color: MyColors.TEXT_COLOR,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800),
                       cursorColor: MyColors.TEXT_COLOR,
                       decoration: InputDecoration(
                         filled: true,
@@ -119,7 +122,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   Container(
-                    width: 50,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: MyColors.TEXT_FIELD_BCK,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -132,8 +135,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (val) => otp2 = val,
                       style: TextStyle(
                           color: MyColors.TEXT_COLOR,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800),
                       maxLines: 1,
                       cursorColor: MyColors.TEXT_COLOR,
                       decoration: InputDecoration(
@@ -151,7 +155,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   Container(
-                    width: 50,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: MyColors.TEXT_FIELD_BCK,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -164,8 +168,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (val) => otp3 = val,
                       style: TextStyle(
                           color: MyColors.TEXT_COLOR,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800),
                       maxLines: 1,
                       cursorColor: MyColors.TEXT_COLOR,
                       decoration: InputDecoration(
@@ -183,7 +188,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   Container(
-                    width: 50,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: MyColors.TEXT_FIELD_BCK,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -196,8 +201,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (val) => otp4 = val,
                       style: TextStyle(
                           color: MyColors.TEXT_COLOR,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800),
                       maxLines: 1,
                       cursorColor: MyColors.TEXT_COLOR,
                       decoration: InputDecoration(
@@ -215,7 +221,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   Container(
-                    width: 50,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: MyColors.TEXT_FIELD_BCK,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -228,8 +234,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (val) => otp5 = val,
                       style: TextStyle(
                           color: MyColors.TEXT_COLOR,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800),
                       maxLines: 1,
                       cursorColor: MyColors.TEXT_COLOR,
                       decoration: InputDecoration(
@@ -247,7 +254,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   Container(
-                    width: 50,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: MyColors.TEXT_FIELD_BCK,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -260,8 +267,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       onChanged: (val) => otp6 = val,
                       style: TextStyle(
                           color: MyColors.TEXT_COLOR,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800),
                       maxLines: 1,
                       cursorColor: MyColors.TEXT_COLOR,
                       decoration: InputDecoration(
@@ -277,6 +285,9 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    width: 5,
                   ),
                 ],
               ),
@@ -299,6 +310,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       dynamic result = await _authService.loginUser(
                         location,
                         widget.phone,
+                        widget.name,
                         context,
                         otp1,
                         otp2,

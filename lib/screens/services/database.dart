@@ -6,11 +6,12 @@ class Database{
   Database({this.uid});
   final CollectionReference ref = Firestore.instance.collection('Users');
 
-  Future UserData(String phone, String location)async{
+  Future UserData(String phone,String name, String location)async{
     return await ref.document(uid).setData(
       {
         'uid':uid,
         'phone':phone,
+        'name' :name,
         'location':location,
         'state':UserLocation.area,
         'postal code':UserLocation.postalCode,

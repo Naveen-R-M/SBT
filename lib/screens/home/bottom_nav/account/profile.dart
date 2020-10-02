@@ -281,7 +281,7 @@ class _ProfileState extends State<Profile> {
                     decoration: BoxDecoration(
                         color: MyColors.STATUS_BAR.withOpacity(0.6),
                         borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
+                          bottomLeft:  Radius.circular(30),
                           bottomRight: Radius.circular(30),
                         )
                     ),
@@ -329,19 +329,32 @@ class _ProfileState extends State<Profile> {
                                       Container(
                                         margin: EdgeInsets.only(
                                           top: 5,
-                                          bottom: 15,
+                                          bottom: 10,
                                           left: 10,
                                           right: 10,
                                         ),
                                         child: Center(
                                           child: CircleAvatar(
-                                            radius: 40,
+                                            radius: 37,
                                             child: Icon(
                                               Icons.person,
                                               size: 65,
                                               color: Colors.white,
                                             ),
                                             backgroundColor: MyColors.TEXT_FIELD_BCK,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 5),
+                                        child: Center(
+                                          child: Text(
+                                            snapshot.data['name'],
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Lato',
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ),

@@ -20,7 +20,7 @@ class AuthService {
   }
 
   Future<bool> loginUser(
-      String location, String phone, BuildContext context, otp1, otp2, otp3, otp4, otp5, otp6) async {
+      String location, String phone, String name, BuildContext context, otp1, otp2, otp3, otp4, otp5, otp6) async {
     _auth.verifyPhoneNumber(
       phoneNumber: phone,
       timeout: Duration(seconds: 60),
@@ -43,7 +43,7 @@ class AuthService {
             verificationId: verificationId, smsCode: code);
         AuthResult authResult = await _auth.signInWithCredential(credential);
         FirebaseUser user = authResult.user;
-        await Database(uid: user.uid).UserData(phone, location);
+        await Database(uid: user.uid).UserData(phone,name, location);
         if (user != null) {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => HomeScreen(user: user),
