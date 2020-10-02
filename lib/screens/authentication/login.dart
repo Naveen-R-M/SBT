@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
                       TextFormField(
                         validator: (val) =>
                         val.length < 1 ? "Enter your full name" : null,
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.text,
                         onChanged: (val) => name = val,
                         style: TextStyle(
                             color: MyColors.TEXT_COLOR,

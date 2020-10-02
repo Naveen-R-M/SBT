@@ -44,6 +44,519 @@ class _ViewItemsState extends State<ViewItems> {
   bool cartAdded;
   Razorpay _razorpay;
 
+  String street;
+  String area;
+  String city;
+  String state;
+  String postalCode;
+  dynamic itemCount;
+  bool exceeded = false;
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void getAddressAlertDialog(BuildContext context, user) {
+    var ref = Firestore.instance.collection('Users').document(user.uid);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: SafeArea(
+            child: Container(
+              padding: EdgeInsets.all(25),
+              width: MediaQuery.of(context).size.width / 1.2,
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Add Address',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Lato',
+                            fontSize: 18),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        validator: (value) => value.length < 1
+                            ? "Street name cannot be empty"
+                            : null,
+                        onChanged: (val) => street = val,
+                        style: TextStyle(
+                          letterSpacing: 3.0,
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        cursorColor: MyColors.TEXT_COLOR,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your street name',
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        validator: (value) => value.length < 1
+                            ? "Area name cannot be empty"
+                            : null,
+                        onChanged: (val) => area = val,
+                        style: TextStyle(
+                          letterSpacing: 3.0,
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        cursorColor: MyColors.TEXT_COLOR,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your area name',
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        validator: (value) => value.length < 1
+                            ? "City name cannot be empty"
+                            : null,
+                        onChanged: (val) => city = val,
+                        style: TextStyle(
+                          letterSpacing: 3.0,
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        cursorColor: MyColors.TEXT_COLOR,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your city name',
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        validator: (value) => value.length < 1
+                            ? "State name cannot be empty"
+                            : null,
+                        onChanged: (val) => state = val,
+                        style: TextStyle(
+                          letterSpacing: 3.0,
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        cursorColor: MyColors.TEXT_COLOR,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your state name',
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        validator: (value) => value.length < 1
+                            ? "Postal Code cannot be empty"
+                            : null,
+                        onChanged: (val) => postalCode = val,
+                        style: TextStyle(
+                          letterSpacing: 3.0,
+                          fontSize: 14,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        cursorColor: MyColors.TEXT_COLOR,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your Postal Code',
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.TEXT_FIELD_BCK),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          OutlineButton(
+                            highlightedBorderColor: MyColors.TEXT_COLOR,
+                            highlightColor: MyColors.TEXT_FIELD_BCK,
+                            splashColor: MyColors.TEXT_COLOR,
+                            borderSide: BorderSide(
+                              color: MyColors.TEXT_FIELD_BCK,
+                              style: BorderStyle.solid,
+                              width: 2,
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                ref.updateData({
+                                  'address':
+                                      '$street\n$area\n$city\n$state\n$postalCode',
+                                }).whenComplete(
+                                    () => Navigator.of(dialogContext).pop());
+                              }
+                            },
+                            child: Text(
+                              'ADD',
+                              style: TextStyle(
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          OutlineButton(
+                            highlightedBorderColor: MyColors.TEXT_COLOR,
+                            highlightColor: MyColors.TEXT_FIELD_BCK,
+                            splashColor: MyColors.TEXT_COLOR,
+                            borderSide: BorderSide(
+                              color: MyColors.TEXT_FIELD_BCK,
+                              style: BorderStyle.solid,
+                              width: 2,
+                            ),
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop();
+                            },
+                            child: Text(
+                              'CANCEL',
+                              style: TextStyle(
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showAddressAlertDialog(BuildContext context, user) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: SafeArea(
+            child: Container(
+              padding: EdgeInsets.all(25),
+              width: MediaQuery.of(context).size.width / 1.2,
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('Users')
+                      .document(user.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: 5,
+                                    bottom: 10,
+                                    left: 10,
+                                    right: 10,
+                                  ),
+                                  child: Center(
+                                    child: CircleAvatar(
+                                      radius: 37,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 65,
+                                        color: Colors.white,
+                                      ),
+                                      backgroundColor: MyColors.TEXT_FIELD_BCK,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  child: Center(
+                                    child: Text(
+                                      snapshot.data['name'],
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Center(
+                                    child: Text(
+                                      snapshot.data['phone'],
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: 25, bottom: 10, left: 20, right: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Address',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            getAddressAlertDialog(
+                                                context, user);
+                                          },
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 20,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      bottom: 20, left: 20, right: 20),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        snapshot.data['address'] ??
+                                            'No Address found',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: 'Lato',
+                                            fontWeight: FontWeight.bold,
+                                            height: 1.5),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      snapshot.data['address'] == null
+                                          ? OutlineButton(
+                                              onPressed: () {
+                                                getAddressAlertDialog(
+                                                    context, user);
+                                              },
+                                              child: Text(
+                                                'ADD ADDRESS',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontFamily: 'Lato',
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12),
+                                              ),
+                                              highlightedBorderColor:
+                                                  MyColors.TEXT_COLOR,
+                                              highlightColor:
+                                                  MyColors.TEXT_FIELD_BCK,
+                                              splashColor: MyColors.TEXT_COLOR,
+                                              borderSide: BorderSide(
+                                                color: MyColors.TEXT_FIELD_BCK,
+                                                style: BorderStyle.solid,
+                                                width: 2,
+                                              ),
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            DropdownButton(
+                              onChanged: (val){
+                                setState(() {
+                                  itemCount = val;
+                                });
+                              },
+                              value: itemCount,
+                              items: <int>[1,2,3,4,5,6,7,8,9,10].map((int value){
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text('$value'),
+                                );
+                              },
+                              ).toList(),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            OutlineButton(
+                              highlightedBorderColor: MyColors.TEXT_COLOR,
+                              highlightColor: MyColors.TEXT_FIELD_BCK,
+                              splashColor: MyColors.TEXT_COLOR,
+                              borderSide: BorderSide(
+                                color: MyColors.TEXT_FIELD_BCK,
+                                style: BorderStyle.solid,
+                                width: 2,
+                              ),
+                              onPressed: () async {
+                                print("CAT:::${widget.category}DOC::${widget.title}");
+                                var itemRef = await Firestore.instance
+                                    .collection(widget.category)
+                                    .document(widget.title)
+                                    .get();
+                                if (itemCount < itemRef['stockAvailable']) {
+                                  openCheckout();
+                                } else {
+                                  print('try less values');
+                                }
+                              },
+                              child: Text(
+                                'PROCEED TO PAYMENT',
+                                style: TextStyle(
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    letterSpacing: 1.5,
+                                    height: 1.5),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.info,
+                                  size: 13,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Check the details before proceeding to payment',
+                                    style: TextStyle(
+                                        fontSize: 12, fontFamily: 'Lato'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   _addToLiked() async {
     var ref = Firestore.instance
         .collection('Users')
@@ -328,38 +841,24 @@ class _ViewItemsState extends State<ViewItems> {
                               onPressed: () async {
                                 try {
                                   var appURL = await Firestore.instance
-                                      .collection('APP').document('URL').get();
+                                      .collection('APP')
+                                      .document('URL')
+                                      .get();
                                   var request = await HttpClient()
                                       .getUrl(Uri.parse(widget.url));
                                   var response = await request.close();
                                   Uint8List bytes =
                                       await consolidateHttpClientResponseBytes(
                                           response);
-                                  await Share.file(
-                                      'SBT Shopping',
-                                      '${widget.title}.jpg',
-                                      bytes,
-                                      'image/jpg',text: 'Hey have a look at our product ${widget.name}.'
-                                      '\nDownload SBT Shopping app for free from playstore.'
-                                      '\n${appURL['url']}');
+                                  await Share.file('SBT Shopping',
+                                      '${widget.title}.jpg', bytes, 'image/jpg',
+                                      text:
+                                          'Hey have a look at our product ${widget.name}.'
+                                          '\nDownload SBT Shopping app for free from playstore.'
+                                          '\n${appURL['url']}');
                                 } catch (e) {
                                   print("ERROR Sharing FILE: $e");
                                 }
-                                // var admin_no = await Firestore.instance
-                                //     .collection('Admin')
-                                //     .document('Phone No')
-                                //     .get();
-                                // FlutterOpenWhatsapp.sendSingleMessage(
-                                //     "${admin_no["phoneNo"]}",
-                                //     'Product ID : ${widget.title}'
-                                //         '\nCost : ₹${widget.cost}'
-                                //         '\nDescription : ${widget.description}'
-                                //         '\n\nAddress:'
-                                //         '\nArea : ${UserLocation.area}'
-                                //         '\nLocality : ${UserLocation.locality}'
-                                //         '\nPostal Code : ${UserLocation.postalCode}'
-                                //         '\nLatitude : ${UserLocation.latitude}'
-                                //         '\nLongitude : ${UserLocation.longitude}');
                               },
                             ),
                           ),
@@ -504,7 +1003,8 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         child: OutlineButton(
                           onPressed: () {
-                            openCheckout();
+                            showAddressAlertDialog(context, user);
+                            // openCheckout();
                           },
                           highlightedBorderColor: MyColors.TEXT_COLOR,
                           highlightColor: MyColors.TEXT_FIELD_BCK,
