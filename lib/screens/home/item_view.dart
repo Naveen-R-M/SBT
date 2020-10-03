@@ -49,8 +49,8 @@ class _ViewItemsState extends State<ViewItems> {
   String city;
   String state;
   String postalCode;
-  dynamic itemCount;
   bool exceeded = false;
+  int itemCount = 1;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -315,8 +315,9 @@ class _ViewItemsState extends State<ViewItems> {
     );
   }
 
-  void showAddressAlertDialog(BuildContext context, user) {
-    showDialog(
+  showAddressAlertDialog(BuildContext context, user, itemCount) {
+    int itemCount = 1;
+    return showDialog(
       context: context,
       barrierDismissible: true,
       // false = user must tap button, true = tap outside dialog
@@ -473,54 +474,69 @@ class _ViewItemsState extends State<ViewItems> {
                           ],
                         ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            DropdownButton(
-                              onChanged: (val){
-                                setState(() {
-                                  itemCount = val;
-                                });
-                              },
-                              value: itemCount,
-                              items: <int>[1,2,3,4,5,6,7,8,9,10].map((int value){
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text('$value'),
-                                );
-                              },
-                              ).toList(),
+                            Container(
+                              margin: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Quantity Selected',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '$itemCount',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 30,
                             ),
-                            OutlineButton(
-                              highlightedBorderColor: MyColors.TEXT_COLOR,
-                              highlightColor: MyColors.TEXT_FIELD_BCK,
-                              splashColor: MyColors.TEXT_COLOR,
-                              borderSide: BorderSide(
-                                color: MyColors.TEXT_FIELD_BCK,
-                                style: BorderStyle.solid,
-                                width: 2,
-                              ),
-                              onPressed: () async {
-                                print("CAT:::${widget.category}DOC::${widget.title}");
-                                var itemRef = await Firestore.instance
-                                    .collection(widget.category)
-                                    .document(widget.title)
-                                    .get();
-                                if (itemCount < itemRef['stockAvailable']) {
-                                  openCheckout();
-                                } else {
-                                  print('try less values');
-                                }
-                              },
-                              child: Text(
-                                'PROCEED TO PAYMENT',
-                                style: TextStyle(
-                                    fontFamily: 'Lato',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                    letterSpacing: 1.5,
-                                    height: 1.5),
+                            Center(
+                              child: OutlineButton(
+                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                splashColor: MyColors.TEXT_COLOR,
+                                borderSide: BorderSide(
+                                  color: MyColors.TEXT_FIELD_BCK,
+                                  style: BorderStyle.solid,
+                                  width: 2,
+                                ),
+                                onPressed: () async {
+                                  print("CAT:::${widget.category}DOC::${widget.title}");
+                                  var itemRef = await Firestore.instance
+                                      .collection(widget.category)
+                                      .document(widget.title)
+                                      .get();
+                                  if (itemCount < itemRef['stockAvailable']) {
+                                    openCheckout();
+                                  } else {
+                                    print('try less values');
+                                  }
+                                },
+                                child: Text(
+                                  'PROCEED TO PAYMENT',
+                                  style: TextStyle(
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      letterSpacing: 1.5,
+                                      height: 1.5),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -924,6 +940,109 @@ class _ViewItemsState extends State<ViewItems> {
                   SizedBox(
                     height: 20,
                   ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        left: 20,
+                      ),
+                      child: Text(
+                        'Quantity',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Lato',
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: StreamBuilder(
+                      stream: Firestore.instance.collection(widget.category).document(widget.title).snapshots(),
+                      builder: (context, snapshot) {
+                        return Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: 20,
+                                right: 10,
+                              ),
+                              width: 40,
+                              height: 30,
+                              child: OutlineButton(
+                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                splashColor: MyColors.TEXT_COLOR,
+                                borderSide: BorderSide(
+                                  color: MyColors.TEXT_FIELD_BCK,
+                                  style: BorderStyle.solid,
+                                  width: 2,
+                                ),
+                                onPressed: itemCount!=1?(){
+                                  setState(() {
+                                    itemCount--;
+                                  });
+                                }:null,
+                                child: Text(
+                                  '-',
+                                  style: TextStyle(
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      ),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '$itemCount',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Lato',
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: 10,
+                                right: 20,
+                              ),
+                              width: 40,
+                              height: 30,
+                              child: OutlineButton(
+                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                splashColor: MyColors.TEXT_COLOR,
+                                borderSide: BorderSide(
+                                  color: MyColors.TEXT_FIELD_BCK,
+                                  style: BorderStyle.solid,
+                                  width: 2,
+                                ),
+                                onPressed: itemCount<snapshot.data['stockAvailable']?(){
+                                  setState(() {
+                                    itemCount++;
+                                  });
+                                }:null,
+                                child: Text(
+                                  '+',
+                                  style: TextStyle(
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -1003,7 +1122,7 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         child: OutlineButton(
                           onPressed: () {
-                            showAddressAlertDialog(context, user);
+                            showAddressAlertDialog(context, user, itemCount);
                             // openCheckout();
                           },
                           highlightedBorderColor: MyColors.TEXT_COLOR,
