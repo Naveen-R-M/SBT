@@ -51,6 +51,7 @@ class _ViewItemsState extends State<ViewItems> {
   String postalCode;
   bool exceeded = false;
   int itemCount = 1;
+  int totalCost;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -315,8 +316,9 @@ class _ViewItemsState extends State<ViewItems> {
     );
   }
 
-  showAddressAlertDialog(BuildContext context, user, itemCount) {
-    int itemCount = 1;
+  showAddressAlertDialog(
+      BuildContext context, user, itemCount, productID, name, cost, imageURL) {
+    totalCost = itemCount * num.parse(cost);
     return showDialog(
       context: context,
       barrierDismissible: true,
@@ -331,241 +333,256 @@ class _ViewItemsState extends State<ViewItems> {
             child: Container(
               padding: EdgeInsets.all(25),
               width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 1.5,
-              child: StreamBuilder(
-                  stream: Firestore.instance
-                      .collection('Users')
-                      .document(user.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    top: 5,
-                                    bottom: 10,
-                                    left: 10,
-                                    right: 10,
-                                  ),
-                                  child: Center(
-                                    child: CircleAvatar(
-                                      radius: 37,
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 65,
-                                        color: Colors.white,
-                                      ),
-                                      backgroundColor: MyColors.TEXT_FIELD_BCK,
+              height: MediaQuery.of(context).size.height / 1.4,
+              child: SingleChildScrollView(
+                child: StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('Users')
+                        .document(user.uid)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      top: 5,
+                                      bottom: 10,
+                                      left: 10,
+                                      right: 10,
                                     ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  child: Center(
-                                    child: Text(
-                                      snapshot.data['name'],
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Lato',
-                                        fontWeight: FontWeight.bold,
+                                    child: Center(
+                                      child: CircleAvatar(
+                                        radius: 37,
+                                        child: Icon(
+                                          Icons.person,
+                                          size: 65,
+                                          color: Colors.white,
+                                        ),
+                                        backgroundColor: MyColors.TEXT_FIELD_BCK,
                                       ),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  child: Center(
-                                    child: Text(
-                                      snapshot.data['phone'],
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Lato',
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      top: 25, bottom: 10, left: 20, right: 20),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Address',
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    child: Center(
+                                      child: Text(
+                                        snapshot.data['name'],
                                         style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 12,
                                           fontFamily: 'Lato',
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      GestureDetector(
-                                          onTap: () {
-                                            getAddressAlertDialog(
-                                                context, user);
-                                          },
-                                          child: Icon(
-                                            Icons.edit,
-                                            size: 20,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      bottom: 20, left: 20, right: 20),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        snapshot.data['address'] ??
-                                            'No Address found',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: 'Lato',
-                                            fontWeight: FontWeight.bold,
-                                            height: 1.5),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      snapshot.data['address'] == null
-                                          ? OutlineButton(
-                                              onPressed: () {
-                                                getAddressAlertDialog(
-                                                    context, user);
-                                              },
-                                              child: Text(
-                                                'ADD ADDRESS',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: 'Lato',
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12),
-                                              ),
-                                              highlightedBorderColor:
-                                                  MyColors.TEXT_COLOR,
-                                              highlightColor:
-                                                  MyColors.TEXT_FIELD_BCK,
-                                              splashColor: MyColors.TEXT_COLOR,
-                                              borderSide: BorderSide(
-                                                color: MyColors.TEXT_FIELD_BCK,
-                                                style: BorderStyle.solid,
-                                                width: 2,
-                                              ),
-                                            )
-                                          : Container()
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Quantity Selected',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'Lato',
-                                      fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    '$itemCount',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'Lato',
-                                      fontWeight: FontWeight.w800,
+                                  Container(
+                                    child: Center(
+                                      child: Text(
+                                        snapshot.data['phone'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Center(
-                              child: OutlineButton(
-                                highlightedBorderColor: MyColors.TEXT_COLOR,
-                                highlightColor: MyColors.TEXT_FIELD_BCK,
-                                splashColor: MyColors.TEXT_COLOR,
-                                borderSide: BorderSide(
-                                  color: MyColors.TEXT_FIELD_BCK,
-                                  style: BorderStyle.solid,
-                                  width: 2,
-                                ),
-                                onPressed: () async {
-                                  print("CAT:::${widget.category}DOC::${widget.title}");
-                                  var itemRef = await Firestore.instance
-                                      .collection(widget.category)
-                                      .document(widget.title)
-                                      .get();
-                                  if (itemCount < itemRef['stockAvailable']) {
-                                    openCheckout();
-                                  } else {
-                                    print('try less values');
-                                  }
-                                },
-                                child: Text(
-                                  'PROCEED TO PAYMENT',
-                                  style: TextStyle(
-                                      fontFamily: 'Lato',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      letterSpacing: 1.5,
-                                      height: 1.5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: 25, bottom: 10, left: 20, right: 20),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Address',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: 'Lato',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
+                                            onTap: () {
+                                              getAddressAlertDialog(
+                                                  context, user);
+                                            },
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 20,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: 20, left: 20, right: 20),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          snapshot.data['address'] ??
+                                              'No Address found',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Lato',
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.5),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        snapshot.data['address'] == null
+                                            ? OutlineButton(
+                                                onPressed: () {
+                                                  getAddressAlertDialog(
+                                                      context, user);
+                                                },
+                                                child: Text(
+                                                  'ADD ADDRESS',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Lato',
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 12),
+                                                ),
+                                                highlightedBorderColor:
+                                                    MyColors.TEXT_COLOR,
+                                                highlightColor:
+                                                    MyColors.TEXT_FIELD_BCK,
+                                                splashColor: MyColors.TEXT_COLOR,
+                                                borderSide: BorderSide(
+                                                  color: MyColors.TEXT_FIELD_BCK,
+                                                  style: BorderStyle.solid,
+                                                  width: 2,
+                                                ),
+                                              )
+                                            : Container()
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Product Details',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: 100,
+                                        height: 100,
+                                        child: Image.network(
+                                      imageURL,
+                                      fit: BoxFit.cover,
+                                    )),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      'Product name : $name'
+                                      '\nProductID : $productID'
+                                      '\nQuantity selected : $itemCount'
+                                      '\nTotal cost : ₹$totalCost',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 1.2,
+                                          height: 1.3,
+                                          wordSpacing: 1.2),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  size: 13,
-                                  color: Colors.green,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
+                              Center(
+                                child: OutlineButton(
+                                  highlightedBorderColor: MyColors.TEXT_COLOR,
+                                  highlightColor: MyColors.TEXT_FIELD_BCK,
+                                  splashColor: MyColors.TEXT_COLOR,
+                                  borderSide: BorderSide(
+                                    color: MyColors.TEXT_FIELD_BCK,
+                                    style: BorderStyle.solid,
+                                    width: 2,
+                                  ),
+                                  onPressed: () async {
+                                    print(
+                                        "CAT:::${widget.category}DOC::${widget.title}");
+                                    var itemRef = await Firestore.instance
+                                        .collection(widget.category)
+                                        .document(widget.title)
+                                        .get();
+                                    if (itemCount <= itemRef['stockAvailable']) {
+                                      openCheckout(totalCost);
+                                    } else {
+                                      print('try less values');
+                                    }
+                                  },
                                   child: Text(
-                                    'Check the details before proceeding to payment',
+                                    'PROCEED TO PAYMENT',
                                     style: TextStyle(
-                                        fontSize: 12, fontFamily: 'Lato'),
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        letterSpacing: 1.5,
+                                        ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.info,
+                                    size: 13,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      'Check the details before proceeding to payment',
+                                      style: TextStyle(
+                                          fontSize: 12, fontFamily: 'Lato'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }),
+              ),
             ),
           ),
         );
@@ -633,10 +650,10 @@ class _ViewItemsState extends State<ViewItems> {
     }
   }
 
-  void openCheckout() async {
+  void openCheckout(totalCost) async {
     var options = {
       'key': 'rzp_test_iXSAz7jqJc5n0D',
-      'amount': num.parse(widget.cost) * 100,
+      'amount': totalCost * 100,
       'name': 'SBT Shopping',
       'description': 'ProductID : ${widget.title}',
       'prefill': {'Contact': '', 'Mail id': ''},
@@ -656,7 +673,25 @@ class _ViewItemsState extends State<ViewItems> {
         msg: 'Your paymentID ${response.paymentId} is successful');
     _update();
     DateTime now = DateTime.now();
+    String formattedMonth = DateFormat('MM').format(now);
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    await Firestore.instance
+        .collection('Admin')
+        .document('Orders')
+        .collection(user.uid)
+        .document('Successful Transactions')
+        .collection(formattedMonth)
+        .document(widget.title)
+        .setData({
+      'dateTime': formattedDate,
+      'result': 'Success',
+      'category': widget.category,
+      'name': widget.name,
+      'productID': widget.title,
+      'quantity' : itemCount,
+      'amount': totalCost,
+      'imageURL': widget.url,
+    });
     await Firestore.instance
         .collection('Users')
         .document(user.uid)
@@ -668,7 +703,8 @@ class _ViewItemsState extends State<ViewItems> {
       'category': widget.category,
       'name': widget.name,
       'productID': widget.title,
-      'amount': widget.cost,
+      'quantity' : itemCount,
+      'amount': totalCost,
       'imageURL': widget.url,
     });
   }
@@ -679,7 +715,25 @@ class _ViewItemsState extends State<ViewItems> {
       response.code
     }.toString()}\nERROR Message:${response.message}');
     DateTime now = DateTime.now();
+    String formattedMonth = DateFormat('MM').format(now);
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    await Firestore.instance
+        .collection('Admin')
+        .document('Orders')
+        .collection(user.uid)
+        .document('Failed Transactions')
+        .collection(formattedMonth)
+        .document(widget.title)
+        .setData({
+      'dateTime': formattedDate,
+      'result': 'Failed',
+      'category': widget.category,
+      'name': widget.name,
+      'productID': widget.title,
+      'quantity' : itemCount,
+      'amount': totalCost,
+      'imageURL': widget.url,
+    });
     await Firestore.instance
         .collection('Users')
         .document(user.uid)
@@ -691,7 +745,8 @@ class _ViewItemsState extends State<ViewItems> {
       'name': widget.name,
       'category': widget.category,
       'productID': widget.title,
-      'amount': widget.cost,
+      'quantity' : itemCount,
+      'amount': totalCost,
       'imageURL': widget.url,
     });
   }
@@ -961,84 +1016,91 @@ class _ViewItemsState extends State<ViewItems> {
                   ),
                   Container(
                     child: StreamBuilder(
-                      stream: Firestore.instance.collection(widget.category).document(widget.title).snapshots(),
-                      builder: (context, snapshot) {
-                        return Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                left: 20,
-                                right: 10,
-                              ),
-                              width: 40,
-                              height: 30,
-                              child: OutlineButton(
-                                highlightedBorderColor: MyColors.TEXT_COLOR,
-                                highlightColor: MyColors.TEXT_FIELD_BCK,
-                                splashColor: MyColors.TEXT_COLOR,
-                                borderSide: BorderSide(
-                                  color: MyColors.TEXT_FIELD_BCK,
-                                  style: BorderStyle.solid,
-                                  width: 2,
+                        stream: Firestore.instance
+                            .collection(widget.category)
+                            .document(widget.title)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          return Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: 20,
+                                  right: 10,
                                 ),
-                                onPressed: itemCount!=1?(){
-                                  setState(() {
-                                    itemCount--;
-                                  });
-                                }:null,
-                                child: Text(
-                                  '-',
-                                  style: TextStyle(
+                                width: 40,
+                                height: 30,
+                                child: OutlineButton(
+                                  highlightedBorderColor: MyColors.TEXT_COLOR,
+                                  highlightColor: MyColors.TEXT_FIELD_BCK,
+                                  splashColor: MyColors.TEXT_COLOR,
+                                  borderSide: BorderSide(
+                                    color: MyColors.TEXT_FIELD_BCK,
+                                    style: BorderStyle.solid,
+                                    width: 2,
+                                  ),
+                                  onPressed: itemCount != 1
+                                      ? () {
+                                          setState(() {
+                                            itemCount--;
+                                          });
+                                        }
+                                      : null,
+                                  child: Text(
+                                    '-',
+                                    style: TextStyle(
                                       fontFamily: 'Lato',
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
-                                      ),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '$itemCount',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                left: 10,
-                                right: 20,
-                              ),
-                              width: 40,
-                              height: 30,
-                              child: OutlineButton(
-                                highlightedBorderColor: MyColors.TEXT_COLOR,
-                                highlightColor: MyColors.TEXT_FIELD_BCK,
-                                splashColor: MyColors.TEXT_COLOR,
-                                borderSide: BorderSide(
-                                  color: MyColors.TEXT_FIELD_BCK,
-                                  style: BorderStyle.solid,
-                                  width: 2,
-                                ),
-                                onPressed: itemCount<snapshot.data['stockAvailable']?(){
-                                  setState(() {
-                                    itemCount++;
-                                  });
-                                }:null,
-                                child: Text(
-                                  '+',
-                                  style: TextStyle(
-                                    fontFamily: 'Lato',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
-                    ),
+                              Text(
+                                '$itemCount',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: 10,
+                                  right: 20,
+                                ),
+                                width: 40,
+                                height: 30,
+                                child: OutlineButton(
+                                  highlightedBorderColor: MyColors.TEXT_COLOR,
+                                  highlightColor: MyColors.TEXT_FIELD_BCK,
+                                  splashColor: MyColors.TEXT_COLOR,
+                                  borderSide: BorderSide(
+                                    color: MyColors.TEXT_FIELD_BCK,
+                                    style: BorderStyle.solid,
+                                    width: 2,
+                                  ),
+                                  onPressed: itemCount <
+                                          snapshot.data['stockAvailable']
+                                      ? () {
+                                          setState(() {
+                                            itemCount++;
+                                          });
+                                        }
+                                      : null,
+                                  child: Text(
+                                    '+',
+                                    style: TextStyle(
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
                   ),
                   SizedBox(
                     height: 20,
@@ -1122,7 +1184,14 @@ class _ViewItemsState extends State<ViewItems> {
                         ),
                         child: OutlineButton(
                           onPressed: () {
-                            showAddressAlertDialog(context, user, itemCount);
+                            showAddressAlertDialog(
+                                context,
+                                user,
+                                itemCount,
+                                widget.title,
+                                widget.name,
+                                widget.cost,
+                                widget.url);
                             // openCheckout();
                           },
                           highlightedBorderColor: MyColors.TEXT_COLOR,

@@ -37,100 +37,76 @@ class _SuccessfulTransactionsState extends State<SuccessfulTransactions> {
                 itemBuilder: (context, index) {
                   var path = data[index];
                   return GestureDetector(
-                    child: Card(
-                      elevation: 10,
-                      shadowColor: MyColors
-                          .TEXT_FIELD_BCK
-                          .withOpacity(0.50),
-                      child: Row(
-                        children: [
-                          Card(
-                            shadowColor: MyColors
-                                .STATUS_BAR
-                                .withOpacity(0.5),
-                            elevation: 15,
-                            child: Container(
-                              width:
-                              MediaQuery.of(context)
-                                  .size
-                                  .width /
-                                  2.5,
-                              height:
-                              MediaQuery.of(context)
-                                  .size
-                                  .height /
-                                  6,
-                              child: Image.network(
-                                path.data["imageURL"],
-                                fit: BoxFit.cover,
+                    child: Banner(
+                      location: BannerLocation.topStart,
+                      message: 'Success',
+                      color: Colors.lightGreen,
+                      child: Card(
+                        elevation: 10,
+                        shadowColor: MyColors
+                            .TEXT_FIELD_BCK
+                            .withOpacity(0.50),
+                        child: Row(
+                          children: [
+                            Card(
+                              shadowColor: MyColors
+                                  .STATUS_BAR
+                                  .withOpacity(0.5),
+                              elevation: 15,
+                              child: Container(
+                                width:
+                                MediaQuery.of(context)
+                                    .size
+                                    .width /
+                                    3.3,
+                                height:
+                                MediaQuery.of(context)
+                                    .size
+                                    .height /
+                                    6,
+                                child: Image.network(
+                                  path.data["imageURL"],
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                    left: 15,
-                                    right: 8.0,
-                                    top: 8.0),
-                                child: Align(
-                                  alignment:
-                                  Alignment.topLeft,
-                                  child: Text(
-                                    path.data['name'],
-                                    style: TextStyle(
-                                      color: MyColors
-                                          .TEXT_COLOR,
-                                      fontFamily: 'Pacifico',
-                                      fontSize: 15,
-                                    ),
+                            Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 15,
+                                      right: 8.0,
+                                      top: 8.0),
+                                  child: Align(
+                                    alignment:
+                                    Alignment.topLeft,
+                                      child: Text(
+                                        'Product name : ${path.data['name']}'
+                                            '\nProductID : ${path.data['productID']}'
+                                            '\nQuantity selected : ${path.data['quantity']}'
+                                            '\nTotal cost : ₹${path.data['amount']}'
+                                            '\nBooking date and time : \n${path.data['dateTime']}',
+                                        style: TextStyle(
+                                            color: MyColors.TEXT_COLOR,
+                                            fontSize: 12,
+                                            fontFamily: 'Lato',
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 1.2,
+                                            height: 1.6,
+                                            wordSpacing: 1.2
+                                        ),
+                                      ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    left: 15,
-                                    right: 8.0,
-                                    top: 8.0,
-                                    bottom: 5),
-                                child: Text(
-                                  '₹${path.data["amount"]}',
-                                  textAlign:
-                                  TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Pacifico',
-                                    color: MyColors
-                                        .TEXT_COLOR,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    left: 15,
-                                    right: 8.0,
-                                    top: 8.0,
-                                    bottom: 5),
-                                child: Text(
-                                  '${path.data['dateTime']}',
-                                  textAlign:
-                                  TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Pacifico',
-                                    color: MyColors
-                                        .TEXT_COLOR,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
