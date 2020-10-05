@@ -54,6 +54,7 @@ class _ViewItemsState extends State<ViewItems> {
   bool exceeded = false;
   int itemCount = 1;
   int totalCost;
+  String address;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -343,6 +344,7 @@ class _ViewItemsState extends State<ViewItems> {
                         .document(user.uid)
                         .snapshots(),
                     builder: (context, snapshot) {
+                      address = snapshot.data['address'];
                       return Column(
                         children: [
                           Row(
@@ -686,15 +688,14 @@ class _ViewItemsState extends State<ViewItems> {
         msg: 'Your paymentID ${response.paymentId} is successful');
     _update();
     DateTime now = DateTime.now();
-    String formattedMonth = DateFormat('MM').format(now);
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     await Firestore.instance
-        .collection('Admin')
-        .document('Orders')
-        .collection(user.uid)
-        .document('Successful Transactions')
-        .collection(formattedMonth)
-        .document(widget.title)
+        .collection('Orders')
+        .document(user.uid)
+        .collection('Successful Transactions')
+        .document()
+        .collection(widget.title)
+        .document()
         .setData({
       'dateTime': formattedDate,
       'result': 'Success',
@@ -704,6 +705,7 @@ class _ViewItemsState extends State<ViewItems> {
       'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
+      'address' : address,
     });
     await Firestore.instance
         .collection('Users')
@@ -729,15 +731,14 @@ class _ViewItemsState extends State<ViewItems> {
       response.code
     }.toString()}\nERROR Message:${response.message}');
     DateTime now = DateTime.now();
-    String formattedMonth = DateFormat('MM').format(now);
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
     await Firestore.instance
-        .collection('Admin')
-        .document('Orders')
-        .collection(user.uid)
-        .document('Failed Transactions')
-        .collection(formattedMonth)
-        .document(widget.title)
+        .collection('Orders')
+        .document(user.uid)
+        .collection('Failed Transactions')
+        .document()
+        .collection(widget.title)
+        .document()
         .setData({
       'dateTime': formattedDate,
       'result': 'Failed',
@@ -747,6 +748,7 @@ class _ViewItemsState extends State<ViewItems> {
       'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
+      'address' : address,
     });
     await Firestore.instance
         .collection('Users')
@@ -1329,7 +1331,7 @@ class _ViewItemsState extends State<ViewItems> {
                           letterSpacing: 1.20),
                     ),
                   ),
-                  Suggestion(widget.category),
+                  Suggestion(widget.category,widget.name),
                   SizedBox(
                     height: 5,
                   ),
