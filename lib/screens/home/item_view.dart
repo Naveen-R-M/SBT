@@ -44,6 +44,8 @@ class _ViewItemsState extends State<ViewItems> {
   bool cartAdded;
   Razorpay _razorpay;
 
+  BuildContext dlogcontext;
+
   String street;
   String area;
   String city;
@@ -364,7 +366,8 @@ class _ViewItemsState extends State<ViewItems> {
                                           size: 65,
                                           color: Colors.white,
                                         ),
-                                        backgroundColor: MyColors.TEXT_FIELD_BCK,
+                                        backgroundColor:
+                                            MyColors.TEXT_FIELD_BCK,
                                       ),
                                     ),
                                   ),
@@ -400,7 +403,10 @@ class _ViewItemsState extends State<ViewItems> {
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 25, bottom: 10, left: 20, right: 20),
+                                        top: 25,
+                                        bottom: 10,
+                                        left: 20,
+                                        right: 20),
                                     child: Row(
                                       children: [
                                         Text(
@@ -454,16 +460,19 @@ class _ViewItemsState extends State<ViewItems> {
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontFamily: 'Lato',
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 12),
                                                 ),
                                                 highlightedBorderColor:
                                                     MyColors.TEXT_COLOR,
                                                 highlightColor:
                                                     MyColors.TEXT_FIELD_BCK,
-                                                splashColor: MyColors.TEXT_COLOR,
+                                                splashColor:
+                                                    MyColors.TEXT_COLOR,
                                                 borderSide: BorderSide(
-                                                  color: MyColors.TEXT_FIELD_BCK,
+                                                  color:
+                                                      MyColors.TEXT_FIELD_BCK,
                                                   style: BorderStyle.solid,
                                                   width: 2,
                                                 ),
@@ -496,12 +505,12 @@ class _ViewItemsState extends State<ViewItems> {
                                       height: 10,
                                     ),
                                     Container(
-                                      width: 100,
+                                        width: 100,
                                         height: 100,
                                         child: Image.network(
-                                      imageURL,
-                                      fit: BoxFit.cover,
-                                    )),
+                                          imageURL,
+                                          fit: BoxFit.cover,
+                                        )),
                                     SizedBox(
                                       height: 10,
                                     ),
@@ -532,13 +541,17 @@ class _ViewItemsState extends State<ViewItems> {
                                     width: 2,
                                   ),
                                   onPressed: () async {
+                                    setState(() {
+                                      dlogcontext = dialogContext;
+                                    });
                                     print(
                                         "CAT:::${widget.category}DOC::${widget.title}");
                                     var itemRef = await Firestore.instance
                                         .collection(widget.category)
                                         .document(widget.title)
                                         .get();
-                                    if (itemCount <= itemRef['stockAvailable']) {
+                                    if (itemCount <=
+                                        itemRef['stockAvailable']) {
                                       openCheckout(totalCost);
                                     } else {
                                       print('try less values');
@@ -547,11 +560,11 @@ class _ViewItemsState extends State<ViewItems> {
                                   child: Text(
                                     'PROCEED TO PAYMENT',
                                     style: TextStyle(
-                                        fontFamily: 'Lato',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        letterSpacing: 1.5,
-                                        ),
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      letterSpacing: 1.5,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -688,7 +701,7 @@ class _ViewItemsState extends State<ViewItems> {
       'category': widget.category,
       'name': widget.name,
       'productID': widget.title,
-      'quantity' : itemCount,
+      'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
     });
@@ -703,10 +716,11 @@ class _ViewItemsState extends State<ViewItems> {
       'category': widget.category,
       'name': widget.name,
       'productID': widget.title,
-      'quantity' : itemCount,
+      'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
     });
+    Navigator.of(dlogcontext).pop();
   }
 
   void _handlePaymentError(PaymentFailureResponse response) async {
@@ -730,7 +744,7 @@ class _ViewItemsState extends State<ViewItems> {
       'category': widget.category,
       'name': widget.name,
       'productID': widget.title,
-      'quantity' : itemCount,
+      'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
     });
@@ -745,10 +759,11 @@ class _ViewItemsState extends State<ViewItems> {
       'name': widget.name,
       'category': widget.category,
       'productID': widget.title,
-      'quantity' : itemCount,
+      'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
     });
+    Navigator.of(dlogcontext).pop();
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -1056,14 +1071,23 @@ class _ViewItemsState extends State<ViewItems> {
                                   ),
                                 ),
                               ),
-                              Text(
-                                '$itemCount',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'Lato',
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
+                              snapshot.data['stockAvailable'] != 0
+                                  ? Text(
+                                      '$itemCount',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    )
+                                  : Text(
+                                      '0',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
                               Container(
                                 margin: EdgeInsets.only(
                                   left: 10,
@@ -1173,58 +1197,68 @@ class _ViewItemsState extends State<ViewItems> {
                               );
                             }),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: 15.0, bottom: 15.0, left: 10.0),
-                        width: MediaQuery.of(context).size.width / 2.35,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: OutlineButton(
-                          onPressed: () {
-                            showAddressAlertDialog(
-                                context,
-                                user,
-                                itemCount,
-                                widget.title,
-                                widget.name,
-                                widget.cost,
-                                widget.url);
-                            // openCheckout();
-                          },
-                          highlightedBorderColor: MyColors.TEXT_COLOR,
-                          highlightColor: MyColors.TEXT_FIELD_BCK,
-                          splashColor: MyColors.TEXT_COLOR,
-                          borderSide: BorderSide(
-                            color: MyColors.TEXT_FIELD_BCK,
-                            style: BorderStyle.solid,
-                            width: 2,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(
-                                Icons.monetization_on,
-                                color: MyColors.TEXT_COLOR,
+                      StreamBuilder(
+                          stream: Firestore.instance
+                              .collection(widget.category)
+                              .document(widget.title)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                  top: 15.0, bottom: 15.0, left: 10.0),
+                              width: MediaQuery.of(context).size.width / 2.35,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                               ),
-                              Expanded(
-                                child: Text(
-                                  'BOOK NOW',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: MyColors.TEXT_COLOR,
-                                    fontFamily: 'Lato',
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              child: OutlineButton(
+                                onPressed: snapshot.data['stockAvailable']>0
+                                    ?() {
+                                  showAddressAlertDialog(
+                                      context,
+                                      user,
+                                      itemCount,
+                                      widget.title,
+                                      widget.name,
+                                      widget.cost,
+                                      widget.url);
+                                  // openCheckout();
+                                }:null,
+                                highlightedBorderColor: MyColors.TEXT_COLOR,
+                                highlightColor: MyColors.TEXT_FIELD_BCK,
+                                splashColor: MyColors.TEXT_COLOR,
+                                borderSide: BorderSide(
+                                  color: MyColors.TEXT_FIELD_BCK,
+                                  style: BorderStyle.solid,
+                                  width: 2,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Icon(
+                                      Icons.monetization_on,
+                                      color: MyColors.TEXT_COLOR,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        'BOOK NOW',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: MyColors.TEXT_COLOR,
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
+                            );
+                          }),
                     ],
                   ),
                   SizedBox(
