@@ -275,9 +275,6 @@ class _ProfileState extends State<Profile> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.only(
-              bottom: 20
-            ),
             child: Column(
               children: [
                 Stack(
@@ -467,166 +464,183 @@ class _ProfileState extends State<Profile> {
                     ),
                   ],
                 ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(
-                      top: 30,
-                      left: 32,
-                      right: 32
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
-                          spreadRadius: 1,
-                          blurRadius: 5
-                      )
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: OutlineButton(
-                    highlightedBorderColor: MyColors.TEXT_COLOR,
-                    highlightColor: MyColors.TEXT_FIELD_BCK,
-                    splashColor: MyColors.TEXT_COLOR,
-                    borderSide: BorderSide(
-                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
-                      style: BorderStyle.solid,
-                      width: 1,
-                    ),
-                    onPressed: (){},
-                    child: Center(
-                      child: Text(
-                        'Privacy policy',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(
-                      top: 15,
-                      left: 32,
-                      right: 32
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
-                          spreadRadius: 1,
-                          blurRadius: 5
-                      )
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: OutlineButton(
-                    highlightedBorderColor: MyColors.TEXT_COLOR,
-                    highlightColor: MyColors.TEXT_FIELD_BCK,
-                    splashColor: MyColors.TEXT_COLOR,
-                    borderSide: BorderSide(
-                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
-                      style: BorderStyle.solid,
-                      width: 1,
-                    ),
-                    onPressed: (){},
-                    child: Center(
-                      child: Text(
-                        'Cancel and Refund policy',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w800,
-                        ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        bottom: 90
                       ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(
-                    top: 15,
-                    left: 32,
-                    right: 32
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
-                            spreadRadius: 1,
-                            blurRadius: 5
-                        )
-                      ],
-                    color: Colors.white,
-                  ),
-                  child: OutlineButton(
-                    highlightedBorderColor: MyColors.TEXT_COLOR,
-                    highlightColor: MyColors.TEXT_FIELD_BCK,
-                    splashColor: MyColors.TEXT_COLOR,
-                    borderSide: BorderSide(
-                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
-                      style: BorderStyle.solid,
-                      width: 1,
-                    ),
-                    onPressed: (){},
-                    child: Center(
-                      child: Text(
-                        'Terms and Conditions',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(
-                      top: 15,
-                      left: 32,
-                      right: 32
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
-                          spreadRadius: 1,
-                          blurRadius: 5
-                      )
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: OutlineButton(
-                    highlightedBorderColor: MyColors.TEXT_COLOR,
-                    highlightColor: MyColors.TEXT_FIELD_BCK,
-                    splashColor: MyColors.TEXT_COLOR,
-                    borderSide: BorderSide(
-                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
-                      style: BorderStyle.solid,
-                      width: 1,
-                    ),
-                    onPressed: (){},
-                    child: Center(
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w800,
-                        ),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                top: 10,
+                                left: 32,
+                                right: 32
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                                    spreadRadius: 1,
+                                    blurRadius: 5
+                                )
+                              ],
+                              color: Colors.white,
+                            ),
+                            child: OutlineButton(
+                              highlightedBorderColor: MyColors.TEXT_COLOR,
+                              highlightColor: MyColors.TEXT_FIELD_BCK,
+                              splashColor: MyColors.TEXT_COLOR,
+                              borderSide: BorderSide(
+                                color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                                style: BorderStyle.solid,
+                                width: 1,
+                              ),
+                              onPressed: (){},
+                              child: Center(
+                                child: Text(
+                                  'Privacy policy',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                top: 15,
+                                left: 32,
+                                right: 32
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                                    spreadRadius: 1,
+                                    blurRadius: 5
+                                )
+                              ],
+                              color: Colors.white,
+                            ),
+                            child: OutlineButton(
+                              highlightedBorderColor: MyColors.TEXT_COLOR,
+                              highlightColor: MyColors.TEXT_FIELD_BCK,
+                              splashColor: MyColors.TEXT_COLOR,
+                              borderSide: BorderSide(
+                                color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                                style: BorderStyle.solid,
+                                width: 1,
+                              ),
+                              onPressed: (){},
+                              child: Center(
+                                child: Text(
+                                  'Cancel and Refund policy',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                top: 15,
+                                left: 32,
+                                right: 32
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                                    spreadRadius: 1,
+                                    blurRadius: 5
+                                )
+                              ],
+                              color: Colors.white,
+                            ),
+                            child: OutlineButton(
+                              highlightedBorderColor: MyColors.TEXT_COLOR,
+                              highlightColor: MyColors.TEXT_FIELD_BCK,
+                              splashColor: MyColors.TEXT_COLOR,
+                              borderSide: BorderSide(
+                                color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                                style: BorderStyle.solid,
+                                width: 1,
+                              ),
+                              onPressed: (){},
+                              child: Center(
+                                child: Text(
+                                  'Terms and Conditions',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                top: 15,
+                                left: 32,
+                                right: 32
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                                    spreadRadius: 1,
+                                    blurRadius: 5
+                                )
+                              ],
+                              color: Colors.white,
+                            ),
+                            child: OutlineButton(
+                              highlightedBorderColor: MyColors.TEXT_COLOR,
+                              highlightColor: MyColors.TEXT_FIELD_BCK,
+                              splashColor: MyColors.TEXT_COLOR,
+                              borderSide: BorderSide(
+                                color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                                style: BorderStyle.solid,
+                                width: 1,
+                              ),
+                              onPressed: (){},
+                              child: Center(
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
