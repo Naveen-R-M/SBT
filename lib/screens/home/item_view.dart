@@ -692,10 +692,10 @@ class _ViewItemsState extends State<ViewItems> {
     await Firestore.instance
         .collection('Orders')
         .document(user.uid)
+        .collection('Transactions')
+        .document()
         .collection('Successful Transactions')
-        .document()
-        .collection(widget.title)
-        .document()
+        .document(widget.title)
         .setData({
       'dateTime': formattedDate,
       'result': 'Success',

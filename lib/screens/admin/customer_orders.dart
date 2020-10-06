@@ -7,40 +7,39 @@ class CustomerOrders extends StatefulWidget {
 }
 
 class _CustomerOrdersState extends State<CustomerOrders> {
-  orders() async{
-    var ref = await Firestore.instance.collection('Orders').document()
-    .collection('Successful Transactions').getDocuments();
-    for (var i = 0 ; i<ref.documents.length; i++){
-      print(ref.documents[i].data);
+  orders() async {
+    var ref = await Firestore.instance.collection('Orders').getDocuments();
+    print(ref.documents.length);
+    for (var i = 0; i < ref.documents.length; i++) {
+      var orderRef = await Firestore.instance
+          .collection('Orders')
+          .document(ref.documents[i].documentID)
+          .collection('Transactions')
+          .getDocuments();
+      for (var j = 0; j < orderRef.documents.length; j++) {
+        var successRef = await Firestore.instance
+            .collection('Orders')
+            .document(ref.documents[i].documentID)
+            .collection('Transactions')
+            .document(orderRef.documents[j].documentID).get();
+        print(successRef['status']);
+      }
     }
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Colors.white,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: Text(
-                'Customer Orders',
-                style: TextStyle(
-                    fontFamily: 'Pacifico', fontSize: 20, color: Colors.black),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return orders();
+    orders();
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.pink,
+      child: GestureDetector(
+        onTap: () {
+          print('tapped');
+          orders();
+        },
+      ),
+    );
   }
 }

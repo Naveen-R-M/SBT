@@ -154,7 +154,8 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.white,
                     padding: EdgeInsets.only(
                         top: 15, left: 24, right: 24, bottom: 15),
-                    child: Row(
+                    child: Admin.admin == true
+                        ?Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
@@ -342,8 +343,7 @@ class _HomePageState extends State<HomePage> {
                                 )
                               : Icon(Icons.account_circle),
                         ),
-                        Admin.admin == true
-                            ?GestureDetector(
+                        GestureDetector(
                           onTap: () {
                             setState(() {
                               bottomIcons = BottomIcons.Orders;
@@ -380,7 +380,196 @@ class _HomePageState extends State<HomePage> {
                           )
                               : Icon(Icons.bookmark_border),
                         )
-                            :Container(),
+                      ],
+                    )
+                        :Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              bottomIcons = BottomIcons.Home;
+                            });
+                          },
+                          child: bottomIcons == BottomIcons.Home
+                              ? Container(
+                            padding: EdgeInsets.only(
+                              top: 8,
+                              bottom: 8,
+                              right: 16,
+                              left: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: MyColors.TEXT_FIELD_BCK
+                                  .withOpacity(0.6),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.home),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  'Home',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Icon(Icons.home),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              bottomIcons = BottomIcons.Cart;
+                            });
+                          },
+                          child: bottomIcons == BottomIcons.Cart
+                              ? Container(
+                            padding: EdgeInsets.only(
+                              top: 8,
+                              bottom: 8,
+                              right: 16,
+                              left: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: MyColors.TEXT_FIELD_BCK
+                                  .withOpacity(0.6),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.add_shopping_cart),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  'Cart',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Icon(Icons.add_shopping_cart),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              bottomIcons = BottomIcons.Liked;
+                            });
+                          },
+                          child: bottomIcons == BottomIcons.Liked
+                              ? Container(
+                            padding: EdgeInsets.only(
+                              top: 8,
+                              bottom: 8,
+                              right: 16,
+                              left: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: MyColors.TEXT_FIELD_BCK
+                                  .withOpacity(0.6),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.thumb_up),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  'Liked',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Icon(Icons.thumb_up),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              bottomIcons = BottomIcons.Purchases;
+                            });
+                          },
+                          child: bottomIcons == BottomIcons.Purchases
+                              ? Container(
+                            padding: EdgeInsets.only(
+                              top: 8,
+                              bottom: 8,
+                              right: 16,
+                              left: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: MyColors.TEXT_FIELD_BCK
+                                  .withOpacity(0.6),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.receipt),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  'Purchases',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Icon(Icons.receipt),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              bottomIcons = BottomIcons.Account;
+                            });
+                          },
+                          child: bottomIcons == BottomIcons.Account
+                              ? Container(
+                            padding: EdgeInsets.only(
+                              top: 8,
+                              bottom: 8,
+                              right: 16,
+                              left: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: MyColors.TEXT_FIELD_BCK
+                                  .withOpacity(0.6),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.account_circle),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  'Account',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Icon(Icons.account_circle),
+                        ),
                       ],
                     ),
                   ),
