@@ -21,7 +21,8 @@ class _DeleteCategoriesState extends State<DeleteCategories> {
   var imageURL;
 
   _delete(context, imageURL, user) async {
-    var userRef = await Firestore.instance.collection('Users').getDocuments();
+    var userRef = await Firestore.instance
+        .collection('Users').getDocuments();
     for (var i = 0; i < userRef.documents.length; i++) {
       await Firestore.instance
           .collection('Users')

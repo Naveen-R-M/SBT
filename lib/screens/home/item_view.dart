@@ -706,6 +706,7 @@ class _ViewItemsState extends State<ViewItems> {
       'amount': totalCost,
       'imageURL': widget.url,
       'address' : address,
+      'status' : 'UnDelivered',
     });
     await Firestore.instance
         .collection('Users')

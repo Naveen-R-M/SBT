@@ -1,4 +1,5 @@
 import 'package:SBT/screens/admin/admin.dart';
+import 'package:SBT/screens/admin/customer_orders.dart';
 import 'package:SBT/screens/home/bottom_nav/account/profile.dart';
 import 'package:SBT/screens/home/bottom_nav/cart.dart';
 import 'package:SBT/screens/home/bottom_nav/home.dart';
@@ -26,13 +27,13 @@ enum BottomIcons {
   Liked,
   Purchases,
   Account,
+  Orders,
 }
 
 class _HomePageState extends State<HomePage> {
 
   var title = 'Categories';
   BottomIcons bottomIcons = BottomIcons.Home;
-
 
   String message;
 
@@ -141,7 +142,12 @@ class _HomePageState extends State<HomePage> {
                     : bottomIcons == BottomIcons.Purchases
                     ? Purchases()
                     : bottomIcons == BottomIcons.Account
-                    ? Profile():Container(),
+                    ? Profile()
+                    : Admin.admin == true
+                    ? bottomIcons == BottomIcons.Orders
+                    ? CustomerOrders()
+                    : Container()
+                    : Container(),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Container(
@@ -336,6 +342,45 @@ class _HomePageState extends State<HomePage> {
                                 )
                               : Icon(Icons.account_circle),
                         ),
+                        Admin.admin == true
+                            ?GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              bottomIcons = BottomIcons.Orders;
+                            });
+                          },
+                          child: bottomIcons == BottomIcons.Orders
+                              ? Container(
+                            padding: EdgeInsets.only(
+                              top: 8,
+                              bottom: 8,
+                              right: 16,
+                              left: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: MyColors.TEXT_FIELD_BCK
+                                  .withOpacity(0.6),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.bookmark_border),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  'Orders',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                              : Icon(Icons.bookmark_border),
+                        )
+                            :Container(),
                       ],
                     ),
                   ),
