@@ -23,34 +23,48 @@ class _DeleteCategoriesState extends State<DeleteCategories> {
   _delete(context, imageURL, user) async {
     var userRef = await Firestore.instance.collection('Users').getDocuments();
     for (var i = 0; i < userRef.documents.length; i++) {
-      var liked = await Firestore.instance
-          .collection('Users')
-          .document(userRef.documents[i].documentID)
-          .collection('Liked')
-          .getDocuments();
-      var cart = await Firestore.instance
+      await Firestore.instance
           .collection('Users')
           .document(userRef.documents[i].documentID)
           .collection('Cart')
-          .getDocuments();
-      for(var j=0;j<cart.documents.length;j++){
-        if (cart.documents[j].data['title'] == documentID) {
-          await Firestore.instance
-              .collection('Users')
-              .document(userRef.documents[i].documentID)
-              .collection('Cart')
-              .document(cart.documents[j].documentID)
-              .delete();
+          .where('title', isEqualTo: documentID)
+          .getDocuments()
+          .then((value) {
+        for (DocumentSnapshot doc in value.documents) {
+          doc.reference.delete();
         }
-        if (liked.documents[j].data['title'] == documentID) {
-          await Firestore.instance
-              .collection('Users')
-              .document(userRef.documents[i].documentID)
-              .collection('Liked')
-              .document(liked.documents[j].documentID)
-              .delete();
+      });
+
+      await Firestore.instance
+          .collection('Users')
+          .document(userRef.documents[i].documentID)
+          .collection('Liked')
+          .where('title', isEqualTo: documentID)
+          .getDocuments()
+          .then((value) {
+        for (DocumentSnapshot doc in value.documents) {
+          doc.reference.delete();
         }
-      }
+      });
+
+      // for(var j=0;j<cart.documents.length;j++){
+      //   if (cart.documents[j].data['title'] == documentID) {
+      //     await Firestore.instance
+      //         .collection('Users')
+      //         .document(userRef.documents[i].documentID)
+      //         .collection('Cart')
+      //         .document(cart.documents[j].documentID)
+      //         .delete();
+      //   }
+      //   if (liked.documents[j].data['title'] == documentID) {
+      //     await Firestore.instance
+      //         .collection('Users')
+      //         .document(userRef.documents[i].documentID)
+      //         .collection('Liked')
+      //         .document(liked.documents[j].documentID)
+      //         .delete();
+      //   }
+      // }
     }
     var ref = await FirebaseStorage.instance
         .getReferenceFromUrl(imageURL)

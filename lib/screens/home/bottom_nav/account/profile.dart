@@ -1,6 +1,7 @@
 import 'package:SBT/model/user.dart';
 import 'package:SBT/my_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -271,199 +272,367 @@ class _ProfileState extends State<Profile> {
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 3.5,
-                    decoration: BoxDecoration(
-                        color: MyColors.STATUS_BAR.withOpacity(0.6),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft:  Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        )
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: Text(
-                        'Account',
-                        style: TextStyle(
-                            fontFamily: 'Pacifico', fontSize: 20, color: Colors.black),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            margin: EdgeInsets.only(
+              bottom: 20
+            ),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 3.5,
+                      decoration: BoxDecoration(
+                          color: MyColors.STATUS_BAR.withOpacity(0.6),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft:  Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                          )
                       ),
                     ),
-                  ),
-                  StreamBuilder(
-                    stream: Firestore.instance.collection('Users').document(user.uid).snapshots(),
-                    builder: (context, snapshot) {
-                      return Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 6.5,
-                            left: 30,
-                            right: 30,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: MyColors.TEXT_COLOR.withOpacity(0.5),
-                                      spreadRadius: 3,
-                                    blurRadius: 10
-                                  )
-                                ],
-                                borderRadius: BorderRadius.all(Radius.circular(20))
+                    Container(
+                      margin: EdgeInsets.only(top: 30),
+                      child: Center(
+                        child: Text(
+                          'Account',
+                          style: TextStyle(
+                              fontFamily: 'Pacifico', fontSize: 20, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    StreamBuilder(
+                      stream: Firestore.instance.collection('Users').document(user.uid).snapshots(),
+                      builder: (context, snapshot) {
+                        return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height / 6.5,
+                              left: 30,
+                              right: 30,
                             ),
                             child: Container(
-                              padding: EdgeInsets.all(15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                          top: 5,
-                                          bottom: 10,
-                                          left: 10,
-                                          right: 10,
-                                        ),
-                                        child: Center(
-                                          child: CircleAvatar(
-                                            radius: 37,
-                                            child: Icon(
-                                              Icons.person,
-                                              size: 65,
-                                              color: Colors.white,
-                                            ),
-                                            backgroundColor: MyColors.TEXT_FIELD_BCK,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 5),
-                                        child: Center(
-                                          child: Text(
-                                            snapshot.data['name'],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'Lato',
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Center(
-                                          child: Text(
-                                            snapshot.data['phone'],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'Lato',
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            top: 25,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: MyColors.TEXT_COLOR.withOpacity(0.5),
+                                        spreadRadius: 3,
+                                      blurRadius: 10
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(15),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                            top: 5,
                                             bottom: 10,
-                                            left: 20,
-                                            right: 20
+                                            left: 10,
+                                            right: 10,
+                                          ),
+                                          child: Center(
+                                            child: CircleAvatar(
+                                              radius: 37,
+                                              child: Icon(
+                                                Icons.person,
+                                                size: 65,
+                                                color: Colors.white,
+                                              ),
+                                              backgroundColor: MyColors.TEXT_FIELD_BCK,
+                                            ),
+                                          ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Address',
+                                        Container(
+                                          margin: EdgeInsets.only(bottom: 5),
+                                          child: Center(
+                                            child: Text(
+                                              snapshot.data['name'],
                                               style: TextStyle(
-                                                fontSize: 17,
+                                                fontSize: 12,
                                                 fontFamily: 'Lato',
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            GestureDetector(
-                                              onTap: (){
-                                                showAlertDialog(context, user);
-                                              },
-                                                child: Icon(Icons.edit,size: 20,)),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            bottom: 20,
-                                            left: 20,
-                                            right: 20
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              snapshot.data['address']??'No Address found',
+                                        Container(
+                                          child: Center(
+                                            child: Text(
+                                              snapshot.data['phone'],
                                               style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontFamily: 'Lato',
-                                                  fontWeight: FontWeight.bold,
-                                                  height: 1.5
+                                                fontSize: 12,
+                                                fontFamily: 'Lato',
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            snapshot.data['address']==null
-                                                ?OutlineButton(
-                                                  onPressed: (){
-                                                    showAlertDialog(context,user);
-                                                  },
-                                                  child: Text(
-                                                    'ADD ADDRESS',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Lato',
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 12
-                                                    ),
-                                                  ),
-                                                  highlightedBorderColor: MyColors.TEXT_COLOR,
-                                                  highlightColor: MyColors.TEXT_FIELD_BCK,
-                                                  splashColor: MyColors.TEXT_COLOR,
-                                                  borderSide: BorderSide(
-                                                    color: MyColors.TEXT_FIELD_BCK,
-                                                    style: BorderStyle.solid,
-                                                    width: 2,
-                                                  ),
-                                                ):Container()
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: 25,
+                                              bottom: 10,
+                                              left: 20,
+                                              right: 20
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                'Address',
+                                                style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Lato',
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              GestureDetector(
+                                                onTap: (){
+                                                  showAlertDialog(context, user);
+                                                },
+                                                  child: Icon(Icons.edit,size: 20,)),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              bottom: 20,
+                                              left: 20,
+                                              right: 20
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                snapshot.data['address']??'No Address found',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontFamily: 'Lato',
+                                                    fontWeight: FontWeight.bold,
+                                                    height: 1.5
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              snapshot.data['address']==null
+                                                  ?OutlineButton(
+                                                    onPressed: (){
+                                                      showAlertDialog(context,user);
+                                                    },
+                                                    child: Text(
+                                                      'ADD ADDRESS',
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Lato',
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 12
+                                                      ),
+                                                    ),
+                                                    highlightedBorderColor: MyColors.TEXT_COLOR,
+                                                    highlightColor: MyColors.TEXT_FIELD_BCK,
+                                                    splashColor: MyColors.TEXT_COLOR,
+                                                    borderSide: BorderSide(
+                                                      color: MyColors.TEXT_FIELD_BCK,
+                                                      style: BorderStyle.solid,
+                                                      width: 2,
+                                                    ),
+                                                  ):Container()
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                      );
-                    }
+                            )
+                        );
+                      }
+                    ),
+                  ],
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(
+                      top: 30,
+                      left: 32,
+                      right: 32
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-            ],
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                          spreadRadius: 1,
+                          blurRadius: 5
+                      )
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: OutlineButton(
+                    highlightedBorderColor: MyColors.TEXT_COLOR,
+                    highlightColor: MyColors.TEXT_FIELD_BCK,
+                    splashColor: MyColors.TEXT_COLOR,
+                    borderSide: BorderSide(
+                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                      style: BorderStyle.solid,
+                      width: 1,
+                    ),
+                    onPressed: (){},
+                    child: Center(
+                      child: Text(
+                        'Privacy policy',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(
+                      top: 15,
+                      left: 32,
+                      right: 32
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                          spreadRadius: 1,
+                          blurRadius: 5
+                      )
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: OutlineButton(
+                    highlightedBorderColor: MyColors.TEXT_COLOR,
+                    highlightColor: MyColors.TEXT_FIELD_BCK,
+                    splashColor: MyColors.TEXT_COLOR,
+                    borderSide: BorderSide(
+                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                      style: BorderStyle.solid,
+                      width: 1,
+                    ),
+                    onPressed: (){},
+                    child: Center(
+                      child: Text(
+                        'Cancel and Refund policy',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(
+                    top: 15,
+                    left: 32,
+                    right: 32
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                            spreadRadius: 1,
+                            blurRadius: 5
+                        )
+                      ],
+                    color: Colors.white,
+                  ),
+                  child: OutlineButton(
+                    highlightedBorderColor: MyColors.TEXT_COLOR,
+                    highlightColor: MyColors.TEXT_FIELD_BCK,
+                    splashColor: MyColors.TEXT_COLOR,
+                    borderSide: BorderSide(
+                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                      style: BorderStyle.solid,
+                      width: 1,
+                    ),
+                    onPressed: (){},
+                    child: Center(
+                      child: Text(
+                        'Terms and Conditions',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(
+                      top: 15,
+                      left: 32,
+                      right: 32
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: MyColors.TEXT_FIELD_BCK.withOpacity(0.8),
+                          spreadRadius: 1,
+                          blurRadius: 5
+                      )
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: OutlineButton(
+                    highlightedBorderColor: MyColors.TEXT_COLOR,
+                    highlightColor: MyColors.TEXT_FIELD_BCK,
+                    splashColor: MyColors.TEXT_COLOR,
+                    borderSide: BorderSide(
+                      color: MyColors.TEXT_FIELD_BCK.withOpacity(0.5),
+                      style: BorderStyle.solid,
+                      width: 1,
+                    ),
+                    onPressed: (){},
+                    child: Center(
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
