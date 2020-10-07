@@ -650,7 +650,7 @@ class _ViewItemsState extends State<ViewItems> {
     _razorpay.clear();
   }
 
-  _update() async {
+  _update(itemCount) async {
     var ref = await Firestore.instance
         .collection(widget.category)
         .document(widget.title)
@@ -660,7 +660,7 @@ class _ViewItemsState extends State<ViewItems> {
           .collection(widget.category)
           .document(widget.title)
           .updateData({
-        'stockAvailable': ref["stockAvailable"] - 1,
+        'stockAvailable': ref["stockAvailable"] - itemCount,
       });
     }
   }
@@ -686,17 +686,12 @@ class _ViewItemsState extends State<ViewItems> {
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     Fluttertoast.showToast(
         msg: 'Your paymentID ${response.paymentId} is successful');
-    _update();
+    _update(itemCount);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-    await Firestore.instance
-        .collection('Orders')
-        .document(user.uid)
-        .collection('Transactions')
-        .document()
-        .collection('Successful Transactions')
-        .document(widget.title)
-        .setData({
+    var userRef =
+        await Firestore.instance.collection('Users').document(user.uid).get();
+    await Firestore.instance.collection('Orders').document().setData({
       'dateTime': formattedDate,
       'result': 'Success',
       'category': widget.category,
@@ -705,8 +700,11 @@ class _ViewItemsState extends State<ViewItems> {
       'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
-      'address' : address,
-      'status' : 'UnDelivered',
+      'address': address,
+      'username' : userRef.data['name'],
+      'user phNo' : userRef.data['phone'],
+      'status': 'UnDelivered',
+      'user id': user.uid,
     });
     await Firestore.instance
         .collection('Users')
@@ -733,11 +731,11 @@ class _ViewItemsState extends State<ViewItems> {
     }.toString()}\nERROR Message:${response.message}');
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    var userRef =
+    await Firestore.instance.collection('Users').document(user.uid).get();
     await Firestore.instance
-        .collection('Orders')
-        .document(user.uid)
         .collection('Failed Transactions')
-        .document()
+        .document(user.uid)
         .collection(widget.title)
         .document()
         .setData({
@@ -749,7 +747,10 @@ class _ViewItemsState extends State<ViewItems> {
       'quantity': itemCount,
       'amount': totalCost,
       'imageURL': widget.url,
-      'address' : address,
+      'address': address,
+      'username' : userRef.data['name'],
+      'user phNo' : userRef.data['phone'],
+      'user id': user.uid,
     });
     await Firestore.instance
         .collection('Users')
@@ -1217,18 +1218,19 @@ class _ViewItemsState extends State<ViewItems> {
                                     BorderRadius.all(Radius.circular(10)),
                               ),
                               child: OutlineButton(
-                                onPressed: snapshot.data['stockAvailable']>0
-                                    ?() {
-                                  showAddressAlertDialog(
-                                      context,
-                                      user,
-                                      itemCount,
-                                      widget.title,
-                                      widget.name,
-                                      widget.cost,
-                                      widget.url);
-                                  // openCheckout();
-                                }:null,
+                                onPressed: snapshot.data['stockAvailable'] > 0
+                                    ? () {
+                                        showAddressAlertDialog(
+                                            context,
+                                            user,
+                                            itemCount,
+                                            widget.title,
+                                            widget.name,
+                                            widget.cost,
+                                            widget.url);
+                                        // openCheckout();
+                                      }
+                                    : null,
                                 highlightedBorderColor: MyColors.TEXT_COLOR,
                                 highlightColor: MyColors.TEXT_FIELD_BCK,
                                 splashColor: MyColors.TEXT_COLOR,
@@ -1332,7 +1334,7 @@ class _ViewItemsState extends State<ViewItems> {
                           letterSpacing: 1.20),
                     ),
                   ),
-                  Suggestion(widget.category,widget.name),
+                  Suggestion(widget.category, widget.name),
                   SizedBox(
                     height: 5,
                   ),

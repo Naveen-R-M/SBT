@@ -103,26 +103,30 @@ class _ImageCaptureState extends State<ImageCapture> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: MyColors.APP_BCK,
-        title: Text('Image Process'),
+        title: Text('Image Process',style: TextStyle(
+          fontSize: 16,
+          fontFamily: 'Lato',
+          fontWeight: FontWeight.w700
+        ),),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: MyColors.APP_BCK,
+        color: MyColors.APP_BCK.withOpacity(0.9),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
               icon: Icon(Icons.camera),
-              iconSize: 40,
+              iconSize: 30,
               onPressed: () => _pickImage(ImageSource.camera),
             ),
             IconButton(
               icon: Icon(Icons.photo_library),
-              iconSize: 40,
+              iconSize: 30,
               onPressed: () => _pickImage(ImageSource.gallery),
             ),
             IconButton(
               icon: Icon(Icons.file_upload),
-              iconSize: 40,
+              iconSize: 30,
               onPressed: _imageFile != null
                   ? () {
                       uploadFile(widget.val, _imageFile);
