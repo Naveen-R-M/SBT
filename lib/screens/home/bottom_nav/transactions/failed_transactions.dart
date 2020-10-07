@@ -1,4 +1,5 @@
 import 'package:SBT/model/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,9 +64,16 @@ class _FailedTransactionsState extends State<FailedTransactions> {
                                     .size
                                     .height /
                                     6,
-                                child: Image.network(
-                                  path.data["imageURL"],
+                                child: CachedNetworkImage(
+                                  imageUrl: path.data['imageURL'],
                                   fit: BoxFit.cover,
+                                  placeholder: (context,url)=>
+                                      Container(
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
+                                  errorWidget: (context,url,error)=>Icon(Icons.error),
                                 ),
                               ),
                             ),

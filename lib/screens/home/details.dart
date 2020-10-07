@@ -29,7 +29,7 @@ class _DetailsState extends State<Details> {
   String _sold;
   Stream _getImages() {
     var ref = Firestore.instance;
-    return ref.collection(widget.title).snapshots();
+    return ref.collection(widget.title).orderBy('priority',descending: true).snapshots();
   }
 
   @override

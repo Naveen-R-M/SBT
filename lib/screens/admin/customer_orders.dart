@@ -1,5 +1,7 @@
 import 'package:SBT/screens/home/loading.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_colors.dart';
@@ -78,9 +80,16 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                                           .size
                                           .height /
                                           3.7,
-                                      child: Image.network(
-                                        path.data["imageURL"],
+                                      child: CachedNetworkImage(
+                                        imageUrl: path.data['imageURL'],
                                         fit: BoxFit.cover,
+                                        placeholder: (context,url)=>
+                                            Container(
+                                              child: Center(
+                                                child: CircularProgressIndicator(),
+                                              ),
+                                            ),
+                                        errorWidget: (context,url,error)=>Icon(Icons.error),
                                       ),
                                     ),
                                   ),
