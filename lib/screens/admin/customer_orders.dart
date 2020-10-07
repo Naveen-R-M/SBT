@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../my_colors.dart';
 
@@ -12,8 +13,7 @@ class CustomerOrders extends StatefulWidget {
 }
 
 class _CustomerOrdersState extends State<CustomerOrders> {
-
-  orders () {
+  orders() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -37,7 +37,8 @@ class _CustomerOrdersState extends State<CustomerOrders> {
             StreamBuilder(
               stream: Firestore.instance
                   .collection('Orders')
-                  .orderBy('dateTime',descending:false)
+                  .orderBy('dateTime', descending: false)
+                  .where('status', isEqualTo: 'UnDelivered')
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -55,98 +56,103 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                         var path = data[index];
                         return Card(
                           elevation: 10,
-                          shadowColor: MyColors
-                              .TEXT_FIELD_BCK
-                              .withOpacity(0.50),
+                          shadowColor:
+                              MyColors.TEXT_FIELD_BCK.withOpacity(0.50),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Card(
-                                    shadowColor: MyColors
-                                        .STATUS_BAR
-                                        .withOpacity(0.5),
+                                    shadowColor:
+                                        MyColors.STATUS_BAR.withOpacity(0.5),
                                     elevation: 15,
                                     child: Container(
                                       width:
-                                      MediaQuery.of(context)
-                                          .size
-                                          .width /
-                                          2,
+                                          MediaQuery.of(context).size.width / 2,
                                       height:
-                                      MediaQuery.of(context)
-                                          .size
-                                          .height /
-                                          3.7,
+                                          MediaQuery.of(context).size.height /
+                                              3.7,
                                       child: CachedNetworkImage(
                                         imageUrl: path.data['imageURL'],
                                         fit: BoxFit.cover,
-                                        placeholder: (context,url)=>
+                                        placeholder: (context, url) =>
                                             Container(
-                                              child: Center(
-                                                child: CircularProgressIndicator(),
-                                              ),
-                                            ),
-                                        errorWidget: (context,url,error)=>Icon(Icons.error),
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 120,
-                                    padding: EdgeInsets.all(5),
-                                    margin: EdgeInsets.only(
-                                        left: 15,
-                                        right: 8.0,
-                                        top: 8.0,
-                                        bottom: 5),
-                                    child: OutlineButton(
-                                      onPressed:()async{
-
-                                      },
-                                      child: Text(
-                                          'MARK AS DELIVERED',
-                                        style: TextStyle(
-                                          fontFamily: 'Lato',
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                          height: 1.5
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 120,
+                                        padding: EdgeInsets.all(5),
+                                        margin: EdgeInsets.only(
+                                            left: 15,
+                                            right: 8.0,
+                                            top: 8.0,
+                                            bottom: 5),
+                                        child: OutlineButton(
+                                          onPressed: () async {
+                                            await Firestore.instance
+                                                .collection('Orders')
+                                                .document(path.documentID)
+                                                .updateData(
+                                                    {'status': 'Delivered'})
+                                                .whenComplete(() =>
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            '${path.documentID} , '
+                                                            '${path.data['name']} deleted'))
+                                                .timeout(Duration(minutes: 1));
+                                          },
+                                          child: Text(
+                                            'MARK AS DELIVERED',
+                                            style: TextStyle(
+                                                fontFamily: 'Lato',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                height: 1.5),
+                                          ),
+                                          highlightedBorderColor:
+                                              MyColors.TEXT_COLOR,
+                                          highlightColor:
+                                              MyColors.TEXT_FIELD_BCK,
+                                          splashColor: MyColors.TEXT_COLOR,
+                                          borderSide: BorderSide(
+                                            color: MyColors.TEXT_FIELD_BCK,
+                                            style: BorderStyle.solid,
+                                            width: 2,
+                                          ),
                                         ),
                                       ),
-                                      highlightedBorderColor: MyColors.TEXT_COLOR,
-                                      highlightColor: MyColors.TEXT_FIELD_BCK,
-                                      splashColor: MyColors.TEXT_COLOR,
-                                      borderSide: BorderSide(
-                                        color: MyColors.TEXT_FIELD_BCK,
-                                        style: BorderStyle.solid,
-                                        width: 2,
-                                      ),
-                                    ),
+                                    ],
                                   ),
                                 ],
                               ),
                               Container(
                                 margin: EdgeInsets.only(
-                                    left: 15,
-                                    right: 8.0,
-                                    bottom: 10,
-                                    top: 8.0),
+                                    left: 15, right: 8.0, bottom: 10, top: 8.0),
                                 child: Align(
-                                  alignment:
-                                  Alignment.topLeft,
+                                  alignment: Alignment.topLeft,
                                   child: Text(
                                     'Product name\t : \t${path.data['name']}'
-                                        '\nProductID\t : \t${path.data['productID']}'
-                                        '\nQuantity\t : \t${path.data['quantity']}'
-                                        '\nAmount Paid\t : \t₹${path.data['amount']}'
-                                        '\nAddress\t : \n[ ${path.data['address']} ]'
-                                        '\nBooking Date\t : \t[-- ${path.data['dateTime']} --]'
-                                        '\nUsername\t : \t[ ${path.data['username']} ]'
-                                        '\nUser PhoneNO\t : \t[ ${path.data['user phNo']} ]',
+                                    '\nProductID\t : \t${path.data['productID']}'
+                                    '\nQuantity\t : \t${path.data['quantity']}'
+                                    '\nAmount Paid\t : \t₹${path.data['amount']}'
+                                    '\nAddress\t : \n[ ${path.data['address']} ]'
+                                    '\nBooking Date\t : \t[-- ${path.data['dateTime']} --]'
+                                    '\nUsername\t : \t[ ${path.data['username']} ]'
+                                    '\nUser PhoneNO\t : \t[ ${path.data['user phNo']} ]',
                                     style: TextStyle(
-                                      color: MyColors
-                                          .TEXT_COLOR,
+                                      color: MyColors.TEXT_COLOR,
                                       fontFamily: 'Lato',
                                       height: 1.5,
                                       fontWeight: FontWeight.w600,
